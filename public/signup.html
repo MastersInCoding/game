@@ -157,7 +157,7 @@
                   aria-describedby="registerCheckHelpText"
                 />
                 <label class="form-check-label" for="registerCheck">
-                  II have read and I accept Hunch’s <a href="/termsandconditions">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
+                  I have read and I accept PGA's <a href="/termsandconditions">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
                 </label>
               </div>
         </form>
@@ -208,6 +208,7 @@
     const characterValidationImage = document.getElementById('charValidationImage');
     const numberValidationImage = document.getElementById('numberValidationImage');
     const letterValidationImage = document.getElementById('letterValidationImage');
+    const checkInput = document.getElementById('registerCheck');
 
     const nameInput = document.getElementById('name');
 
@@ -220,7 +221,7 @@
             nameInput.classList.add('is-invalid');
             nameInput.classList.remove('is-valid');
         }
-        if(nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid')){
+        if(nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked){
             nextBtn.disabled = false;
         }
         else{
@@ -358,7 +359,7 @@
         confirmPasswordInput.classList.add('is-invalid');
       }
 
-      if (validatePassword(password) && passwordsMatch(password, confirmPassword) && nameInput.classList.contains('is-valid') ){
+      if (validatePassword(password) && passwordsMatch(password, confirmPassword) && nameInput.classList.contains('is-valid') && checkInput.checked){
         nextBtn.disabled = false;
       } else {
         nextBtn.disabled = true;
@@ -367,6 +368,15 @@
 
     passwordInput.addEventListener('input', handlePasswordInput);
     confirmPasswordInput.addEventListener('input', handlePasswordInput);
+
+    checkInput.addEventListener('click', function() {
+      if(nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked){
+            nextBtn.disabled = false;
+        }
+        else{
+            nextBtn.disabled = true;
+        }
+    });
 
     nextBtn.addEventListener('click', function() {
 
