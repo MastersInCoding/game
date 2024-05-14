@@ -10,7 +10,7 @@ const teamSchema = new mongoose.Schema({
     required: true
   },
   users: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Player' }
   ],
   totalPoints: {
     type: Number,

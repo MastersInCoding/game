@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Team = require('../models/team');
+const Player = require('../models/players');
 
 
 exports.team = async (req, res) => {
@@ -35,11 +36,12 @@ exports.saveSelectedUsers = async (req, res) => {
   try {
     const { createdBy, selectedUserIds, teamName } = req.body;
 
-    const selectedUsers = await User.find({ _id: { $in: selectedUserIds } });
+    const selectedUsers = await Player.find({ _id: { $in: selectedUserIds } });
 
     if (!selectedUsers || selectedUsers.length === 0) {
       return res.status(404).json({ message: 'No users found with the provided IDs' });
     }
+
 
     const newTeam = new Team();
     const createdByUser = await User.findOne({email: createdBy});
@@ -51,6 +53,10 @@ exports.saveSelectedUsers = async (req, res) => {
     newTeam.createdOn = Date.now();
     newTeam.name = teamName;
 
+    // console.log(newTeam);
+
+
+
     // Save the updated team document
     newTeam.save()
      .then((updatedTeam) => {
@@ -59,7 +65,8 @@ exports.saveSelectedUsers = async (req, res) => {
           user.teams.push(updatedTeam._id);
           await user.save();
         });
-        // Send response after all operations are completed
+    //     console.log("Added Successfully")
+    //     // Send response after all operations are completed
         return res.status(200).json({ message: 'Selected users added to the team successfully' });
       }
      })
@@ -82,6 +89,8 @@ exports.getTeamDetails = async (req, res) => {
     if (!team) {
       return res.status(404).json({ message: 'Team not found.' });
     }
+
+    // console.log(team);
 
     const userNames = team.users.map(user => ({
       id: user._id, 
@@ -129,7 +138,7 @@ exports.updateTeam = async (req, res) => {
         if (!team) {
             return res.status(404).json({ error: "Team not found" });
         }
-        const usersToAdd = await User.find({ _id: { $in: selectedUserIds } });
+        const usersToAdd = await Player.find({ _id: { $in: selectedUserIds } });
         const usersToRemove = team.users.filter(user => !selectedUserIds.includes(user.id));
 
         team.users =  usersToAdd.map(user => user._id);
@@ -157,9 +166,9 @@ exports.deleteTeam = async (req, res) => {
         if (!team) {
           return res.status(404).json({ message: 'Team not found.' });
         }
-        const users = await User.find({ _id: { $in: team.users } });
+        const users = await Player.find({ _id: { $in: team.users } });
         users.forEach(async user => {
-          const u = await User.findById(user.id);
+          const u = await Player.findById(user.id);
             if (u) {
                 u.teams = u.teams.filter(id => id.toString() !== team.id.toString());
                 await u.save();

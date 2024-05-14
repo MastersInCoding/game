@@ -228,7 +228,7 @@
     var totalPoints = 0;
     var deleteTeamId = '';
 
-    fetch('/users', {
+    fetch('/players', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -242,12 +242,11 @@
             .then(data => {
                 data.users.forEach((user) => {
                     userdetails.push({id: user._id, name: user.name});
-                    console.log(user.length);
+                    // console.log(user);
                     if(user.teams.length < 5    ) {
                         const li = document.createElement('li');
                         li.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>` ;
                         userSelector.appendChild(li);
-                        console.log(li);
                     }
                     const li2 = document.createElement('li');
                     li2.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>`;
@@ -560,7 +559,7 @@
           <p><strong>Created By:</strong> ${teamData.createdBy}</p>
           <p><strong>Created On:</strong> ${new Date(teamData.createdOn).toLocaleString()}</p>
           <p><strong>Total Points:</strong> ${teamData.totalPoints}</p>
-          <p><strong>Users:</strong></p>
+          <p><strong>Players:</strong></p>
           <ul>
             ${teamData.users.map(user => `<li>${user.name} (${user.points} points)</li>`).join('')}
           </ul>
@@ -572,14 +571,17 @@
 const addTeam = document.getElementById('addTeam');
 
 addTeam.addEventListener('click', function(){
+    console.log("Yes");
     mySelectedItems = [];
     selectedUsers = [];
+    addTeamName.value = '';
     dropdownButton.innerHTML = 'Select Items';
     const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
     });
     totalPoints = 0;
+    totalPointsValue.innerHTML = totalPoints;
 });
 
 updateTeam.addEventListener('click', () =>{

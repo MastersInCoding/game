@@ -18,6 +18,7 @@ let transporter = nodemailer.createTransport({
 
 const userController = require('../controllers/userController');
 const teamController = require('../controllers/teamController');
+const playerController = require('../controllers/playerController');
 
 
 // Home page route
@@ -55,6 +56,11 @@ router.get('/getteams/:id', teamController.getTeams);
 router.get('/getTeamDetails/:id', teamController.getTeamDetails);
 router.put('/updateTeam', teamController.updateTeam);
 router.delete('/deleteTeam', teamController.deleteTeam);
+
+router.get('/addPlayer', playerController.addPlayer);
+router.get('/players', playerController.getPlayers);
+// router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
+// router.put('/updateTeam', teamController.updateTeam);
 
 router.post('/resetPasswordLink', async (req, res) => {
 

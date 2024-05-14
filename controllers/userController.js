@@ -5,7 +5,7 @@ exports.getUsers = async (req, res) => {
     try {
         const users = await User.find({}, 'name email points teams');
 
-        const user = await User.findById('663c61443b88eac6aa8dbde7');
+        // const user = await User.findById('663c61443b88eac6aa8dbde7');
         // console.log(user.teams.length);
 
         // const usersWithTeamsCount = users.map(user => {
@@ -81,7 +81,6 @@ exports.signup = async (req, res) => {
         email: email,
         name: name,
         password: password,
-        points: 50
     });
     newUser.save()
         .then(() => {
