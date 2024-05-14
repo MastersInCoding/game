@@ -302,7 +302,7 @@
             selectedUsers = selectedUsers.filter((item) => item !== checkbox.id);
         }
         dropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.join(', ') : 'Select Items';
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
 
         // Disable select options once max selections reached
         const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
@@ -454,7 +454,7 @@
         selectedUsers = teamData.users.map(user => user.id);
         teamName.value = teamData.name;
         updateDropdownButton.innerText = mySelectedItems.length > 0
-        ? mySelectedItems.join(', ') : 'Select Items';
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
         console.log(teamData.totalPoints);
         updateTotalPoints.value = teamData.totalPoints;
@@ -517,7 +517,7 @@
         console.log(totalPoints, mySelectedItems.length);
 
         updateDropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.join(', ') : 'Select Items';
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
 
         // Disable select options once max selections reached
         checkboxes.forEach((checkbox) => {

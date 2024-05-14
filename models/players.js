@@ -16,3 +16,6 @@ const playerSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Player', playerSchema);
+
+
+// http://15.207.88.203:3000   
