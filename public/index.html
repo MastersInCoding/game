@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Sign Up Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+
+  <style>
+    @media only screen and (max-width: 635px) {
+        .mobile-min-height {
+            height: 3rem; /* Set your desired minimum height */
+        }
+    }
+    .display {
+        display: block;
+    }
+    .hide {
+        display: none;
+    }
+    .profile-image {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: rgb(4, 19, 198);
+        color: #fff;
+        font-size: 30px;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .dropdown-toggle::after {
+        content: none !important;
+    }
+    .toast-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body style="background-color: #e95d06;">
+
+    <div class="container-fluid">
+
+        <div class="row">
+          <div class="col mt-2">
+          </div>
+          <div class="col mt-2">
+            <div class="text-center mobile-min-height"> 
+                <a href="#"><img class="mobile-min-height" style="max-height: 5rem;" src="short_logo.jpeg" alt="Chania"><img class="mobile-min-height" style="max-height: 5rem;" src="full_logo.jpeg" alt="Chania"></a>
+            </div>
+          </div>
+          <div class="mt-2 col d-flex justify-content-end">
+            <div id="login" class=""> 
+                <a id="loginBtn" class="btn btn-primary">Login</a>
+            </div>
+            <div id="content" class="dropdown mb-3">
+                <button class="btn btn-primary dropdown-toggle text-center" style="border-radius: 50%; background-color: rgb(4, 19, 198);" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-image m-2" id="profile-image"></div>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="left: unset; right: -32px;width: max-content;">
+                    <li><a class="dropdown-item">
+                        <div class="row">
+                            <div class="col px-2 ">
+                                <div class="profile-image " id="profile-images" style="width: 2rem; height: 2rem; font-size: 20px;"></div>
+                            </div>
+                            <div class="col" style="font-size: 15px;">
+                                <div class="row" id="userName">Name</div>
+                                <div class="row" id="userEmail">Email</div>
+                            </div>
+                        </div>
+                    </a></li>
+                    <hr>
+                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeNameModal" style="box-shadow: none;">
+                        <i class="fas fa-pen"></i>Change Name</button>
+                    </li>
+                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeEmailModal" style="box-shadow: none;">
+                        <i class="fas fa-pen"></i>Change email</button>
+                    </li>
+                    <li><button class="dropdown-item" id="myteam">
+                        <i class="fas fa-pen"></i>My Team</button>
+                    </li>
+                    <li><button class="dropdown-item" id="logOutBtn">
+                        <i class="fas fa-right-from-bracket"></i>Logout</button>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+  <!-- <header >
+    <nav class="navbar navbar-light bg-light">
+      <div class="container">
+        <div class="row">
+            <div class="col text-center"> 
+                <a href="#">Logo</a>
+            </div>
+            <div id="content" class="col">
+                <div class="row justify-content-end">
+                    <div id="login"> 
+                        <a id="loginBtn" class="btn btn-primary">Login</a>
+                    </div>
+                    <div class="dropdown mb-3 col">
+                        <button class="btn btn-primary dropdown-toggle text-center" style="border-radius: 50%; background-color: rgb(4, 19, 198);" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false">
+                            <div class="profile-image m-2" id="profile-image"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="left: unset; right: -32px;width: max-content;">
+                            <li><a class="dropdown-item">
+                                <div class="row">
+                                    <div class="col px-2 ">
+                                        <div class="profile-image " id="profile-images" style="width: 2rem; height: 2rem; font-size: 20px;"></div>
+                                    </div>
+                                    <div class="col" style="font-size: 15px;">
+                                        <div class="row" id="userName">Name</div>
+                                        <div class="row" id="userEmail">Email</div>
+                                    </div>
+                                </div>
+                            </a></li>
+                            <hr>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeNameModal" style="box-shadow: none;">
+                                <i class="fas fa-pen"></i>Change Name</button>
+                            </li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeEmailModal" style="box-shadow: none;">
+                                <i class="fas fa-pen"></i>Change email</button>
+                            </li>
+                            <li><button class="dropdown-item" id="myteam">
+                                <i class="fas fa-pen"></i>My Team</button>
+                            </li>
+                            <li><button class="dropdown-item" id="logOutBtn">
+                                <i class="fas fa-right-from-bracket"></i>Logout</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+      </div>
+    </nav>
+  </header> -->
+  <main>
+
+
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>
+    <p>This is testing modal</p>viewTeamModal
+    <p>This is testing modal</p>
+
+<div class="modal fade" id="changeNameModal" tabindex="-1" aria-labelledby="changeNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changeNameModalLabel">Change Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <form id="loginForm" class="mx-5 my-4">
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="text" id="newName" class="form-control form-control-lg" />
+                    <label class="form-label" for="newName">New Name</label>
+                  </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-secondary float-left" style="background-color: #e95d06; border: none;" data-bs-dismiss="modal">CANCEL</button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary float-right" style="background-color: #e95d06; border: none;" id="saveNameBtn" disabled>OK</button>
+                </div>          
+          
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="modal fade" id="changeEmailModal" tabindex="-1" aria-labelledby="changeEmailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changeEmailModalLabel">Change Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <form id="loginForm" class="mx-5 my-4">
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="email" id="newEmail" class="form-control form-control-lg" />
+                    <label class="form-label" for="newEmail">New Email</label>
+                    <div class="name-text invalid-feedback mt-0" style="font-style: normal;color: red;"></div>
+                  </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-secondary float-left" style="background-color: #e95d06; border: none;" data-bs-dismiss="modal">CANCEL</button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary float-right" style="background-color: #e95d06; border: none;" id="saveEmailBtn" disabled>OK</button>
+                </div>          
+          
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="toast-container" id="successToastContainer">
+    <div class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">Success</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        Operation completed successfully.
+      </div>
+    </div>
+  </div>
+
+  </main>
+  <footer>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script>
+    function getUrlParams() {
+        const params = {};
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        
+        for (const [key, value] of urlParams) {
+            params[key] = value;
+        }
+
+        return params;
+    }
+
+    const params = getUrlParams()
+
+    function isLoggedIn(){
+        return sessionStorage.getItem('email') !== null;
+    }
+
+    function renderDashboard(){
+        if(!isLoggedIn()) {
+            console.log("No");
+            document.getElementById('login').classList.add('display');
+            document.getElementById('login').classList.remove('hide');
+            document.getElementById('content').classList.remove('dispaly');
+            document.getElementById('content').classList.add('hide');
+        }
+        else{
+            console.log("Yes");
+            document.getElementById('login').classList.add('hide');
+            document.getElementById('login').classList.remove('display');
+            document.getElementById('content').classList.add('display');
+            document.getElementById('content').classList.remove('display');
+        }
+    }
+
+    const saveNameBtn = document.getElementById('saveNameBtn');
+    const newName = document.getElementById('newName');
+
+    const saveEmailBtn = document.getElementById('saveEmailBtn');
+    const newEmail = document.getElementById('newEmail');
+    const successToast = document.querySelector('#successToastContainer .toast');
+
+    
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    newEmail.addEventListener('input', function() {
+
+        if(emailRegex.test(newEmail.value)){
+            saveEmailBtn.disabled = false;
+        }
+        else{
+            saveEmailBtn.disabled = true;
+        }
+    });
+
+
+    newName.addEventListener('input', function() {
+        if(newName.value.length > 2){
+            saveNameBtn.disabled = false;
+        }
+        else{
+            saveNameBtn.disabled = true;
+        }
+    });
+    
+    const logoutButton = document.getElementById('logOutBtn');
+    document.getElementById('userName').innerHTML = sessionStorage.getItem('userName');
+    logoutButton.addEventListener('click', function() {
+        fetch('/logout', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            successToast.classList.add('show');
+            setTimeout(() => {
+            successToast.classList.remove('show');
+            }, 1000);
+            sessionStorage.removeItem('email');
+            window.location.href = '/'; // Redirect to homepage after logout
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    renderDashboard();
+
+    const loginButton = document.getElementById('loginBtn');
+    loginButton.addEventListener('click', function() {
+        fetch('/login1', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(response => {
+
+        console.log('Response:', response);
+    if (response.redirected) {
+        successToast.classList.add('show');
+        setTimeout(() => {
+          successToast.classList.remove('show');
+        }, 1000);
+        window.location.href = response.url;
+    }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+    console.log(sessionStorage.getItem('email'));
+    if(sessionStorage.getItem('email') !== null) {
+        fetch('/getByEmail?email='+sessionStorage.getItem('email'), {
+            method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Network response was not successful');
+            }
+            return response.json();
+            
+        })
+        .then(data => {
+            if(data.message != null){
+                const userName = data.username.name; 
+                const userEmail =data.username.email;
+                document.getElementById('userName').innerText = userName;
+                document.getElementById('userEmail').innerText = userEmail;
+                const firstLetter = userName.charAt(0).toUpperCase();
+                const profileImage = document.getElementById('profile-image');
+                const profileImages = document.getElementById('profile-images');
+                profileImages.textContent = firstLetter;
+                profileImage.textContent = firstLetter;
+            }
+            else{
+                document.getElementById('login').classList.add('display');
+                document.getElementById('login').classList.remove('hide');
+                document.getElementById('content').classList.remove('dispaly');
+                document.getElementById('content').classList.add('hide');
+            }
+        })  
+        .catch(error => {
+            console.error('Error:', error);
+        });   
+    }
+
+    const myTeam = document.getElementById('myteam');
+    myTeam.addEventListener('click', function(){
+        fetch('/my-team', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if(response.redirected){
+                window.location.href = response.url;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+
+    saveNameBtn.addEventListener('click', function(){
+        fetch('/changeName', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                newName: newName.value,
+                email: sessionStorage.getItem('email')
+            })
+        })
+       .then(response => {
+            if(response.status == 200)
+            successToast.classList.add('show');
+            setTimeout(() => {
+            successToast.classList.remove('show');
+            }, 1000);
+                location.reload();
+       })
+       .catch(error => {
+            console.error('Error:', error);
+        });
+    })
+
+    saveEmailBtn.addEventListener('click', function(){
+        fetch('/changeEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                currentEmail: sessionStorage.getItem('email'),
+                newEmail: newEmail.value
+            })
+        })
+       .then(response => {
+            if(response.status == 200){
+                successToast.classList.add('show');
+                setTimeout(() => {
+                successToast.classList.remove('show');
+                }, 1000);
+                sessionStorage.setItem('email', newEmail.value);
+                location.reload();
+            }
+            else{
+                
+            }
+       })
+       .catch(error => {
+            console.error('Error:', error);
+        });
+    })
+
+  </script>
+</body>
+</html>

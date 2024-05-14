@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+  <style>
+    .centered {
+    display: flex;
+    justify-content: center;
+  }
+  .bg {
+      background-color: #e95d06;
+  }
+  .text_style {
+      text-align: center;
+      border-bottom-color: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+      color: #e95d06;
+      font-size: 24px;
+      font-weight: bold;
+      font-style: italic;
+      border-bottom: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+  }
+  .icon {
+    fill: #e95d06; 
+  }
+  .button_style {
+      width: -webkit-fill-available;
+      background-color: #e95d06;
+      border: none;
+  }
+  .butn:disabled {
+      background-color: #d3d3d3; 
+  }
+  .table th{
+    font-weight: 800;
+  }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+        <h3 class="text-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill" viewBox="0 0 16 16" style="color: #e95d06;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+              </svg>
+        </h3>
+        <p class="text-center mb-4" style="color: #e95d06;">
+            Account
+        </p>
+        <p class="text-center mx-5 text_style">
+            SIGN UP OR LOGIN TO ENTER GAME
+        </p>
+        <form id="loginForm" class="mx-5 my-4">
+            <div data-mdb-input-init class="form-outline mb-4">
+                <input type="email" id="form1Example1" class="form-control form-control-lg" />
+                <label class="form-label" for="form1Example1">Email address</label>
+              </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+<div class="container mb-1 fixed-bottom">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="centered">
+          <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+<script>
+  const emailInput = document.getElementById('form1Example1');
+  const nextBtn = document.getElementById('nextBtn');
+
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+  emailInput.addEventListener('input', function() {
+    if (emailRegex.test(emailInput.value)) {
+      emailInput.classList.remove('is-invalid');
+      nextBtn.disabled = false;
+    } else {
+      emailInput.classList.add('is-invalid');
+      nextBtn.disabled = true;
+    }
+  });
+
+  emailInput.addEventListener('blur', function() {
+    if (!emailInput.value) {
+      emailInput.classList.remove('is-invalid');
+    }
+  });
+
+  nextBtn.addEventListener('click', function() {
+
+    const email = emailInput.value;
+    console.log(email);
+    if (email) {
+      fetch('/findByEmailId', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(response => {
+        console.log('Response:', response);
+    if (response.redirected) {
+        window.location.href = response.url;
+    }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  });
+</script>
+</body>
+</html>

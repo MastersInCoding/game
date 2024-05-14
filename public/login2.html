@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+  <style>
+    .centered {
+    display: flex;
+    justify-content: center;
+  }
+  .bg {
+      background-color: #e95d06;
+  }
+  .text_style {
+      text-align: center;
+      border-bottom-color: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+      color: #e95d06;
+      font-size: 24px;
+      font-weight: bold;
+      font-style: italic;
+      border-bottom: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+  }
+  .icon {
+    fill: #e95d06;
+  }
+  .button_style {
+      width: -webkit-fill-available;
+      background-color: #e95d06;
+      border: none;
+  }
+  .butn:disabled {
+      background-color: #d3d3d3; 
+  }
+  .toggle-password-button{
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background-image: url(path/to/eye-icon.png);
+        background-size: cover;
+        border: none;
+        cursor: pointer;
+    }
+    .toast-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill" viewBox="0 0 16 16" style="color: #e95d06;">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+                </svg>
+            </h3>
+            <p class="text-center mb-4" style="color: #e95d06;">
+                Account
+            </p>
+            <p class="text-center mx-5 text_style">
+                WELCOME BACK, <label id="name"></label>
+            </p>
+            <form id="loginForm" class="mx-5 my-4">
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="email" id="email" class="form-control form-control-lg" readonly/>
+                    <label class="form-label" for="form1Example1">Email address</label>
+                </div>
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="password" id="password" class="form-control form-control-lg" />
+                    <button class="toggle-password-button" type="button" id="togglePassword">
+                        <i class="fas fa-eye-slash" id="passwordIcon"></i>
+                    </button>
+                    <label class="form-label" for="password">Password</label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-1 fixed-bottom ">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+          <div class="centered">
+            <a class="" id="resetPassword" style="color: black;" ><u>Reset your password</u></a>
+          </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 mb-4">
+        <div class="centered">
+          <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="toast-container" id="successToastContainer">
+    <div class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">Success</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        Operation completed successfully.
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+<script>
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const nextBtn = document.getElementById('nextBtn');
+  const resetPassword = document.getElementById('resetPassword');
+  const successToast = document.querySelector('#successToastContainer .toast');
+
+
+  resetPassword.addEventListener('click', function(){
+    fetch('/resetPasswordPage', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if(response.redirected){
+            window.location.href = response.url;
+
+        }
+    })
+  });
+
+  password.addEventListener('input', function() {
+        console.log(password.value.length);
+        if (password.value.length > 7) {
+            console.log("enabling");
+            nextBtn.disabled = false;
+        } 
+        else {
+            console.log("disabled");
+            nextBtn.disabled = true;
+        }
+    });
+
+  nextBtn.addEventListener('click', function() {
+    if (email) {
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            email: email.value,
+            password: password.value
+        })
+      })
+      .then(response => {
+
+        console.log('Response:', response);
+    if (response.redirected) {
+        successToast.classList.add('show');
+        setTimeout(() => {
+          successToast.classList.remove('show');
+        }, 1000);
+        sessionStorage.setItem('email', email.value);
+
+        email.value = '';
+        password.value = '';
+
+        window.location.href = response.url;
+    }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  });
+
+
+    const toggleConfirmPassword = document.getElementById('togglePassword');
+    toggleConfirmPassword.addEventListener('click', function() {
+        const icon = document.getElementById('passwordIcon');
+
+        if (password.type === 'password') {
+            password.type = 'text';
+            icon.classList.add('fa-eye');
+            icon.classList.remove('fa-eye-slash');
+        } else {
+            password.type = 'password';
+            icon.classList.add('fa-eye-slash');
+            icon.classList.remove('fa-eye');
+        }
+    });
+
+    
+
+    function getUrlParams() {
+        const params = {};
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        
+
+        for (const [key, value] of urlParams) {
+            params[key] = value;
+        }
+
+        return params;
+    }
+
+    
+
+    const params = getUrlParams();
+
+    const emailValue = params['email'];
+    console.log(params[['email']]);
+    console.log(params['name']);
+    document.getElementById('email').value = emailValue;
+    document.getElementById('name').innerHTML = params['name'];
+</script>
+</body>
+</html>
