@@ -153,11 +153,10 @@
                   type="checkbox"
                   value=""
                   id="registerCheck"
-                  checked
                   aria-describedby="registerCheckHelpText"
                 />
                 <label class="form-check-label" for="registerCheck">
-                  I have read and I accept PGA's <a href="/termsandconditions">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
+                  I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
                 </label>
               </div>
         </form>
@@ -209,6 +208,13 @@
     const numberValidationImage = document.getElementById('numberValidationImage');
     const letterValidationImage = document.getElementById('letterValidationImage');
     const checkInput = document.getElementById('registerCheck');
+
+
+    const tAndCBtn = document.getElementById('tAndC');
+
+    tAndCBtn.addEventListener('click', function(){
+      window.location.href = '/termsandconditions';
+    })
 
     const nameInput = document.getElementById('name');
 
