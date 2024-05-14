@@ -57,8 +57,9 @@ router.get('/getTeamDetails/:id', teamController.getTeamDetails);
 router.put('/updateTeam', teamController.updateTeam);
 router.delete('/deleteTeam', teamController.deleteTeam);
 
-// router.get('/addPlayer', playerController.addPlayer);
+router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
+router.get('deletePlayer', playerController.deletePlayer);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
 

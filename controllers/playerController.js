@@ -10,7 +10,7 @@ const path = require('path');
 exports.addPlayer = async (req, res) => {
     try {
         console.log(__dirname);
-        const workbook = xlsx.readFile(path.join(__dirname, 'data.xlsx'));
+        const workbook = xlsx.readFile(path.join(__dirname, 'datas.xlsx'));
         console.log('y');
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
@@ -38,6 +38,16 @@ exports.addPlayer = async (req, res) => {
     }
 };
 
+exports.deletePlayer = async (req, res) => {
+    try {
+        await Player.deleteMany({});
+        console.log("All documents deleted successfully!");
+        res.status(200).json({message: "All documents deleted successfully!"});
+    } catch (error) {
+        console.error("Error deleting documents:", error);
+    } 
+};
+
 exports.getPlayers = async (req, res) => {
     try {
         const players = await Player.find({}, 'name points teams');
@@ -46,6 +56,7 @@ exports.getPlayers = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
 
 exports.saveSelectedPlayers = async (req, res) => {
     try {
