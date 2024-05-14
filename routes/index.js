@@ -11,8 +11,8 @@ const crypto = require('crypto');
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'username', // Your email address
-        pass: 'zhrv scqp ufmn eckv' // Your email password or app-specific password
+        user: 'saifalaman@gmail.com', // Your email address
+        pass: 'zhrvscqpufmneckv' // Your email password or app-specific password
     }
 });
 
@@ -72,13 +72,16 @@ router.post('/resetPasswordLink', async (req, res) => {
 
     user.resetToken = resetToken;
     user.password = user.password;
+    console.log(resetToken);
     await user.save();
 
+    console.log("token", user.token);
     // Save the reset token to the session
     req.session.resetToken = resetToken;
 
     // Send the password reset link via email
-    const resetLink = `http://localhost:3000/confirmNewPass?token=${resetToken}`;
+    const resetLink = `http://15.207.88.203:3000/confirmNewPass?token=${resetToken}`;
+    console.log(resetLink);
     // Define email options
     let mailOptions = {
         from: 'saifalaman@gmail.com', // Sender email address

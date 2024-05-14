@@ -17,7 +17,7 @@ app.use(session({
     cookie: { maxAge: 10 * 60 * 1000 }
 }));
 
-
+// http://15.207.88.203:3000/signup.html?email=saifalcoding@gmail.com
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/loginapp', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
