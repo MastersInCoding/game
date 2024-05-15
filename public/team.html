@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-striped table-hover" style="font-size: large;background-color: white;">
+                <table class="table table-striped table-hover" style="font-size: large;background-color: white; display: none;" id="tableContainer">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -78,6 +78,9 @@
                     <tbody>
                     </tbody>
                 </table>
+                <div id="noDataMessage" class="d-flex justify-content-center" style="display: none !important;color: #325f5f;" >
+                    <h1>Form a team for collaboration.</h1>
+                  </div>
             </div>
         </div>        
     </div>
@@ -360,25 +363,36 @@
         if (response.ok) {
             response.json()
             .then(data => {
+                const tableBody = document.querySelector('tbody');
+                const tableContainer = document.getElementById('tableContainer');
+                const noDataMessage = document.getElementById('noDataMessage');
                 // Assuming 'data' is an array of team objects
-                data.forEach((team, index) => {
-                    const tableBody = document.querySelector('tbody');
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${team.name}</td>
-                        <td>${new Date(team.createdOn).toLocaleDateString()}</td>
-                        <td>${team.totalPoints}</td>
-                        <td id="check">
-                            <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
-                                    <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
-                            <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id="updateTeam">
-                                    <i class="fas fa-solid fa-pen view-icon" style="color: green"></i></button>
-                            <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
-                        </td>
-                    `;
-                    tableBody.appendChild(newRow);
-                });
+                if(data.length > 0) {
+                    tableContainer.style.display = '';
+                    noDataMessage.style.display = 'none !important';
+                    tableBody.innerHTML = '';
+                    data.forEach((team, index) => {
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${team.name}</td>
+                            <td>${new Date(team.createdOn).toLocaleDateString()}</td>
+                            <td>${team.totalPoints}</td>
+                            <td id="check">
+                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
+                                        <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
+                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id="updateTeam">
+                                        <i class="fas fa-solid fa-pen view-icon" style="color: green"></i></button>
+                                <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
+                            </td>
+                        `;
+                        tableBody.appendChild(newRow);
+                    });
+                }
+                else{
+                    tableContainer.style.display = 'none';
+                    noDataMessage.style.display = 'block';
+                }
             })
             .catch(error => {
                 console.error('Error parsing JSON:', error);
