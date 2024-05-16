@@ -467,15 +467,18 @@
         mySelectedItems = teamData.users.map(user => user.name);
         selectedUsers = teamData.users.map(user => user.id);
         teamName.value = teamData.name;
-        updateDropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        // updateDropdownButton.innerText = mySelectedItems.length > 0
+        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
         console.log(teamData.totalPoints);
         updateTotalPoints.value = teamData.totalPoints;
         console.log(checkboxes.length," check");
+        var foundName = [];
+        var foundId = [];
         checkboxes.forEach((checkbox) => {
             if(selectedUsers.includes(checkbox.id)) {
-                console.log(checkbox.id);
+                foundId.push(checkbox.id);
+                foundName.push(checkbox.value);
                 checkbox.checked = true;
                 checkbox.disabled = false;
             }
@@ -484,8 +487,14 @@
                 checkbox.disabled = true;
             }
         });
+        if(foundId.length !== selectedUsers.length){
+            mySelectedItems = mySelectedItems.filter(item => foundName.includes(item));
+            selectedUsers = selectedUsers.filter(item => foundId.includes(item));
+        }
+        updateDropdownButton.innerText = mySelectedItems.length > 0
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         totalPoints = teamData.totalPoints;
-        console.log("DOM ",totalPoints, mySelectedItems.length);
+        // console.log("DOM ",totalPoints, mySelectedItems.length);
         // handleUpdateCB(event);
     }
 

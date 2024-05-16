@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const Team = require('../models/team');
 const Player = require('../models/players');
+const mongoose = require('mongoose');
+
 
 
 exports.team = async (req, res) => {
@@ -43,21 +45,25 @@ exports.saveSelectedUsers = async (req, res) => {
     }
 
 
-    const newTeam = new Team();
     const createdByUser = await User.findOne({email: createdBy});
 
-    // Add selected users to the team's users array
-    newTeam.users = [...selectedUsers];
-    newTeam.createdBy = createdByUser._id;
-    newTeam.totalPoints = selectedUsers.reduce((total, user) => total + user.points, 0);
-    newTeam.createdOn = Date.now();
-    newTeam.name = teamName;
 
-    // console.log(newTeam);
+  const populatedUsers = selectedUsers.map(user => ({
+    id: user._id,
+    points: user.points,
+    name: user.name
+}));
 
 
+  const newTeam = new Team({
+      name: teamName,
+      createdBy: createdByUser.id,
+      users: populatedUsers, // Assign the populatedUsers array
+      totalPoints: selectedUsers.reduce((total, user) => total + user.points, 0), // Calculate totalPoints
+      createdOn: Date.now()
+  });
 
-    // Save the updated team document
+    console.log(newTeam);
     newTeam.save()
      .then((updatedTeam) => {
       if(updatedTeam) {
@@ -65,8 +71,6 @@ exports.saveSelectedUsers = async (req, res) => {
           user.teams.push(updatedTeam._id);
           await user.save();
         });
-    //     console.log("Added Successfully")
-    //     // Send response after all operations are completed
         return res.status(200).json({ message: 'Selected users added to the team successfully' });
       }
      })
@@ -85,17 +89,14 @@ exports.saveSelectedUsers = async (req, res) => {
 
 exports.getTeamDetails = async (req, res) => {
   try {
-    const team = await Team.findById(req.params.id).populate('users').populate('createdBy'); // Populate createdBy field
+    const team = await Team.findById(req.params.id); 
     if (!team) {
       return res.status(404).json({ message: 'Team not found.' });
     }
 
-    // console.log(team);
-
     const userNames = team.users.map(user => ({
-      id: user._id, 
+      id: user.id, 
       name: user.name, 
-      teamSize: user.teams.length,
       points: user.points
     }));
 

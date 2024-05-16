@@ -38,15 +38,15 @@ exports.addPlayer = async (req, res) => {
     }
 };
 
-exports.deletePlayer = async (req, res) => {
-    try {
-        await Player.deleteMany({});
-        console.log("All documents deleted successfully!");
-        res.status(200).json({message: "All documents deleted successfully!"});
-    } catch (error) {
-        console.error("Error deleting documents:", error);
-    } 
-};
+// exports.deleteAllPlayer = async (req, res) => {
+//     try {
+//         await Player.deleteMany({});
+//         console.log("All documents deleted successfully!");
+//         res.status(200).json({message: "All documents deleted successfully!"});
+//     } catch (error) {
+//         console.error("Error deleting documents:", error);
+//     } 
+// };
 
 exports.getPlayers = async (req, res) => {
     try {
@@ -100,4 +100,99 @@ exports.saveSelectedPlayers = async (req, res) => {
         console.error('Error saving selected users:', error);
         return res.status(500).json({ message: 'Internal server error' });
       }
+};
+
+
+exports.getAdmin = async (req, res) => {
+    res.redirect('/admin.html');
+};
+
+exports.deletePlayer = async (req, res) => {
+    try {
+        const player = await Player.findByIdAndDelete(req.params.id);
+        console.log(player);
+        if(player){
+            res.json({ message: 'Player deleted successfully.' });
+        }
+        else{
+            res.status(500).send({message: 'Player not found'});
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Internal Server Error'});
+    }
+};
+
+exports.updatePlayer = async (req, res) => {
+    try {
+        const { playerName, points, playerId} = req.body;
+
+        const player = await Player.findById(playerId);
+
+        if(!player) {
+            return res.status(404).json({ message: 'Player not found.' });
+        }
+
+        if(playerName !== player.name) {
+            const existingUser = await Player.find({name: playerName});
+            if(existingUser.length > 0) {
+                return res.status(409).json({ message: 'Player Name already exists.' });
+            }
+        }
+        
+
+        player.name = playerName;
+        player.points = points;
+
+        await player.save();
+
+        return res.status(200).json({ message: "Player updated successfully" });
+        
+    } catch (error) {
+        console.error('Error updating team:', error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+exports.getPlayerById = async (req, res) => {
+    try {
+
+        const player = await Player.findById(req.params.id);
+
+        if(!player) {
+            return res.status(404).json({ message: 'Player not found.' });
+        }
+
+        return res.status(200).json( {
+            id: player._id,
+            name: player.name,
+            points: player.points
+        } );
+        
+    } catch (error) {
+        console.error('Error updating team:', error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+
+exports.savePlayer = async (req, res) => {
+    try {
+
+        const {playerName, points} = req.body;
+        const playerByName = await Player.find({name: playerName});
+        
+        if(playerByName.length > 0) {
+            return res.status(409).json({ message: 'Player Name already exists.' });
+        }
+        
+        const player = new Player({name: playerName, points});
+        
+        await player.save();
+
+        return res.status(200).json({message: "Successfully saved player"});
+        
+    } catch (error) {
+        console.error('Error updating team:', error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
 };

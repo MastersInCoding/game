@@ -41,8 +41,14 @@ exports.login = async (req, res) => {
         }
         // Set session data
         req.session.userId = user.id;
-        const redirectUrl = '/index.html?name=' + user.name.split(' ')[0] + '&email=' + user.email;
-        res.redirect(redirectUrl);
+        if(user.role === 'admin') {
+            return res.redirect('admin.html');
+        }
+        else {
+            const redirectUrl = '/index.html?name=' + user.name.split(' ')[0] + '&email=' + user.email;
+            return res.redirect(redirectUrl);
+        }
+        
     } catch (err) {
         console.error('Error logging in:', err);
         res.status(500).send('Error logging in');
@@ -122,6 +128,16 @@ exports.findByEmailId = async (req, res) => {
   exports.logout = async (req, res) => {
     req.session.destroy();
     return res.sendFile('index.html', { root: 'public' });
+  };
+
+  exports.makeAdmin = async (req, res) => {
+    const user = await User.findOne({email: req.params.id});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    user.role = 'admin';
+    await user.save();
+    return res.status(200).json({ message: 'Successfully'});
   };
 
   exports.changeName = async (req, res) => {

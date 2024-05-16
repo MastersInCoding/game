@@ -39,7 +39,7 @@ router.get('/login1', (req, res) => {
 router.get('/users', userController.getUsers);
 router.post('/login', userController.login);
 router.get('/getByEmail', userController.getByEmail);
-router.post('/logout', userController.logout);
+router.get('/logout', userController.logout);
 router.post('/changeEmail', userController.changeEmail);
 router.post('/changeName', userController.changeName);
 router.post('/createAccount', userController.signup);
@@ -59,9 +59,16 @@ router.delete('/deleteTeam', teamController.deleteTeam);
 
 router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
-router.get('/deletePlayer', playerController.deletePlayer);
+// router.get('/deleteAllPlayer', playerController.deleteAllPlayer);
+router.get('/admin', playerController.getAdmin);
+router.delete('/deletePlayer/:id', playerController.deletePlayer);
+router.put('/updatePlayer', playerController.updatePlayer);
+router.get('/player/:id', playerController.getPlayerById);
+router.post('/savePlayer', playerController.savePlayer);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
+
+router.get('/makeAdmin/:id', userController.makeAdmin);
 
 router.post('/resetPasswordLink', async (req, res) => {
 
