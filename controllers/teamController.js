@@ -101,7 +101,7 @@ exports.getTeamDetails = async (req, res) => {
     }));
 
     const createdByUser = await User.findById(team.createdBy);
-
+    console.log(team.name);
     const message = {
       id: team._id,
       name: team.name,
@@ -186,6 +186,18 @@ exports.deleteTeam = async (req, res) => {
 }
 
 exports.myTeam = async (req, res) => {
-    // logic for sending mail
-    return res.redirect('/team.html');
-  };
+  // logic for sending mail
+  return res.redirect('/team.html');
+};
+
+exports.getAllTeams = async (req, res) => {
+  try {
+      const teams = await Team.find({});
+      if (!teams) {
+        return res.status(404).json({ message: 'Teams not found.' });
+      }
+      res.status(200).json(teams);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+}

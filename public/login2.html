@@ -154,6 +154,9 @@
             window.location.href = response.url;
 
         }
+        else{
+          alert('Kindly enter the correct password or reset the password through the link below.')
+        }
     })
   });
 
@@ -195,6 +198,9 @@
         password.value = '';
 
         window.location.href = response.url;
+    }
+    else{
+      alert('Kindly enter the correct password or reset the password through the link below.')
     }
       })
       .catch(error => {

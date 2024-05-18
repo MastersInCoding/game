@@ -49,15 +49,16 @@ router.get('/confirmNewPass', userController.confirmResetPass);
 router.get('/privacyPolicy', userController.privacyPolicy);
 router.get('/termsAndConditions', userController.termsAndConditions);
 
-router.get('/my-team', teamController.myTeam);
+// router.get('/my-team', teamController.myTeam);
 router.post('/team', teamController.team);
 router.post('/saveSelectedUsers', teamController.saveSelectedUsers);
 router.get('/getteams/:id', teamController.getTeams);
 router.get('/getTeamDetails/:id', teamController.getTeamDetails);
 router.put('/updateTeam', teamController.updateTeam);
 router.delete('/deleteTeam', teamController.deleteTeam);
+router.get('/getTeams', teamController.getAllTeams);
 
-router.get('/addPlayer', playerController.addPlayer);
+// router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
 // router.get('/deleteAllPlayer', playerController.deleteAllPlayer);
 router.get('/admin', playerController.getAdmin);
