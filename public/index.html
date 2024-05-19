@@ -312,10 +312,19 @@
     </div>
     <div id="tab2" class="tab-content" style="display:none;">
         <div class="container">
-            <div class="card" style="border-radius: 25px;">
-                <div class="card-body">
+
+            <div class="card"  style="border-radius: 25px;">
+                <div class="card-body" id="logoutContent">
+                    <h5 class="card-title text-center">MAKE YOUR TEAM</h5>
+                    <p class="card-text text-center">
+                    Select your team by choosing <strong>six golfers</strong>, each is assigned a specific value.
+                        <br/>Make sure the combined value of your selected <strong>golfers</strong> does not surpass 300 points.
+                        <br/>    The team with the lowest combined socre wins.
+                        For full details, click here
+                    </p>
+                </div>
+                <div class="card-body" id="loginContent">
                     <h5 class="card-title text-center">Predictions</h5>
-                    <!-- <iframe src="team.html" title="description" width="100%" height="100%"></iframe> -->
                     <div class="table">
                         <div class="table-wrapper">
                             <div class="table-title" style="border-bottom: 3px solid #8793d4; margin-bottom: 16px;">
@@ -629,16 +638,27 @@
 
         function renderDashboard() {
             if (!isLoggedIn()) {
+                console.log("Logged Off");
                 document.getElementById('login').classList.add('display');
                 document.getElementById('login').classList.remove('hide');
-                document.getElementById('content').classList.remove('dispaly');
+                document.getElementById('content').classList.remove('display');
                 document.getElementById('content').classList.add('hide');
+                document.getElementById('logoutContent').classList.add('display');
+                // document.getElementById('logoutContent').classList.remove('hide');
+                // document.getElementById('loginContent').classList.remove('display');
+                document.getElementById('loginContent').classList.add('hide');
             }
             else {
+                console.log("Logged In");
                 document.getElementById('login').classList.add('hide');
                 document.getElementById('login').classList.remove('display');
                 document.getElementById('content').classList.add('display');
                 document.getElementById('content').classList.remove('display');
+                document.getElementById('logoutContent').classList.add('hide');
+                // document.getElementById('logoutContent').classList.remove('display');
+                // document.getElementById('loginContent').classList.add('display');
+                // document.getElementById('loginContent').classList.add('hide');
+                // document.getElementById('loginContent').classList.remove('hide');
             }
         }
 

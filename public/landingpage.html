@@ -1,0 +1,90 @@
+<html>
+<head>
+  <title>Landing Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* General styles */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .hero {
+        height: 60vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body style="background-color: #5b5bcd;">
+  <!-- // v0 by Vercel. // https://v0.dev/t/s3TEl7tngF1 -->
+  <div class="hero relative w-full h-[80vh] overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#9b59b6] to-[#3498db] via-[#8e44ad]"></div>
+    <img src="Image1.jpg" width="1920" height="1080" alt="Hero Image" class="w-full h-full object-cover opacity-50" style="aspect-ratio: 1920 / 1080; object-fit: cover;" />
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white space-y-4 px-4">
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight" style="color: #e1e1c1;">KELLY GOLF</h1>
+      <p class="max-w-xl text-lg sm:text-xl" style="font-size: x-large; font-style: italic;">
+        Welcome to <strong>Major Sweeps</strong>: A private members club celebrating golf's biggest tournaments
+      </p>
+      <div class="flex gap-2">
+        <button id="home"  class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                Get Started
+            </span>
+            </button>
+            <button id="login" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" x2="3" y1="12" y2="12"></line>
+                </svg>
+                Login/Signup
+          </button>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="py-12 md:py-20">
+    <div class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <img src="Image2.jpg" width="400" height="300" alt="Product Shot" class="rounded-md object-cover" style="aspect-ratio: 400 / 300; object-fit: cover;" />
+      <img src="Image3.jpg" width="400" height="300" alt="Product Shot" class="rounded-md object-cover" style="aspect-ratio: 400 / 300; object-fit: cover;" />
+      <img src="Image4.jpg" width="400" height="300" alt="Product Shot" class="rounded-md object-cover" style="aspect-ratio: 400 / 300; object-fit: cover;" />
+      <img src="Image5.jpg" width="400" height="300" alt="Product Shot" class="rounded-md object-cover" style="aspect-ratio: 400 / 300; object-fit: cover;" />
+    </div>
+  </section>
+
+
+
+  <script>
+    const login = document.getElementById('login');
+    login.addEventListener('click', function() {
+      window.location.href = "login.html";
+    });
+    const home = document.getElementById('home');
+    home.addEventListener('click', function() {
+      window.location.href = "index.html";
+    });
+  </script>
+
+</body>
+</html>

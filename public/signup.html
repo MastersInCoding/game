@@ -89,9 +89,21 @@
         border: none;
         cursor: pointer;
     }
+    .bg-image {
+  /* The image used */
+  background-image: url("125.jpg");
+
+  /* Full height */
+  height: 100vh;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
   </style>
 </head>
-<body>
+<body class="bg-image">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -109,11 +121,11 @@
         <form id="loginForm" class="mx-5 my-4">
             <div data-mdb-input-init class="form-outline mb-4">
                 <input type="email" id="email" class="form-control form-control-lg"  readonly/>
-                <label class="form-label" forinvalid="formControlReadonly">Email address</label>
+                <label class="form-label" forinvalid="formControlReadonly" style="font-size: large; font-weight: bold;">Email address</label>
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
                 <input type="text" id="name" class="form-control form-control-lg mb-0" />
-                <label class="form-label" for="form1Example1">Name</label>
+                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Name</label>
                 <!-- <div class="name-text invalid-feedback mt-0" style="font-style: normal;color: red;">Name must be at least 6 characters and less than 20 characters</div> -->
             </div>
             <div class="m-0 my-2 p-0 ">
@@ -122,18 +134,18 @@
             
             <div data-mdb-input-init class="form-outline mb-4">
                 <input type="password" id="password" class="form-control form-control-lg" />
-                <button class="toggle-password-button" type="button" id="togglePassword">
+                <button class="toggle-password-button" type="button" id="togglePassword" style="background: none;">
                     <i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
                 </button>
-                <label class="form-label" for="form1Example1">Password</label>
+                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Password</label>
                 
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
                 <input type="password" id="confirmPassword" class="form-control form-control-lg" />
-                <button class="toggle-password-button" type="button" id="toggleConfirmPassword">
+                <button class="toggle-password-button" type="button" id="toggleConfirmPassword" style="background: none;">
                     <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
                 </button>
-                <label class="form-label" for="form1Example1">Confirm Password</label>
+                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Confirm Password</label>
             </div>
             <div class="row center">
                 <div class="col in_valid_text" id="characterValidation">
@@ -155,7 +167,7 @@
                   id="registerCheck"
                   aria-describedby="registerCheckHelpText"
                 />
-                <label class="form-check-label" for="registerCheck">
+                <label class="form-check-label" for="registerCheck" style="font-size: large; font-weight: bold;">
                   I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
                 </label>
               </div>
