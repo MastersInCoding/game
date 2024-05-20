@@ -18,66 +18,67 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
     />
-  <style>
-    .centered {
-    display: flex;
-    justify-content: center;
-  }
-  .bg {
-      background-color: #e95d06;
-  }
-  .text_style {
-      text-align: center;
-      border-bottom-color: #FFD000;
-      border-bottom-width: 3px;
-      border-bottom-style: solid;
-      color: #e95d06;
-      font-size: 24px;
-      font-weight: bold;
-      font-style: italic;
-      border-bottom: #FFD000;
-      border-bottom-width: 3px;
-      border-bottom-style: solid;
-  }
-  .icon {
-    fill: #e95d06; 
-  }
-  .button_style {
-      width: -webkit-fill-available;
-      background-color: #e95d06;
-      border: none;
-  }
-  .butn:disabled {
-      background-color: #d3d3d3; 
-  }
-  .in_valid_text {
-    font-weight: 500;
-    font-size: 1rem;
-    color: red;
-    word-wrap: break-word;
-    text-align: center;
-    font-size: 12px;
-  }
-  .name-text {
-    font-weight: 500;
-    font-size: 1rem;
-    color: black;
-    word-wrap: break-word;
-    font-size: 12px;
-    font-style: italic;
-  }
-  .valid_text {
-    font-weight: 500;
-    font-size: 1rem;
-    color: green;
-    word-wrap: break-word;
-    text-align: center;
-    font-size: 12px;
-  }
-  .name-focused {
-      border-color: black; 
-    }
-    .toggle-password-button{
+    <style>
+      body {
+        background-image: url("125.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+      }
+      .text_style {
+        text-align: center;
+        border-bottom-color: #FFD000;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+        color: #e95d06;
+        font-size: 24px;
+        font-weight: bold;
+        font-style: italic;
+        border-bottom: #FFD000;
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+      }
+      .icon {
+        fill: #e95d06; 
+      }
+      .button_style {
+        width: -webkit-fill-available;
+        background-color: #e95d06;
+        border: none;
+      }
+      .butn:disabled {
+        background-color: #d3d3d3; 
+      }
+      .in_valid_text {
+        font-weight: 500;
+        font-size: 1rem;
+        color: red;
+        word-wrap: break-word;
+        text-align: center;
+        font-size: 12px;
+      }
+      .name-text {
+        font-weight: 500;
+        font-size: 1rem;
+        color: black;
+        word-wrap: break-word;
+        font-size: 12px;
+        font-style: italic;
+      }
+      .valid_text {
+        font-weight: 500;
+        font-size: 1rem;
+        color: green;
+        word-wrap: break-word;
+        text-align: center;
+        font-size: 12px;
+      }
+      .name-focused {
+        border-color: black; 
+      }
+      .toggle-password-button {
         position: absolute;
         right: 10px;
         top: 50%;
@@ -88,22 +89,19 @@
         background-size: cover;
         border: none;
         cursor: pointer;
-    }
-    .bg-image {
-  /* The image used */
-  background-image: url("125.jpg");
-
-  /* Full height */
-  height: 100vh;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-  </style>
+      }
+      .bg-image {
+        background-image: url("125.jpg");
+  
+        min-height: 100vh;
+  
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    </style>
 </head>
-<body class="bg-image">
+<body class="">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -171,12 +169,15 @@
                   I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
                 </label>
               </div>
+              <div class="centered">
+                <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
+              </div>
         </form>
         </div>
     </div>
     </div>
 
-<div class="container mb-1 fixed-bottom">
+<!-- <div class="container mb-1 fixed-bottom">
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="centered">
@@ -184,7 +185,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 <div class="toast-container">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -231,7 +232,7 @@
     const nameInput = document.getElementById('name');
 
     nameInput.addEventListener('input', function() {
-        if(nameInput.value.length > 5 && nameInput.value.length < 20){
+        if(nameInput.value.length > 1 && nameInput.value.length < 20){
             nameInput.classList.add('is-valid');
             nameInput.classList.remove('is-invalid');
         }
