@@ -19,14 +19,18 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
     />
     <style>
-      body {
+      html, body{
+        height: 100%;
+        width: 100%;
+      }
+      /* body {
         background-image: url("125.jpg");
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
         overflow-x: hidden !important;
         overflow-y: auto !important;
-      }
+      } */
       .text_style {
         text-align: center;
         border-bottom-color: #FFD000;
@@ -90,19 +94,21 @@
         border: none;
         cursor: pointer;
       }
-      .bg-image {
-        background-image: url("125.jpg");
-  
-        min-height: 100vh;
-  
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
+      .bg-images {
+      background-image: url('Image1.jpg');
+      height: 100%;
+      width: 100%;
+      background-size: 100% 100%;
+      
+      filter: blur(2px);
+      -webkit-filter: blur(2px);
+      opacity: 80%;
+    }
     </style>
 </head>
-<body class="">
-<div class="container mt-5">
+<body>
+<div class="bg-images"></div>
+<div class="container-fluid mt-5" style="position: absolute; top: 0">
     <div class="row justify-content-center">
         <div class="col-md-6">
         <h3 class="text-center mb-4">
@@ -169,23 +175,23 @@
                   I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
                 </label>
               </div>
-              <div class="centered">
+              <!-- <div class="centered">
                 <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
-              </div>
+              </div> -->
         </form>
         </div>
     </div>
     </div>
 
-<!-- <div class="container mb-1 fixed-bottom">
-    <div class="row justify-content-center">
+<div class="container mb-1 fixed-bottom">
+    <div class="row justify-content-center mb-4">
       <div class="col-md-6">
         <div class="centered">
           <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
 <div class="toast-container">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -232,7 +238,7 @@
     const nameInput = document.getElementById('name');
 
     nameInput.addEventListener('input', function() {
-        if(nameInput.value.length > 1 && nameInput.value.length < 20){
+        if(nameInput.value.length >= 1 && nameInput.value.length < 20){
             nameInput.classList.add('is-valid');
             nameInput.classList.remove('is-invalid');
         }

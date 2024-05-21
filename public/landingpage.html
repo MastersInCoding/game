@@ -10,6 +10,11 @@
       padding: 0 1rem;
     }
 
+    html, body{
+      height: 100%;
+      width: 100%;
+    }
+
     /* Mobile styles */
     @media (max-width: 768px) {
       .hero {
@@ -33,11 +38,21 @@
         height: auto;
       }
     }
+
+    .bg-image{
+      background-image: url('Image1.jpg');
+      height: 100%;
+      width: 100%;
+      background-size: 100% 100%;
+      filter: blur(3px);
+      -webkit-filter: blur(3px);
+      opacity: 80%;
+    }
   </style>
 </head>
-<body style="background: url(Image1.jpg)">
-  <div class="hero relative w-full h-[80vh] overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-[#9b59b6] to-[#3498db] via-[#8e44ad]"></div>
+<body>
+  <div class="bg-image"></div>
+  <div class="hero ">
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white space-y-4 px-4">
       <h1 class="text-4xl sm:text-6xl font-bold tracking-tight" style="color: #e1e1c1;">KELLY GOLF</h1>
       <p class="max-w-xl text-lg sm:text-xl" style="font-size: x-large; font-style: italic;">
@@ -49,7 +64,7 @@
                 Join for free
             </span>
             </button>
-            <button id="login" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <button id="login" class="relative inline-flex items-center justify-center px-2 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
                 Login
           </button>
         </button>
