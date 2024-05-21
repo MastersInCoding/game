@@ -1,29 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Page</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/mdb.min.css" />
   <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="login.css">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-    />
-    <style>
-      html, body{
-        height: 100%;
-        width: 100%;
-      }
-      /* body {
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* body {
         background-image: url("125.jpg");
         background-position: center;
         background-repeat: no-repeat;
@@ -31,160 +28,168 @@
         overflow-x: hidden !important;
         overflow-y: auto !important;
       } */
-      .text_style {
-        text-align: center;
-        border-bottom-color: #FFD000;
-        border-bottom-width: 3px;
-        border-bottom-style: solid;
-        color: #e95d06;
-        font-size: 24px;
-        font-weight: bold;
-        font-style: italic;
-        border-bottom: #FFD000;
-        border-bottom-width: 3px;
-        border-bottom-style: solid;
-      }
-      .icon {
-        fill: #e95d06; 
-      }
-      .button_style {
-        width: -webkit-fill-available;
-        background-color: #e95d06;
-        border: none;
-      }
-      .butn:disabled {
-        background-color: #d3d3d3; 
-      }
-      .in_valid_text {
-        font-weight: 500;
-        font-size: 1rem;
-        color: red;
-        word-wrap: break-word;
-        text-align: center;
-        font-size: 12px;
-      }
-      .name-text {
-        font-weight: 500;
-        font-size: 1rem;
-        color: black;
-        word-wrap: break-word;
-        font-size: 12px;
-        font-style: italic;
-      }
-      .valid_text {
-        font-weight: 500;
-        font-size: 1rem;
-        color: green;
-        word-wrap: break-word;
-        text-align: center;
-        font-size: 12px;
-      }
-      .name-focused {
-        border-color: black; 
-      }
-      .toggle-password-button {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 30px;
-        background-image: url(path/to/eye-icon.png);
-        background-size: cover;
-        border: none;
-        cursor: pointer;
-      }
-      .bg-images {
+    .text_style {
+      text-align: center;
+      border-bottom-color: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+      color: #e95d06;
+      font-size: 24px;
+      font-weight: bold;
+      font-style: italic;
+      border-bottom: #FFD000;
+      border-bottom-width: 3px;
+      border-bottom-style: solid;
+    }
+
+    .icon {
+      fill: #e95d06;
+    }
+
+    .button_style {
+      width: -webkit-fill-available;
+      background-color: #e95d06;
+      border: none;
+    }
+
+    .butn:disabled {
+      background-color: #d3d3d3;
+    }
+
+    .in_valid_text {
+      font-weight: 500;
+      font-size: 1rem;
+      color: red;
+      word-wrap: break-word;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .name-text {
+      font-weight: 500;
+      font-size: 1rem;
+      color: black;
+      word-wrap: break-word;
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .valid_text {
+      font-weight: 500;
+      font-size: 1rem;
+      color: green;
+      word-wrap: break-word;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .name-focused {
+      border-color: black;
+    }
+
+    .toggle-password-button {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-image: url(path/to/eye-icon.png);
+      background-size: cover;
+      border: none;
+      cursor: pointer;
+    }
+
+    .bg-images {
       background-image: url('Image1.jpg');
       height: 100%;
       width: 100%;
       background-size: 100% 100%;
-      
+
       filter: blur(2px);
       -webkit-filter: blur(2px);
       opacity: 80%;
     }
-    </style>
+  </style>
 </head>
+
 <body>
-<div class="bg-images"></div>
-<div class="container-fluid mt-5" style="position: absolute; top: 0">
+  <div class="bg-images"></div>
+  <div class="container-fluid mt-5" style="position: absolute; top: 0">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+      <div class="col-md-6">
         <h3 class="text-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill" viewBox="0 0 16 16" style="color: #e95d06;">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
-              </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill"
+            viewBox="0 0 16 16" style="color: #e95d06;">
+            <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z" />
+          </svg>
         </h3>
         <p class="text-center mb-4" style="color: #e95d06;">
-            Account
+          Account
         </p>
         <p class="text-center mx-5 text_style">
-            <ins>The email address you entered is not connected to an account. Create an account now to play!</ins>
+          <ins>The email address you entered is not connected to an account. Create an account now to play!</ins>
         </p>
         <form id="loginForm" class="mx-5 my-4">
-            <div data-mdb-input-init class="form-outline mb-4">
-                <input type="email" id="email" class="form-control form-control-lg"  readonly/>
-                <label class="form-label" forinvalid="formControlReadonly" style="font-size: large; font-weight: bold;">Email address</label>
-            </div>
-            <div data-mdb-input-init class="form-outline mb-4">
-                <input type="text" id="name" class="form-control form-control-lg mb-0" />
-                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Name</label>
-                <!-- <div class="name-text invalid-feedback mt-0" style="font-style: normal;color: red;">Name must be at least 6 characters and less than 20 characters</div> -->
-            </div>
-            <div class="m-0 my-2 p-0 ">
-                <p class="name-text">Please use your first and last names</p>
-            </div>
-            
-            <div data-mdb-input-init class="form-outline mb-4">
-                <input type="password" id="password" class="form-control form-control-lg" />
-                <button class="toggle-password-button" type="button" id="togglePassword" style="background: none;">
-                    <i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
-                </button>
-                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Password</label>
-                
-            </div>
-            <div data-mdb-input-init class="form-outline mb-4">
-                <input type="password" id="confirmPassword" class="form-control form-control-lg" />
-                <button class="toggle-password-button" type="button" id="toggleConfirmPassword" style="background: none;">
-                    <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
-                </button>
-                <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Confirm Password</label>
-            </div>
-            <div class="row center">
-                <div class="col in_valid_text" id="characterValidation">
-                    <i class="fas fa-xmark" id="charValidationImage"></i> 8 characters
-                </div>
-                <div class="col in_valid_text" id="numberValidation">
-                    <i class="fas fa-xmark" id="numberValidationImage"></i> Numbers
-                </div>
-                <div class="col in_valid_text" id="letterValidation">
-                    <i class="fas fa-xmark" id="letterValidationImage"></i> Uppercase & Lowercase
-                </div>
-                
-            </div>
-            <div class="form-check mb-4">
-                <input
-                  class="form-check-input me-2"
-                  type="checkbox"
-                  value=""
-                  id="registerCheck"
-                  aria-describedby="registerCheckHelpText"
-                />
-                <label class="form-check-label" for="registerCheck" style="font-size: large; font-weight: bold;">
-                  I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
-                </label>
-              </div>
-              <!-- <div class="centered">
-                <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
-              </div> -->
-        </form>
-        </div>
-    </div>
-    </div>
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="email" class="form-control form-control-lg" readonly />
+            <label class="form-label" forinvalid="formControlReadonly"
+              style="font-size: large; font-weight: bold;">Email address</label>
+          </div>
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" id="name" class="form-control form-control-lg mb-0" />
+            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Name</label>
+            <!-- <div class="name-text invalid-feedback mt-0" style="font-style: normal;color: red;">Name must be at least 6 characters and less than 20 characters</div> -->
+          </div>
+          <div class="m-0 my-2 p-0 ">
+            <p class="name-text">Please use your first and last names</p>
+          </div>
 
-<div class="container-fluid mb-1 fixed-bottom mx-5">
-    <div class="row justify-content-center mb-4">
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="password" class="form-control form-control-lg" />
+            <button class="toggle-password-button" type="button" id="togglePassword" style="background: none;">
+              <i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
+            </button>
+            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Password</label>
+
+          </div>
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="confirmPassword" class="form-control form-control-lg" />
+            <button class="toggle-password-button" type="button" id="toggleConfirmPassword" style="background: none;">
+              <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
+            </button>
+            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Confirm
+              Password</label>
+          </div>
+          <div class="row center">
+            <div class="col in_valid_text" id="characterValidation">
+              <i class="fas fa-xmark" id="charValidationImage"></i> 8 characters
+            </div>
+            <div class="col in_valid_text" id="numberValidation">
+              <i class="fas fa-xmark" id="numberValidationImage"></i> Numbers
+            </div>
+            <div class="col in_valid_text" id="letterValidation">
+              <i class="fas fa-xmark" id="letterValidationImage"></i> Uppercase & Lowercase
+            </div>
+
+          </div>
+          <div class="form-check mb-4">
+            <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck"
+              aria-describedby="registerCheckHelpText" />
+            <label class="form-check-label" for="registerCheck" style="font-size: large; font-weight: bold;">
+              I have read and I accept Jason Kelly Golf’s <a href="/termsandconditions" id="tAndC">Terms and
+                Conditions</a> and <a href="/privacypolicy">Privacy Policy</a>
+            </label>
+          </div>
+          <div class="row" style="height: 28px;"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mb-1 fixed-bottom">
+    <div class="row justify-content-center mb-4 mx-5">
       <div class="col-md-6">
         <div class="centered">
           <button type="button" class="btn btn-primary button_style butn" id="nextBtn" disabled>Next</button>
@@ -193,25 +198,25 @@
     </div>
   </div>
 
-<div class="toast-container">
+  <div class="toast-container">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
+      <div class="toast-header">
         <strong class="mr-auto">Bootstrap Toast</strong>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-        <div class="toast-body">
+      </div>
+      <div class="toast-body">
         This is a Bootstrap toast example!
-        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
-<script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+  <script>
     const email = document.getElementById('email');
     const nextBtn = document.getElementById('nextBtn');
     const passwordInput = document.getElementById('password');
@@ -231,49 +236,49 @@
 
     const tAndCBtn = document.getElementById('tAndC');
 
-    tAndCBtn.addEventListener('click', function(){
+    tAndCBtn.addEventListener('click', function () {
       window.location.href = '/termsandconditions';
     })
 
     const nameInput = document.getElementById('name');
 
-    nameInput.addEventListener('input', function() {
-        if(nameInput.value.length >= 1 && nameInput.value.length < 20){
-            nameInput.classList.add('is-valid');
-            nameInput.classList.remove('is-invalid');
-        }
-        else {
-            nameInput.classList.add('is-invalid');
-            nameInput.classList.remove('is-valid');
-        }
-        if(nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked){
-            nextBtn.disabled = false;
-        }
-        else{
-            nextBtn.disabled = true;
-        }
+    nameInput.addEventListener('input', function () {
+      if (nameInput.value.length >= 1 && nameInput.value.length < 20) {
+        nameInput.classList.add('is-valid');
+        nameInput.classList.remove('is-invalid');
+      }
+      else {
+        nameInput.classList.add('is-invalid');
+        nameInput.classList.remove('is-valid');
+      }
+      if (nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked) {
+        nextBtn.disabled = false;
+      }
+      else {
+        nextBtn.disabled = true;
+      }
 
     });
 
-    nameInput.addEventListener('focus', function() {
+    nameInput.addEventListener('focus', function () {
       nameInput.classList.add('name-focused');
     });
 
-    nameInput.addEventListener('blur', function() {
+    nameInput.addEventListener('blur', function () {
       nameInput.classList.remove('name-focused');
     });
 
 
     function getUrlParams() {
-        const params = {};
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        
-        for (const [key, value] of urlParams) {
-            params[key] = value;
-        }
+      const params = {};
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
 
-        return params;
+      for (const [key, value] of urlParams) {
+        params[key] = value;
+      }
+
+      return params;
     }
 
     const params = getUrlParams();
@@ -283,79 +288,79 @@
     document.getElementById('email').value = paramValue;
 
     const togglePassword = document.getElementById('togglePassword');
-    togglePassword.addEventListener('click', function() {
-        const icon = document.getElementById('togglePasswordIcon');
+    togglePassword.addEventListener('click', function () {
+      const icon = document.getElementById('togglePasswordIcon');
 
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.add('fa-eye');
-            icon.classList.remove('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.add('fa-eye-slash');
-            icon.classList.remove('fa-eye');
-        }
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.add('fa-eye');
+        icon.classList.remove('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.add('fa-eye-slash');
+        icon.classList.remove('fa-eye');
+      }
     });
 
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    toggleConfirmPassword.addEventListener('click', function() {
-        const icon = document.getElementById('toggleConfirmPasswordIcon');
+    toggleConfirmPassword.addEventListener('click', function () {
+      const icon = document.getElementById('toggleConfirmPasswordIcon');
 
-        if (confirmPasswordInput.type === 'password') {
-            confirmPasswordInput.type = 'text';
-            icon.classList.add('fa-eye');
-            icon.classList.remove('fa-eye-slash');
-        } else {
-            confirmPasswordInput.type = 'password';
-            icon.classList.add('fa-eye-slash');
-            icon.classList.remove('fa-eye');
-        }
+      if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = 'text';
+        icon.classList.add('fa-eye');
+        icon.classList.remove('fa-eye-slash');
+      } else {
+        confirmPasswordInput.type = 'password';
+        icon.classList.add('fa-eye-slash');
+        icon.classList.remove('fa-eye');
+      }
     });
 
     function validatePassword(password) {
-        const characters = password.length;
-        const letters = /[a-z]/.test(password) && /[A-Z]/.test(password);
-        const number = /\d/.test(password);
-        console.log(characters, letters, number);
-        if(characters < 8){
-            characterValidationImage.classList.remove('fa-check');
-            characterValidationImage.classList.add('fa-xmark');
-            characterValidation.classList.remove('valid_text');
-            characterValidation.classList.add('in_valid_text');
-        }
-        else{
-            characterValidationImage.classList.remove('fa-xmark');
-            characterValidationImage.classList.add('fa-check');
-            characterValidation.classList.remove('in_valid_text');
-            characterValidation.classList.add('valid_text');
-        }
-        if(letters){
-            letterValidationImage.classList.remove('fa-xmark');
-            letterValidationImage.classList.add('fa-check');
-            letterValidation.classList.remove('in_valid_text');
-            letterValidation.classList.add('valid_text');
-        }
-        else{
-            letterValidationImage.classList.remove('fa-check');
-            letterValidationImage.classList.add('fa-xmark');
-            letterValidation.classList.remove('valid_text');
-            letterValidation.classList.add('in_valid_text');
-        }
-        if(number){
-            numberValidationImage.classList.remove('fa-xmark');
-            numberValidationImage.classList.add('fa-check');
-            numberValidation.classList.remove('in_valid_text');
-            numberValidation.classList.add('valid_text');
-        }
-        else{
-            numberValidationImage.classList.remove('fa-check');
-            numberValidationImage.classList.add('fa-xmark');
-            numberValidation.classList.remove('valid_text');
-            numberValidation.classList.add('in_valid_text');
-        }
+      const characters = password.length;
+      const letters = /[a-z]/.test(password) && /[A-Z]/.test(password);
+      const number = /\d/.test(password);
+      console.log(characters, letters, number);
+      if (characters < 8) {
+        characterValidationImage.classList.remove('fa-check');
+        characterValidationImage.classList.add('fa-xmark');
+        characterValidation.classList.remove('valid_text');
+        characterValidation.classList.add('in_valid_text');
+      }
+      else {
+        characterValidationImage.classList.remove('fa-xmark');
+        characterValidationImage.classList.add('fa-check');
+        characterValidation.classList.remove('in_valid_text');
+        characterValidation.classList.add('valid_text');
+      }
+      if (letters) {
+        letterValidationImage.classList.remove('fa-xmark');
+        letterValidationImage.classList.add('fa-check');
+        letterValidation.classList.remove('in_valid_text');
+        letterValidation.classList.add('valid_text');
+      }
+      else {
+        letterValidationImage.classList.remove('fa-check');
+        letterValidationImage.classList.add('fa-xmark');
+        letterValidation.classList.remove('valid_text');
+        letterValidation.classList.add('in_valid_text');
+      }
+      if (number) {
+        numberValidationImage.classList.remove('fa-xmark');
+        numberValidationImage.classList.add('fa-check');
+        numberValidation.classList.remove('in_valid_text');
+        numberValidation.classList.add('valid_text');
+      }
+      else {
+        numberValidationImage.classList.remove('fa-check');
+        numberValidationImage.classList.add('fa-xmark');
+        numberValidation.classList.remove('valid_text');
+        numberValidation.classList.add('in_valid_text');
+      }
 
 
-        return characters > 7 && letters && number;
+      return characters > 7 && letters && number;
     }
 
     function passwordsMatch(password, confirmPassword) {
@@ -384,7 +389,7 @@
         confirmPasswordInput.classList.add('is-invalid');
       }
 
-      if (validatePassword(password) && passwordsMatch(password, confirmPassword) && nameInput.classList.contains('is-valid') && checkInput.checked){
+      if (validatePassword(password) && passwordsMatch(password, confirmPassword) && nameInput.classList.contains('is-valid') && checkInput.checked) {
         nextBtn.disabled = false;
       } else {
         nextBtn.disabled = true;
@@ -394,45 +399,46 @@
     passwordInput.addEventListener('input', handlePasswordInput);
     confirmPasswordInput.addEventListener('input', handlePasswordInput);
 
-    checkInput.addEventListener('click', function() {
-      if(nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked){
-            nextBtn.disabled = false;
-        }
-        else{
-            nextBtn.disabled = true;
-        }
+    checkInput.addEventListener('click', function () {
+      if (nameInput.classList.contains('is-valid') && passwordInput.classList.contains('is-valid') && confirmPasswordInput.classList.contains('is-valid') && checkInput.checked) {
+        nextBtn.disabled = false;
+      }
+      else {
+        nextBtn.disabled = true;
+      }
     });
 
-    nextBtn.addEventListener('click', function() {
+    nextBtn.addEventListener('click', function () {
 
-    fetch('/createAccount', {
+      fetch('/createAccount', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
-            email: email.value,
-            name: nameInput.value,
-            password:  passwordInput.value
+        body: JSON.stringify({
+          email: email.value,
+          name: nameInput.value,
+          password: passwordInput.value
         })
-    })
-    .then(response => {
-        console.log('Response:', response);
-        if (response.redirected) {
+      })
+        .then(response => {
+          console.log('Response:', response);
+          if (response.redirected) {
             sessionStorage.setItem('email', email.value);
             email.value = '';
             nameInput.value = '';
             passwordInput.value = '';
             confirmPasswordInput.value = '';
             window.location.href = response.url
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-    
-});
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
 
-</script>
+    });
+
+  </script>
 </body>
+
 </html>
