@@ -20,6 +20,12 @@
       width: 100%;
     }
 
+    @media only screen and (max-width: 370px) {
+      .bg-images {
+        height: 127% !important;
+      }
+    }
+
     /* body {
         background-image: url("125.jpg");
         background-position: center;
@@ -33,7 +39,7 @@
       border-bottom-color: #FFD000;
       border-bottom-width: 3px;
       border-bottom-style: solid;
-      color: #e95d06;
+      color: white;
       font-size: 24px;
       font-weight: bold;
       font-style: italic;
@@ -120,12 +126,12 @@
       <div class="col-md-6">
         <h3 class="text-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill"
-            viewBox="0 0 16 16" style="color: #e95d06;">
+            viewBox="0 0 16 16" style="color: yellow;">
             <path
               d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z" />
           </svg>
         </h3>
-        <p class="text-center mb-4" style="color: #e95d06;">
+        <p class="text-center mb-4" style="color: white;">
           Account
         </p>
         <p class="text-center mx-5 text_style">
@@ -133,13 +139,14 @@
         </p>
         <form id="loginForm" class="mx-5 my-4">
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="email" class="form-control form-control-lg" readonly />
+            <input type="email" id="email" style="color: black;background: none;" class="form-control form-control-lg" readonly />
             <label class="form-label" forinvalid="formControlReadonly"
-              style="font-size: large; font-weight: bold;">Email address</label>
+              style="font-size: large; font-weight: bold;color: black">Email address</label>
           </div>
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="text" id="name" class="form-control form-control-lg mb-0" />
-            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Name</label>
+            <input type="text" id="name" class="form-control form-control-lg mb-0" style="color: black;background: none;"/>
+            <label class="form-label" for="form1Example1"
+              style="font-size: large; font-weight: bold;color: black">Name</label>
             <!-- <div class="name-text invalid-feedback mt-0" style="font-style: normal;color: red;">Name must be at least 6 characters and less than 20 characters</div> -->
           </div>
           <div class="m-0 my-2 p-0 ">
@@ -147,19 +154,21 @@
           </div>
 
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="password" class="form-control form-control-lg" />
+            <input type="password" id="password" class="form-control form-control-lg" style="color: black;background: none;"/>
             <button class="toggle-password-button" type="button" id="togglePassword" style="background: none;">
               <i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
             </button>
-            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Password</label>
+            <label class="form-label" for="form1Example1"
+              style="font-size: large; font-weight: bold;color: black">Password</label>
 
           </div>
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="confirmPassword" class="form-control form-control-lg" />
+            <input type="password" id="confirmPassword" class="form-control form-control-lg" style="color: black;background: none;"/>
             <button class="toggle-password-button" type="button" id="toggleConfirmPassword" style="background: none;">
               <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
             </button>
-            <label class="form-label" for="form1Example1" style="font-size: large; font-weight: bold;">Confirm
+            <label class="form-label" for="form1Example1"
+              style="font-size: large; font-weight: bold;color: black">Confirm
               Password</label>
           </div>
           <div class="row center">
