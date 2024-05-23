@@ -17,6 +17,11 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
     />
   <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
     .centered {
     display: flex;
     justify-content: center;
@@ -29,22 +34,26 @@
       border-bottom-color: #FFD000;
       border-bottom-width: 3px;
       border-bottom-style: solid;
-      color: #e95d06;
+      color: #DAA520;
       font-size: 24px;
       font-weight: bold;
       font-style: italic;
       border-bottom: #FFD000;
       border-bottom-width: 3px;
       border-bottom-style: solid;
-  }
+      background: #EEE8AA;
+    }
   .icon {
     fill: #e95d06; 
   }
   .button_style {
       width: -webkit-fill-available;
-      background-color: #e95d06;
+      color: #B8860B !important;
+      background: #BDB76B;
       border: none;
-  }
+      font-size: x-large;
+      font-weight: bolder;
+    }
   .butn:disabled {
       background-color: #d3d3d3; 
   }
@@ -60,19 +69,31 @@
         border: none;
         cursor: pointer;
     }
+    .bg-images {
+      background-image: url('Image1.jpg');
+      height: 100%;
+      width: 100%;
+      background-size: 100% 100%;
+      
+      filter: blur(2px);
+      -webkit-filter: blur(2px);
+      opacity: 80%;
+    }
   </style>
 </head>
 <body>
-<a href="javascript:history.back()">Go Back</a>
-<div class="container mt-5">
-    <div class="row justify-content-center">
+  <div class="bg-images"></div>
+
+<a href="javascript:history.back()" style="position: absolute; top: 0; color: white;font-weight: bold;font-size: x-large;">Go Back</a>
+<div class="container-fluid mt-5" style="position: absolute; top: 0;">
+  <div class="row justify-content-center">
         <div class="col-md-6">
             <h3 class="text-center mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill" viewBox="0 0 16 16" style="color: #e95d06;">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
                 </svg>
             </h3>
-            <p class="text-center mb-4" style="color: #e95d06;">
+            <p class="text-center mb-4" style="color: #ffffff;">
                 Account
             </p>
             <p class="text-center mx-5 text_style">
