@@ -138,7 +138,7 @@
     </style>
 </head>
 
-<body style="background-color: #00e5ff;">
+<body style="background-color: #e6ffee;">
 
 
     <div class="container-fluid">
@@ -232,7 +232,7 @@
     <div class="tab-buttons">
         <button id="tabButton1" class="btn btn-primary ripple-surface active" style="
         border: none;
-        background: #00e5ff;
+        background: #e6ffee;
         box-shadow: none; 
         color: rgb(233, 93, 6);
         font-style: italic;
@@ -240,11 +240,11 @@
         font-weight: 900;
         font-size: 23px;
         border-bottom: 3px solid orange;
-        border-bottom-color: #00e5ff;
+        border-bottom-color: #e6ffee;
         " onclick="showTab('tab1')">HOW TO PLAY</button>
         <button id="tabButton2" class="btn btn-primary ripple-surface" style="
         border: none;
-        background: #00e5ff;
+        background: #e6ffee;
         box-shadow: none;
         color: rgb(233, 93, 6);
         font-style: italic;
@@ -252,7 +252,7 @@
         font-weight: 900;
         font-size: 23px;
         border-bottom: 3px solid orange;
-        border-bottom-color: #00e5ff;
+        border-bottom-color: #e6ffee;
         " onclick="showTab('tab2')">MAKE YOUR OWN TEAM</button>
     </div>
 
@@ -592,6 +592,9 @@
 
         howToPlay = document.getElementById('tabButton1');
         predictions = document.getElementById('tabButton2');
+        var urlParams = new URLSearchParams(window.location.search);
+        var passedValue = urlParams.get('tabId');
+        showTab(passedValue == 2 ? 'tab2': 'tab1');
         function showTab(tabId) {
             if (tabId === 'tab1') {
                 predictions.classList.remove('active');
@@ -975,7 +978,7 @@
         .then(response => {
             console.log('Response:', response);
             if(response.ok){
-                window.location.reload();
+                window.location.href = window.location.pathname + '?tabId=2';
             }
         })
         .catch(error => {
@@ -1253,7 +1256,8 @@ updateTeam.addEventListener('click', () =>{
     })
     .then(response => {
         if(response.ok){
-            window.location.reload();
+            window.location.href = window.location.pathname + '?tabId=2';
+            // window.location.reload();
         }
     })
     .catch(error => {
@@ -1274,7 +1278,7 @@ deleteTeamBtn.addEventListener('click', () =>{
     })
     .then(response => {
         if(response.ok){
-            window.location.reload();
+            window.location.href = window.location.pathname + '?tabId=2';
         }
     })
     .catch(error => {

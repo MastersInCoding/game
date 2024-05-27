@@ -63,7 +63,6 @@ exports.saveSelectedUsers = async (req, res) => {
       createdOn: Date.now()
   });
 
-    console.log(newTeam);
     newTeam.save()
      .then((updatedTeam) => {
       if(updatedTeam) {
@@ -89,7 +88,7 @@ exports.saveSelectedUsers = async (req, res) => {
 
 exports.getTeamDetails = async (req, res) => {
   try {
-    const team = await Team.findById(req.params.id); 
+    const team = await Team.findById(req.params.id).populate('users'); 
     if (!team) {
       return res.status(404).json({ message: 'Team not found.' });
     }
@@ -101,7 +100,6 @@ exports.getTeamDetails = async (req, res) => {
     }));
 
     const createdByUser = await User.findById(team.createdBy);
-    console.log(team.name);
     const message = {
       id: team._id,
       name: team.name,
@@ -133,23 +131,32 @@ exports.getTeams = async (req, res) => {
 exports.updateTeam = async (req, res) => {
     try {
         const { selectedUserIds, teamName, teamId } = req.body;
-    
-        const team = await Team.findById(teamId).populate('users');
-
+        const team = await Team.findById(teamId);
         if (!team) {
             return res.status(404).json({ error: "Team not found" });
         }
         const usersToAdd = await Player.find({ _id: { $in: selectedUserIds } });
-        const usersToRemove = team.users.filter(user => !selectedUserIds.includes(user.id));
+        const selectedUserObjectIds = usersToAdd.map(user => user._id.toString());
+        const usersToRemove = team.users.filter(user => !selectedUserObjectIds.includes(user.id.toString()));
+        usersToRemove.forEach(user => console.log(user._id));
 
-        team.users =  usersToAdd.map(user => user._id);
+        const users = usersToAdd.map(user => ({
+          id: user._id,
+          points: user.points,
+          name: user.name
+      }));
+        team.users =  users;
         team.name = teamName;
         team.totalPoints = usersToAdd.reduce((total, user) => total + user.points, 0);
 
       
         await team.save();
 
-        for (const user of usersToRemove) {
+
+        for (const userId of usersToRemove) {
+          console.log(userId);
+
+          const user = await User.findById(userId);
           user.teams = user.teams.filter(id => id.toString() !== teamId);
           await user.save();
         }
