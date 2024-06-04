@@ -1003,7 +1003,7 @@
             }
         } else {
             totalPoints -= points; // Subtract the user's points from the total when unchecked
-            // mySelectedItems = mySelectedItems.filter((item) => item !== checkbox.value);
+            mySelectedItems = mySelectedItems.filter((item) => item !== checkbox.value);
             const indexToRemove = mySelectedItems.indexOf(checkbox.value);
             if (indexToRemove !== -1) {
                 mySelectedItems = mySelectedItems.slice(0, indexToRemove).concat(mySelectedItems.slice(indexToRemove + 1));
@@ -1174,8 +1174,8 @@
         mySelectedItems = teamData.users.map(user => user.name);
         selectedUsers = teamData.users.map(user => user.id);
         teamName.value = teamData.name;
-        // updateDropdownButton.innerText = mySelectedItems.length > 0
-        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateDropdownButton.innerText = mySelectedItems.length > 0
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
         console.log(teamData.totalPoints);
         updateTotalPoints.value = teamData.totalPoints;
@@ -1198,8 +1198,8 @@
             mySelectedItems = mySelectedItems.filter(item => foundName.includes(item));
             selectedUsers = selectedUsers.filter(item => foundId.includes(item));
         }
-        // updateDropdownButton.innerText = mySelectedItems.length > 0
-        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateDropdownButton.innerText = mySelectedItems.length > 0
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         totalPoints = teamData.totalPoints;
         // console.log("DOM ",totalPoints, mySelectedItems.length);
         // handleUpdateCB(event);
@@ -1246,8 +1246,8 @@
         console.log(mySelectedItems);
         console.log(totalPoints, mySelectedItems.length);
 
-        // updateDropdownButton.innerText = mySelectedItems.length > 0
-        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateDropdownButton.innerText = mySelectedItems.length > 0
+            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
 
         // Disable select options once max selections reached
         checkboxes.forEach((checkbox) => {
@@ -1305,12 +1305,18 @@ addTeam.addEventListener('click', function(){
     console.log("Yes");
     mySelectedItems = [];
     selectedUsers = [];
+    console.log("Go");
     addTeamName.value = '';
     dropdownButton.innerHTML = 'Select Team Player';
     const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
     });
+    const selectedUsersContainer = document.getElementById('selectedUsers');
+    console.log(selectedUsersContainer);
+    selectedUsersContainer.innerHTML = '';
+    console.log(selectedUsersContainer);
+    console.log(mySelectedItems, selectedUsers);
     totalPoints = 0;
     totalPointsValue.innerHTML = totalPoints;
 });
