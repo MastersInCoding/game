@@ -31,7 +31,6 @@ exports.login = async (req, res) => {
     try {
         // Find user by email
         const user = await User.findOne({ email: email });
-        console.log(user);
         if (!user) {
             return res.status(401).send('Invalid email or password');
         }
@@ -57,11 +56,9 @@ exports.login = async (req, res) => {
 
 exports.getByEmail = async (req, res) => {
     const { email } = req.query;
-    console.log(req.query);
     try {
         // Find user by email
         const user = await User.findOne({ email: email });
-        console.log(user);
         if (!user) {
             return res.status(401).send('Invalid email');
         }
@@ -69,7 +66,6 @@ exports.getByEmail = async (req, res) => {
             "name": user.name,
             "email": user.email
         };
-        console.log(username);
         res.json({message: "found user", username: username});
     } catch (err) {
         console.error('Error logging in:', err);
@@ -82,7 +78,6 @@ exports.signup = async (req, res) => {
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
-    console.log(email, name, password);
     const newUser = new User({
         email: email,
         name: name,
@@ -90,7 +85,6 @@ exports.signup = async (req, res) => {
     });
     newUser.save()
         .then(() => {
-            console.log("User created", newUser);
             const redirectUrl = '/index.html?name=' + newUser.name.split(' ')[0] + '&email=' + newUser.email;
             req.session.userId = newUser._id;
             res.redirect(redirectUrl);
@@ -104,18 +98,14 @@ exports.signup = async (req, res) => {
 
 exports.findByEmailId = async (req, res) => {
     const { email } = req.body;
-    console.log(email);
     User.findOne( {email : email})
         .then(user => {
             if(user){
                 // console.log(user);
-                console.log(user.email, user.name.split(' ')[0], user.password);
                 const redirectUrl = '/login2.html?name=' + user.name.split(' ')[0] + '&email=' + user.email;
-                console.log(redirectUrl);
                 return res.status(200).redirect(redirectUrl);
             }
             else{
-                console.log("Not Found");
                 return res.status(200).redirect('/signup.html?email=' + email);
             }
         })

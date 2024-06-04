@@ -415,7 +415,6 @@
     
         
         addPlayer.addEventListener('click', () => {
-            console.log("YEs");
             playerName.value = '';
             playerPoints.value = 0;
         });
@@ -474,7 +473,6 @@
             })
             .then(response => response.json())
             .then(player => {
-                console.log(player);
                 document.getElementById('editPlayerName').value = player.name;
                 document.getElementById('editPlayerPoints').value = player.points;
                 updatePlayerBtn.setAttribute('data-player-id', playerId);
@@ -564,7 +562,6 @@
 
     deletePlayerBtn.addEventListener('click', () => {
         const playerId = deletePlayerBtn.getAttribute('data-player-id');
-        console.log(playerId);
         // Perform delete operation
         fetch(`/deletePlayer/${playerId}`, {
             method: 'DELETE'

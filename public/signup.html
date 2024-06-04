@@ -8,9 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/mdb.min.css" />
   <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="login.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
   <style>
@@ -41,7 +39,7 @@
       border-bottom-color: #FFD000;
       border-bottom-width: 3px;
       border-bottom-style: solid;
-      color: white;
+      color: black;
       font-size: 24px;
       font-weight: bold;
       font-style: italic;
@@ -56,8 +54,8 @@
 
     .button_style {
       width: -webkit-fill-available;
-      color: #B8860B !important;
-      background: #BDB76B;
+      color: #ffffff !important;
+      background: #0400ff;
       border: none;
       font-size: x-large;
       font-weight: bolder;
@@ -107,7 +105,7 @@
       height: 30px;
       background-image: url(path/to/eye-icon.png);
       background-size: cover;
-      border: none;•••••••••
+      border: none;
       cursor: pointer;
     }
 
@@ -134,19 +132,19 @@
 </head>
 
 <body>
-  <div class="bg-images"></div>
+  <!-- <div class="bg-images"></div> -->
   <div class="content">
     <div class="container-fluid mt-5" style="position: absolute; top: 0">
       <div class="row justify-content-center">
         <div class="col-md-6">
           <h3 class="text-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-1-circle-fill"
-              viewBox="0 0 16 16" style="color: yellow;">
+              viewBox="0 0 16 16" style="color: black;">
               <path
                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z" />
             </svg>
           </h3>
-          <p class="text-center mb-4" style="color: white;">
+          <p class="text-center mb-4" style="color: black;">
             Account
           </p>
           <p class="text-center mx-5 text_style">
@@ -308,7 +306,6 @@
     }
 
     const params = getUrlParams();
-    console.log(params);
 
     const paramValue = params['email'];
     document.getElementById('email').value = paramValue;
@@ -347,7 +344,6 @@
       const characters = password.length;
       const letters = /[a-z]/.test(password) && /[A-Z]/.test(password);
       const number = /\d/.test(password);
-      console.log(characters, letters, number);
       if (characters < 8) {
         characterValidationImage.classList.remove('fa-check');
         characterValidationImage.classList.add('fa-xmark');
@@ -396,9 +392,6 @@
     function handlePasswordInput() {
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
-
-      console.log(password, confirmPassword);
-
       if (validatePassword(password)) {
         passwordInput.classList.add('is-valid');
         passwordInput.classList.remove('is-invalid');
@@ -448,7 +441,6 @@
         })
       })
         .then(response => {
-          console.log('Response:', response);
           if (response.redirected) {
             sessionStorage.setItem('email', email.value);
             email.value = '';

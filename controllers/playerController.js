@@ -9,9 +9,7 @@ const path = require('path');
 
 exports.addPlayer = async (req, res) => {
     try {
-        console.log(__dirname);
         const workbook = xlsx.readFile(path.join(__dirname, 'datas.xlsx'));
-        console.log('y');
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const data = xlsx.utils.sheet_to_json(worksheet);
@@ -22,15 +20,12 @@ exports.addPlayer = async (req, res) => {
                 name: row['Name'],
                 points: row['Points']
             });
-            console.log(newData);
             try {
                 await newData.save();
-                console.log('Data saved to MongoDB:', newData);
             } catch (err) {
                 console.error('Error saving data to MongoDB:', err);
             }
         });
-        console.log("Saved");
         return res.status(200).json({player : player});
     } catch (error) {
         console.log(error)
@@ -110,7 +105,6 @@ exports.getAdmin = async (req, res) => {
 exports.deletePlayer = async (req, res) => {
     try {
         const player = await Player.findByIdAndDelete(req.params.id);
-        console.log(player);
         if(player){
             res.json({ message: 'Player deleted successfully.' });
         }

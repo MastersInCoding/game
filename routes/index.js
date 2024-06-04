@@ -23,7 +23,6 @@ const playerController = require('../controllers/playerController');
 
 // Home page route
 router.get('/index.html', (req, res) => {
-    console.log("Yes");
     if (!req.session.userId) {
         return res.sendFile('index.html', { root: 'public' });
     }
@@ -87,16 +86,13 @@ router.post('/resetPasswordLink', async (req, res) => {
 
     user.resetToken = resetToken;
     user.password = user.password;
-    console.log(resetToken);
     await user.save();
 
-    console.log("token", user.token);
     // Save the reset token to the session
     req.session.resetToken = resetToken;
 
     // Send the password reset link via email
     const resetLink = `http://15.207.88.203:3000/confirmNewPass?token=${resetToken}`;
-    console.log(resetLink);
     // Define email options
     let mailOptions = {
         from: 'saifalaman@gmail.com', // Sender email address
@@ -109,7 +105,6 @@ router.post('/resetPasswordLink', async (req, res) => {
             console.error('Error:', error);
             return res.status(500).send('Error sending email');
         }
-        console.log('Email sent:', info.response);
         res.send('Password reset email sent');
     });   
 
@@ -117,19 +112,16 @@ router.post('/resetPasswordLink', async (req, res) => {
 
 router.post('/reset-password', async(req, res) => {
     const {token, password} = req.body;
-    console.log(token, password);
     const user = await User.findOne({ resetToken: token });
     if (!user) {
         return res.status(404).send('Invalid or expired token');
     }
 
-    console.log(user);  
     user.password = password;
     // user.email =
     user.resetToken = undefined;
     await user.save();
 
-    console.log(user);
 
     // Clear the reset token from the session
     req.session.resetToken = undefined;

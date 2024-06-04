@@ -117,6 +117,8 @@ exports.getTeamDetails = async (req, res) => {
 
 exports.getTeams = async (req, res) => {
     try {
+      console.log(req.params.id);
+      console.log("Y");
         const user = await User.findOne({email: req.params.id});
         const teams = await Team.find({'createdBy' : user._id});
         if (!teams) {
@@ -138,7 +140,6 @@ exports.updateTeam = async (req, res) => {
         const usersToAdd = await Player.find({ _id: { $in: selectedUserIds } });
         const selectedUserObjectIds = usersToAdd.map(user => user._id.toString());
         const usersToRemove = team.users.filter(user => !selectedUserObjectIds.includes(user.id.toString()));
-        usersToRemove.forEach(user => console.log(user._id));
 
         const users = usersToAdd.map(user => ({
           id: user._id,
@@ -154,7 +155,6 @@ exports.updateTeam = async (req, res) => {
 
 
         for (const userId of usersToRemove) {
-          console.log(userId);
 
           const user = await User.findById(userId);
           user.teams = user.teams.filter(id => id.toString() !== teamId);
@@ -199,6 +199,7 @@ exports.myTeam = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
   try {
+    console.log("Reeee")
       const teams = await Team.find({});
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
