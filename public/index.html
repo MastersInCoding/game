@@ -644,7 +644,6 @@
 
         function renderDashboard() {
             if (!isLoggedIn()) {
-                console.log("Logged Off");
                 document.getElementById('login').classList.add('display');
                 document.getElementById('login').classList.remove('hide');
                 document.getElementById('content').classList.remove('display');
@@ -655,7 +654,6 @@
                 document.getElementById('loginContent').classList.add('hide');
             }
             else {
-                console.log("Logged In");
                 document.getElementById('login').classList.add('hide');
                 document.getElementById('login').classList.remove('display');
                 document.getElementById('content').classList.add('display');
@@ -734,7 +732,6 @@
             })
                 .then(response => {
 
-                    console.log('Response:', response);
                     if (response.redirected) {
                         successToast.classList.add('show');
                         setTimeout(() => {
@@ -879,7 +876,6 @@
             .then(data => {
                 data.users.forEach((user) => {
                     userdetails.push({id: user._id, name: user.name});
-                    // console.log(user);
                     if(user.teams.length < 5    ) {
                         const li = document.createElement('li');
                         li.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>` ;
@@ -936,10 +932,8 @@
     }
 
     function updateSelectedUsers(name, id, points){
-        console.log(name, id, points);
         const selectedUsersContainer = document.getElementById('selectedUsers');
         // selectedUsersContainer.innerHTML = '';
-        console.log(selectedUsers);
 
         // for(let i = 0; i < selectedUsers.length; i++) {
             const userEl = document.createElement('p');
@@ -957,7 +951,6 @@
     //     selectedUsersContainer.innerHTML = '';
 
     //     let totalPoints = 0;
-    //     console.log(selectedUsers);
 
     //     for(let i = 0; i < selectedUsers.length; i++) {
     //         const userEl = document.createElement('ul');
@@ -986,7 +979,6 @@
 
 
     function handleCB(event) {
-        console.log("Reached");
         const checkbox = event.target;
         const points = parseInt(checkbox.getAttribute('data-points')); // Get the points associated with the user
         
@@ -1050,7 +1042,6 @@
             })
         })
         .then(response => {
-            console.log('Response:', response);
             if(response.ok){
                 window.location.href = window.location.pathname + '?tabId=2';
             }
@@ -1177,9 +1168,7 @@
         updateDropdownButton.innerText = mySelectedItems.length > 0
             ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
-        console.log(teamData.totalPoints);
         updateTotalPoints.value = teamData.totalPoints;
-        console.log(checkboxes.length," check");
         var foundName = [];
         var foundId = [];
         checkboxes.forEach((checkbox) => {
@@ -1201,12 +1190,10 @@
         updateDropdownButton.innerText = mySelectedItems.length > 0
             ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
         totalPoints = teamData.totalPoints;
-        // console.log("DOM ",totalPoints, mySelectedItems.length);
         // handleUpdateCB(event);
     }
 
     addTeamName.addEventListener('input', function(){
-        console.log(addTeamName.value);
         if(checkAddUpdateCondition(false)){
             saveTeamBtn.disabled = false;
         }
@@ -1222,7 +1209,6 @@
         const checkbox = event.target;
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
         const points = parseInt(checkbox.getAttribute('data-points')); // Get the points associated with the user
-        console.log(points);
         checkboxes.forEach((checkbox) =>{
             checkbox.disabled = false;
         })
@@ -1243,15 +1229,12 @@
             }            
             selectedUsers = selectedUsers.filter((item) => item !== checkbox.id);
         }
-        console.log(mySelectedItems);
-        console.log(totalPoints, mySelectedItems.length);
 
         updateDropdownButton.innerText = mySelectedItems.length > 0
             ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
 
         // Disable select options once max selections reached
         checkboxes.forEach((checkbox) => {
-            console.log(checkbox.checked);
             if (mySelectedItems.length >= MAX_SELECTIONS || totalPoints > MAX_POINTS) {
                 checkbox.disabled = !checkbox.checked;
             } else {
@@ -1262,7 +1245,6 @@
     }
 
     updateDropdownMenu.addEventListener('change', function(event) {
-        console.log("eventListenr");
         handleUpdateCB(event, -1);
         if(checkAddUpdateCondition(true)){
             updateTeam.disabled = false;
@@ -1274,7 +1256,6 @@
 
     function checkAddUpdateCondition(update){
         if(update){
-            console.log(teamName.value+" "+mySelectedItems.length+" "+totalPoints);
             return teamName.value !== '' && mySelectedItems.length == 6 && totalPoints <= 300;
         }
         else{
@@ -1283,7 +1264,6 @@
     }
 
       function populateModal(teamData) {
-        console.log(teamData);
         const modalBody = document.querySelector('#viewTeamModal .modal-body');
         modalBody.innerHTML = `
           <p><strong>Team Name:</strong> ${teamData.name}</p>
@@ -1302,23 +1282,20 @@
 const addTeam = document.getElementById('addTeam');
 
 addTeam.addEventListener('click', function(){
-    console.log("Yes");
     mySelectedItems = [];
     selectedUsers = [];
-    console.log("Go");
     addTeamName.value = '';
     dropdownButton.innerHTML = 'Select Team Player';
     const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
+        checkbox.disabled = false;
     });
     const selectedUsersContainer = document.getElementById('selectedUsers');
-    console.log(selectedUsersContainer);
     selectedUsersContainer.innerHTML = '';
-    console.log(selectedUsersContainer);
-    console.log(mySelectedItems, selectedUsers);
     totalPoints = 0;
     totalPointsValue.innerHTML = totalPoints;
+    saveTeamBtn.disabled = true;
 });
 
 updateTeam.addEventListener('click', () =>{
