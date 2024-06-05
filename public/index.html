@@ -531,6 +531,9 @@
                         <ul class="dropdown-menu update-dropdown-menu" aria-labelledby="multiSelectDropdownUpdate" id="updateUserSelect"> 
                         </ul> 
                     </div>
+                    <div id="editUsers" class="mt-3">
+                        <!-- Selected users will be displayed here -->
+                    </div>
                   </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
@@ -943,6 +946,50 @@
         });
     }
 
+    function unselectedEditUser(name, id, points){
+        const selectedUsersContainer = document.getElementById('editUsers');
+        const childElement = selectedUsersContainer.querySelectorAll('li');
+        childElement.forEach((child) => {
+            if(child.id == id) {
+                child.remove();
+            }
+        });
+    }
+
+    function updateEditPlayer(mySelectedItem){
+        console.log(mySelectedItem);
+        const selectedUsersContainer = document.getElementById('editUsers');
+        const childElement = selectedUsersContainer.querySelectorAll('p');
+        childElement.forEach((child) => {
+            // if(child.id == id) {
+                child.remove();
+            // }
+        });
+        // selectedUsersContainer.innerHTML = '';
+
+        for(let i = 0; i < mySelectedItem.length; i++) {
+            const userEl = document.createElement('p');
+            userEl.className = 'd-flex justify-content-between align-items-center mb-2 btn btn-success';
+            userEl.innerHTML = `${mySelectedItem[i]}`;
+            selectedUsersContainer.appendChild(userEl);
+        }
+    }
+
+    function updateSelectedEditedUsers(name, id, points){
+        const selectedUsersContainer = document.getElementById('selectedUsers');
+        // selectedUsersContainer.innerHTML = '';
+
+        // for(let i = 0; i < selectedUsers.length; i++) {
+            const userEl = document.createElement('p');
+            userEl.className = 'd-flex justify-content-between align-items-center mb-2 btn btn-success';
+            userEl.innerHTML = `${name}
+                
+            `;
+            // <li id='${id}'>${name} - ${points} points</li>
+            selectedUsersContainer.appendChild(userEl);
+        // }
+    }
+
     function updateSelectedUsers(name, id, points){
         const selectedUsersContainer = document.getElementById('selectedUsers');
         // selectedUsersContainer.innerHTML = '';
@@ -1177,8 +1224,9 @@
         mySelectedItems = teamData.users.map(user => user.name);
         selectedUsers = teamData.users.map(user => user.id);
         teamName.value = teamData.name;
-        updateDropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        // updateDropdownButton.innerText = mySelectedItems.length > 0
+        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateEditPlayer(mySelectedItems);
         const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
         updateTotalPoints.value = teamData.totalPoints;
         var foundName = [];
@@ -1199,8 +1247,10 @@
             mySelectedItems = mySelectedItems.filter(item => foundName.includes(item));
             selectedUsers = selectedUsers.filter(item => foundId.includes(item));
         }
-        updateDropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        // updateDropdownButton.innerText = mySelectedItems.length > 0
+        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateEditPlayer(mySelectedItems);
+
         totalPoints = teamData.totalPoints;
         // handleUpdateCB(event);
     }
@@ -1242,8 +1292,10 @@
             selectedUsers = selectedUsers.filter((item) => item !== checkbox.id);
         }
 
-        updateDropdownButton.innerText = mySelectedItems.length > 0
-            ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        // updateDropdownButton.innerText = mySelectedItems.length > 0
+        //     ? mySelectedItems.length < 3 ? mySelectedItems.join(', ') : mySelectedItems.slice(0, 2).join(', ') + '...' : 'Select Items';
+        updateEditPlayer(mySelectedItems);
+
 
         // Disable select options once max selections reached
         checkboxes.forEach((checkbox) => {
