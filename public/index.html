@@ -526,7 +526,7 @@
                                 id="multiSelectDropdownUpdate"
                                 data-bs-toggle="dropdown" 
                                 aria-expanded="false"> 
-                            Select 
+                            Edit Team Player
                         </button> 
                         <ul class="dropdown-menu update-dropdown-menu" aria-labelledby="multiSelectDropdownUpdate" id="updateUserSelect"> 
                         </ul> 
@@ -957,15 +957,11 @@
     }
 
     function updateEditPlayer(mySelectedItem){
-        console.log(mySelectedItem);
         const selectedUsersContainer = document.getElementById('editUsers');
         const childElement = selectedUsersContainer.querySelectorAll('p');
         childElement.forEach((child) => {
-            // if(child.id == id) {
                 child.remove();
-            // }
         });
-        // selectedUsersContainer.innerHTML = '';
 
         for(let i = 0; i < mySelectedItem.length; i++) {
             const userEl = document.createElement('p');
