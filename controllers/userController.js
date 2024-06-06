@@ -78,6 +78,10 @@ exports.signup = async (req, res) => {
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
+    const user = await User.findOne({ email: email });
+    if (user) {
+        return res.status(401).send('Invalid email');
+    }
     const newUser = new User({
         email: email,
         name: name,

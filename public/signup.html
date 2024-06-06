@@ -20,6 +20,13 @@
       padding: 0;
     }
 
+    .toast-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 9999;
+    }
+
     @media only screen and (max-width: 420px) {
       /* .bg-images {
         height: 131% !important;
@@ -148,11 +155,11 @@
             Account
           </p>
           <p class="text-center mx-5 text_style">
-            <ins>The email address you entered is not connected to an account. Create an account now to play!</ins>
+            <ins>Sign up now to play!</ins>
           </p>
           <form id="loginForm" class="mx-5 my-4">
             <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="email" style="color: black;background: none;" class="form-control form-control-lg" readonly />
+              <input type="email" id="email" style="color: black;background: none;" class="form-control form-control-lg"/>
               <label class="form-label" forinvalid="formControlReadonly"
                 style="font-size: large; font-weight: bold;color: black">Email address</label>
             </div>
@@ -236,6 +243,20 @@
     </div>
   </div>
 
+  <div class="toast-container" id="errorToastContainer">
+    <div class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">Error</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        Email Id is already registered
+      </div>
+    </div>
+  </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
@@ -256,6 +277,7 @@
     const numberValidationImage = document.getElementById('numberValidationImage');
     const letterValidationImage = document.getElementById('letterValidationImage');
     const checkInput = document.getElementById('registerCheck');
+    const errorToast = document.querySelector('#errorToastContainer .toast');
 
 
     const tAndCBtn = document.getElementById('tAndC');
@@ -308,7 +330,15 @@
     const params = getUrlParams();
 
     const paramValue = params['email'];
-    document.getElementById('email').value = paramValue;
+    console.log(paramValue);
+    if(paramValue !== undefined) {
+      document.getElementById('email').value = paramValue;
+    }
+    else {
+      console.log("Yes");
+      document.getElementById('email').value = '';
+    }
+    
 
     const togglePassword = document.getElementById('togglePassword');
     togglePassword.addEventListener('click', function () {
@@ -448,6 +478,12 @@
             passwordInput.value = '';
             confirmPasswordInput.value = '';
             window.location.href = response.url
+          }
+          else if (response.status === 401) {
+            errorToast.classList.add('show');
+              setTimeout(() => {
+                errorToast.classList.remove('show');
+              }, 3000);
           }
         })
         .catch(error => {
