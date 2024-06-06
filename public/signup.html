@@ -155,7 +155,7 @@
             Account
           </p>
           <p class="text-center mx-5 text_style">
-            <ins>Sign up now to play!</ins>
+            <ins id="signupTitle"></ins>
           </p>
           <form id="loginForm" class="mx-5 my-4">
             <div data-mdb-input-init class="form-outline mb-4">
@@ -266,6 +266,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
+    const signupTitle = document.getElementById('signupTitle');
 
 
     const characterValidation = document.getElementById('characterValidation');
@@ -333,9 +334,10 @@
     console.log(paramValue);
     if(paramValue !== undefined) {
       document.getElementById('email').value = paramValue;
+      signupTitle.innerHTML = 'Sign up now to Play!';
     }
     else {
-      console.log("Yes");
+      signupTitle.innerHTML = 'The email address you entered is not connected to an account. Create an account now to play!';
       document.getElementById('email').value = '';
     }
     
