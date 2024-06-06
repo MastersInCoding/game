@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const Team = require('../models/team');
 const Player = require('../models/players');
-const mongoose = require('mongoose');
 
 
 
@@ -205,14 +204,48 @@ exports.myTeam = async (req, res) => {
 };
 
 exports.getAllTeams = async (req, res) => {
+  console.log("Yes")
   try {
-    console.log("Reeee")
-      const teams = await Team.find({});
+      const teams = await Team.aggregate([
+        {
+          $group: {
+            _id: "$createdBy",
+            numTeams: { $sum: 1 },
+            teams: { $push: "$$ROOT" }
+          }
+        },
+        {
+          $project: {
+            createdBy: "$_id",
+            numTeams: 1,
+            teams: 1
+          }
+        }
+      ]);
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
       }
-      res.status(200).json(teams);
+      for(let team of teams) {
+        const user = await User.findById(team.createdBy);
+        team.createdBy = user.name;
+      }
+      console.log(teams)
+      res.status(200).json(teams.map(team => ({createdBy: team.createdBy, numTeams: team.numTeams, id: team._id})));
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
 }
+
+
+// exports.getAllTeams = async (req, res) => {
+//   try {
+//       const teams = await Team.find({});
+//       if (!teams) {
+//         return res.status(404).json({ message: 'Teams not found.' });
+//       }
+      
+//       res.status(200).json(teams);
+//   } catch (error) {
+//       res.status(500).json({ message: error.message });
+//   }
+// }
