@@ -202,9 +202,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Id</th>
                                     <th>Created By</th>
                                     <th>No. of teams</th>
-                                    <!-- <th>Actions</th> -->
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -274,8 +275,14 @@
                                 const newRow = document.createElement('tr');
                                 newRow.innerHTML = `
                                 <td>${index + 1}</td>
+                                <td>${team.id}</td>
                                 <td>${team.createdBy}</td>
                                 <td>${team.numTeams}</td>
+                                <td id="check">
+                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team.id}">
+                                    <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
+                                </button>
+                                </td>
                                 `;
 
                                 // newRow.innerHTML = `
