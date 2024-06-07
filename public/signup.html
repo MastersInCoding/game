@@ -334,10 +334,10 @@
     console.log(paramValue);
     if(paramValue !== undefined) {
       document.getElementById('email').value = paramValue;
-      signupTitle.innerHTML = 'Sign up now to Play!';
+      signupTitle.innerHTML = 'The email address you entered is not connected to an account. Create an account now to play!';
     }
     else {
-      signupTitle.innerHTML = 'The email address you entered is not connected to an account. Create an account now to play!';
+      signupTitle.innerHTML = 'Sign up now to Play!';
       document.getElementById('email').value = '';
     }
     
