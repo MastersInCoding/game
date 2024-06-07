@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <title>Admin</title>
+    <title>Teams</title>
     <style>
         @media only screen and (max-width: 419px) {
             .font-size-table {
-                font-size: smaller !important;
+                font-size: xx-small !important;
             }
         }
 
@@ -279,9 +279,11 @@
                                 <td>${team.createdBy}</td>
                                 <td>${team.numTeams}</td>
                                 <td id="check">
-                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team.id}">
+                                <a href="/team/teamDetails.html?id=${team.id}">
+                                    <button style="border: none;background: none" o>
                                     <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
                                 </button>
+                                </a>
                                 </td>
                                 `;
 

@@ -56,6 +56,7 @@ router.get('/getTeamDetails/:id', teamController.getTeamDetails);
 router.put('/updateTeam', teamController.updateTeam);
 router.delete('/deleteTeam', teamController.deleteTeam);
 router.get('/getTeams', teamController.getAllTeams);
+router.get('/getTeamsByUser/:id', teamController.getTeamByUserId);
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
