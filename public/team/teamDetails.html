@@ -101,9 +101,6 @@
 
 <script>
 
-function viewTeamDetails(teamId){
-    console.log(teamId);
-}
     var urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id');
     if (userId == null || userId == undefined || userId.length == 0)
@@ -146,12 +143,34 @@ function viewTeamDetails(teamId){
             console.error('Error:', error);
         });
 
-        const viewTeam = document.getElementById('viewTeam');
-        viewTeam.addEventListener('click', function () {
-            const teamId = this.getAttribute('data-team-id');
-            viewTeamDetails(teamId);
+        document.addEventListener('DOMContentLoaded', function(){
+            const tableBody = document.querySelector('tbody'); // Adjust selector as needed
+            tableBody.addEventListener('click', async function(event) {
+                try {
+                    const selectedTeamId = event.target.parentElement.dataset.teamId;
+                    if(event.target.classList.contains('fa-eye')){
+                        const response = await fetch(`/getTeamDetails/${selectedTeamId}`);
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const teamData = await response.json();
+                        const modalBody = document.querySelector('#viewTeamModal .modal-body');
+                        modalBody.innerHTML = `
+                        <p><strong>Team Name:</strong> ${teamData.name}</p>
+                        <p><strong>Created By:</strong> ${teamData.createdBy}</p>
+                        <p><strong>Created On:</strong> ${new Date(teamData.createdOn).toLocaleString()}</p>
+                        <p><strong>Total Points:</strong> ${teamData.totalPoints}</p>
+                        <p><strong>Players:</strong></p>
+                        <ul>
+                            ${teamData.users.map(user => `<li>${user.name} (${user.points} points)</li>`).join('')}
+                        </ul>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Error fetching team Details', error);
+                }
+            });
         });
-
    
 </script>
 
