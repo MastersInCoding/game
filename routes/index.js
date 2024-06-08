@@ -48,6 +48,7 @@ router.get('/confirmNewPass', userController.confirmResetPass);
 router.get('/privacyPolicy', userController.privacyPolicy);
 router.get('/termsAndConditions', userController.termsAndConditions);
 
+
 // router.get('/my-team', teamController.myTeam);
 router.post('/team', teamController.team);
 router.post('/saveSelectedUsers', teamController.saveSelectedUsers);
@@ -57,6 +58,8 @@ router.put('/updateTeam', teamController.updateTeam);
 router.delete('/deleteTeam', teamController.deleteTeam);
 router.get('/getTeams', teamController.getAllTeams);
 router.get('/getTeamsByUser/:id', teamController.getTeamByUserId);
+router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
+
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);

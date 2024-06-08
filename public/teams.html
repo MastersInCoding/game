@@ -129,7 +129,7 @@
     <div class="d-flex" id="wrapper">
         <div class="bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
-                <img src="full_logo.ico" style="height: 3rem;">
+                <img src="logo.jpeg" style="height: 3rem;">
                 KellyGolf
             </div>
             <div class="list-group list-group-flush my-3 text-center">
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-6 mt-2">
                                     <button class="d-flex align-items-center mt-2"                                        
-                                        style="box-shadow: none; float: right;border: none;background: none;">
+                                        style="box-shadow: none; float: right;border: none;background: none;" onclick="CSV()">
                                         <i class="fa-solid fa-file-csv fa-2xl" style="color: #1f7a57;"></i></button>
                                 </div>
                             </div>
@@ -265,7 +265,6 @@
             .then(response => {
                 response.json()
                     .then(data => {
-                        console.log("Y");
                         document.getElementById("spinner").style.display = "none";
                         document.getElementById('table').style.display = "block";
                         const tableBody = document.querySelector('tbody');
@@ -380,6 +379,11 @@
         });
 
 
+        // fa-file-csv
+        function CSV() {
+            window.location.href = '/download-csv';
+        }
+   
 
     </script>
 </body>

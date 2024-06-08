@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Team = require('../models/team');
 const Player = require('../models/players');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 
 
@@ -204,7 +205,6 @@ exports.myTeam = async (req, res) => {
 };
 
 exports.getAllTeams = async (req, res) => {
-  console.log("Yes")
   try {
       const teams = await Team.aggregate([
         {
@@ -229,7 +229,6 @@ exports.getAllTeams = async (req, res) => {
         const user = await User.findById(team.createdBy);
         team.createdBy = user.name;
       }
-      console.log(teams)
       res.status(200).json(teams.map(team => ({createdBy: team.createdBy, numTeams: team.numTeams, id: team._id})));
   } catch (error) {
       res.status(500).json({ message: error.message });
@@ -256,6 +255,77 @@ exports.getTeamByUserId = async (req, res) => {
       });
   } catch (error) {
       res.status(500).json({ message: error.message });
+  }
+}
+
+
+exports.downloadTeamDataInCSVFile = async (req, res) => {
+  try {
+    const teams = await Team.aggregate([
+      {
+        $group: {
+          _id: "$createdBy",
+          numTeams: { $sum: 1 },
+          teams: { $push: "$$ROOT" }
+        }
+      },
+      {
+        $project: {
+          createdBy: "$_id",
+          numTeams: 1,
+          teams: 1
+        }
+      }
+    ]);
+    if (!teams) {
+      return res.status(404).json({ message: 'Teams not found.' });
+    }
+    for(let team of teams) {
+      const user = await User.findById(team.createdBy);
+      team.createdBy = user.name;
+    }
+    // Define the CSV file path
+    const csvFilePath = 'teams.csv';
+    // Create a CSV writer
+    const csvWriter = createCsvWriter({
+      path: csvFilePath,
+      header: [
+        { id: 'id', title: 'Id' },
+        { id: 'createdBy', title: 'Created By' },
+        { id: 'numTeams', title: 'Number Of Teams' },
+      ]
+    });
+
+    // Format data for CSV
+    const records = teams.map(team => ({
+      id: team._id,
+      createdBy: team.createdBy,
+      numTeams: team.numTeams
+    }));
+    console.log(records);
+
+    // Write data to CSV
+    await csvWriter.writeRecords(records);
+    return res.download(csvFilePath);
+    //  // Set headers to force download
+    //  res.setHeader('Content-Disposition', 'attachment; filename=teams.csv');
+    //  res.setHeader('Content-Type', 'text/csv');
+    // console.log("Yes")
+    //  // Stream the file to the client
+    //  const fileStream = fs.createReadStream(csvFilePath);
+    //  fileStream.pipe(res);
+    //  console.log("Yessss")
+    //  // Optionally delete the file after sending it
+    //  fileStream.on('end', () => {
+    //    fs.unlink(csvFilePath, (err) => {
+    //      if (err) {
+    //        console.error('Error deleting file:', err);
+    //      }
+    //    });
+    //  });
+    //  console.log("Yesaaa")
+  } catch (error) {
+    res.status(500).send('An error occurred while generating the CSV file.');
   }
 }
 
