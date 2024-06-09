@@ -17,9 +17,29 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 
 </head>
+<style>
+  @media only screen and (max-width: 652px) {
+    .mobile-min-height {
+      height: 3rem;
+      /* Set your desired minimum height */
+    }
+  }
+
+  @media only screen and (max-width: 430px) {
+    .mobile-min-height {
+      height: 2rem;
+    }
+  }
+</style>
 
 <body>
-
+  <div class="text-center mobile-min-height">
+    <a href="#"><img class="mobile-min-height" style="max-height: 5rem;" src="short_logo.jpeg" alt=""><img
+        class="mobile-min-height" style="max-height: 5rem;" src="logo.jpeg" alt=""></a>
+  </div>
+  <a href="javascript:history.back()"
+    style="position: absolute; top: 0; color: rgb(0, 0, 0);font-weight: bold;font-size: large;text-decoration: none;">
+    <i class="fa-solid fa-arrow-left"></i> Go Back</a>
   <div class="container my-4">
 
     <div class="d-flex justify-content-center">
