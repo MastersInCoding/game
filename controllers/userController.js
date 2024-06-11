@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
             return res.redirect('admin.html');
         }
         else {
-            const redirectUrl = '/index.html?name=' + user.name.split(' ')[0] + '&email=' + user.email;
+            const redirectUrl = '/home.html?name=' + user.name.split(' ')[0] + '&email=' + user.email;
             return res.redirect(redirectUrl);
         }
         
@@ -89,7 +89,7 @@ exports.signup = async (req, res) => {
     });
     newUser.save()
         .then(() => {
-            const redirectUrl = '/index.html?name=' + newUser.name.split(' ')[0] + '&email=' + newUser.email;
+            const redirectUrl = '/home.html?name=' + newUser.name.split(' ')[0] + '&email=' + newUser.email;
             req.session.userId = newUser._id;
             res.redirect(redirectUrl);
         })
