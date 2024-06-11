@@ -280,7 +280,7 @@
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
         " onclick="showTab('tab2')">ENTER TEAMS</button>
-         <a id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
+         <!-- <a id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
          border: none;
          background: #ffffff;
          box-shadow: none;
@@ -291,7 +291,20 @@
          font-size: 23px;
          border-bottom: 3px solid orange;
          border-bottom-color: #ffffff;
-         " href="https://jasonkellygolf.com/category/major-sweeps/" target="_blank">LEADER BOARD</a>
+         " href="https://jasonkellygolf.com/category/major-sweeps/" target="_blank">LEADERBOARD</a> -->
+
+         <button id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
+         border: none;
+         background: #ffffff;
+         box-shadow: none;
+         color: rgb(233, 93, 6);
+         font-style: italic;
+         font-family: Montserrat;
+         font-weight: 900;
+         font-size: 23px;
+         border-bottom: 3px solid orange;
+         border-bottom-color: #ffffff;
+         " onclick="showTab('tab3')">LEADERBOARD</button>
     </div>
 
     <div id="tab1" class="tab-content" style="display:block;">
@@ -302,7 +315,7 @@
                     <p class="card-text text-center">
                     Select your team by choosing <strong>six golfers</strong>, each is assigned a specific value.
                         <br/>Make sure the combined value of your selected <strong>golfers</strong> does not surpass 300 points.
-                        <br/>    The team with the lowest combined socre wins. For full details, <a href="/login.html">Login</a>
+                        <br/>    The team with the lowest combined score wins. For full details, <a href="/login.html">Login</a>
                     </p>
                 </div>
                 <div class="card-body" id="loginContentHP">
@@ -310,7 +323,7 @@
                     <p class="card-text text-center">
                     Select your team by choosing <strong>six golfers</strong>, each is assigned a specific value.
                         <br/>Make sure the combined value of your selected <strong>golfers</strong> does not surpass 300 points.
-                        <br/>    The team with the lowest combined socre wins.
+                        <br/>    The team with the lowest combined score wins.
                     </p>
                 </div>
             </div>
@@ -358,6 +371,20 @@
                     </div>   
 
                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab3" class="tab-content" style="display:none;">
+        <div class="container">
+
+            <div class="card"  style="border-radius: 25px;">
+                <div class="card-body" id="logoutContent">
+                    <h5 class="card-title text-center">Coming Soon</h5>
+                </div>
+                <!-- <div class="card-body" id="loginContent">
+                    <h5 class="card-title text-center">Coming soon</h5>
+                   </div> -->
             </div>
         </div>
     </div>
@@ -598,16 +625,24 @@
 
         howToPlay = document.getElementById('tabButton1');
         predictions = document.getElementById('tabButton2');
+        leaderBoard = document.getElementById('tabButton3');
         var urlParams = new URLSearchParams(window.location.search);
         var passedValue = urlParams.get('tabId');
         showTab(passedValue == 2 ? 'tab2': 'tab1');
         function showTab(tabId) {
             if (tabId === 'tab1') {
                 predictions.classList.remove('active');
+                leaderBoard.classList.remove('active');
                 howToPlay.classList.add('active');
+            }
+            else if(tabId === 'tab3') {
+                leaderBoard.classList.add('active');
+                predictions.classList.remove('active');
+                howToPlay.classList.remove('active');
             }
             else {
                 howToPlay.classList.remove('active');
+                leaderBoard.classList.remove('active');
                 predictions.classList.add('active');
             }
             var tabs = document.querySelectorAll('.tab-content');
@@ -867,8 +902,8 @@
     
 
 
-
-    fetch('/players', {
+    if(sessionStorage.getItem('email')){
+        fetch(`/players/${sessionStorage.getItem('email')}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -880,17 +915,22 @@
             userdetails = [];
             response.json()
             .then(data => {
-                data.users.forEach((user) => {
-                    userdetails.push({id: user._id, name: user.name});
-                    if(user.teams.length < 5    ) {
+                data.showableUsers.forEach((user) => {
+                    // userdetails.push({id: user._id, name: user.name});
+                    // if(user.teams.length < 5    ) {
                         const li = document.createElement('li');
                         li.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>` ;
                         userSelector.appendChild(li);
-                    }
+                    // }
+                    // const li2 = document.createElement('li');
+                    // li2.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>`;
+                    // updateUserSelect.appendChild(li2);
+
+                });
+                data.allUsers.forEach((user) =>{
                     const li2 = document.createElement('li');
                     li2.innerHTML = `<label><input id="${user._id}" type="checkbox" value="${user.name}" data-points="${user.points}">${user.name}( ${user.points} pt)</label>`;
                     updateUserSelect.appendChild(li2);
-
                 });
             })
             .catch(error => {
@@ -898,6 +938,8 @@
             });
         }
     });
+
+    }
 
 
     const dropdownButton = document.getElementById('multiSelectDropdown');

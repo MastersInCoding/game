@@ -63,6 +63,7 @@ router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
+router.get('/players/:userEmail', playerController.getPlayersByUser);
 // router.get('/deleteAllPlayer', playerController.deleteAllPlayer);
 router.get('/admin', playerController.getAdmin);
 router.delete('/deletePlayer/:id', playerController.deletePlayer);
