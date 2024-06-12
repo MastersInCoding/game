@@ -899,6 +899,7 @@
     let userdetails = [];
     var totalPoints = 0;
     var deleteTeamId = '';
+    var showableUsers = [];
     
 
 
@@ -915,6 +916,7 @@
             userdetails = [];
             response.json()
             .then(data => {
+                showableUsers = data.showableUsers;
                 data.showableUsers.forEach((user) => {
                     // userdetails.push({id: user._id, name: user.name});
                     // if(user.teams.length < 5    ) {
@@ -1133,6 +1135,9 @@
             if(response.ok){
                 window.location.href = window.location.pathname + '?tabId=2';
             }
+            if(response.status === 400){
+                alert('Team name already exists');
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1235,6 +1240,7 @@
     });
     function populateUpdateModal(teamData, event){
         const children = updateUserSelect.children;
+
         const userIds = teamData.users.map(user => user.id);
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
@@ -1243,7 +1249,11 @@
                 if (input && !userIds.includes(input.id)) {
                     const userId = input.id;
                     const user = teamData.users.find(user => user.id === userId);
-                    if (user && user.teamSize > 4) {
+                    if(userId == '6643c561a722d1fa40a17dc0'){
+                        console.log("true");
+                        // console.log(showableUsers.findIndex(user => user._id === userId));
+                    }
+                    if (!(showableUsers.findIndex(user => user._id === userId) !== -1)) {
                         // Remove the child if the condition is met
                         child.remove();
                     }
@@ -1407,7 +1417,9 @@ updateTeam.addEventListener('click', () =>{
     .then(response => {
         if(response.ok){
             window.location.href = window.location.pathname + '?tabId=2';
-            // window.location.reload();
+        }
+        else if(response.status === 400){
+            alert('Team name already exists');
         }
     })
     .catch(error => {

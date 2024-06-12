@@ -46,7 +46,7 @@ exports.addPlayer = async (req, res) => {
 
 exports.getPlayers = async (req, res) => {
     try {
-        const players = await Player.find({}, 'name points teams').populate('teams');
+        const players = await Player.find({}, 'name points teams').populate('teams').sort({ points: -1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -56,42 +56,34 @@ exports.getPlayers = async (req, res) => {
 
 exports.getPlayersByUser = async (req, res) => {
     try {
-        const players = await Player.find({}, 'name points teams');
+        const players = await Player.find({}, 'name points teams').populate('teams').sort({points: -1});
         const user = await User.findOne({email: req.params.userEmail});
-        console.log(user)
         // console.log(user.)
         var showableUsers = [];
         players.forEach(async player => {
             var count = 0;
             
-            var teams = [];
             // console.log(t.teams.length)
-            if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                player.teams.forEach(async a => {
-            console.log(a);
-                    t = await Team.findById(a);
-                    console.log(t);
-                    teams.push(t);
-                });
+                // await player.teams.forEach(async a => {
+                //     t = await Team.findById(a);
+                //     // teams.push(t);
+                //     if(t != null)
+                //         if(player._id.toString() == '6643c561a722d1fa40a17dc0')
+                //             console.log('Players', count);
+                //     count++;
+                // });
 
                 if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                    console.log(teams);
-                // console.log(player.teams, teams)
-            player.teams.forEach(teams => {
-                // console.log(teams.createdBy, user._id.toString());
-                // if(player._id == '6643c561a722d1fa40a17dc0')
-                //     console.log(teams._id)
-                // if(teams._id.toString() == '665ef12461ffb80adcf0b368')
-                //     console.log(teams)
-                // if(teams.createdBy.toString() === user._id.toString()) {
-                //     count++;
-                // }
-            });
-            // if(player._id.toString() == '6643c561a722d1fa40a17dc0' ){
-            //     console.log(count);
-            // }
-            if(count < 5) {
+                    console.log(count, '111');
+                
+            if(player.teams.length < 5) {
+                if(player._id.toString() == '6643c561a722d1fa40a17dc0')
+                    console.log(count)
                 showableUsers.push(player);
+            }
+            else{
+                if(player._id.toString() == '6643c561a722d1fa40a17dc0')
+                    console.log(count, 'sss')
             }
         })
         return res.status(200).json({showableUsers : showableUsers, allUsers : players});

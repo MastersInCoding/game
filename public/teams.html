@@ -180,8 +180,8 @@
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                    
-                  </div>
+
+                </div>
 
                 <div class="table" id="table" style="display: none;">
                     <div class="table-wrapper">
@@ -191,8 +191,9 @@
                                     <h2 style="color: #e95d06;"><b>Teams</b></h2>
                                 </div>
                                 <div class="col-6 mt-2">
-                                    <button class="d-flex align-items-center mt-2"                                        
-                                        style="box-shadow: none; float: right;border: none;background: none;" onclick="CSV()">
+                                    <button class="d-flex align-items-center mt-2"
+                                        style="box-shadow: none; float: right;border: none;background: none;"
+                                        onclick="CSV()">
                                         <i class="fa-solid fa-file-csv fa-2xl" style="color: #1f7a57;"></i></button>
                                 </div>
                             </div>
@@ -223,7 +224,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" style="color: #e95d06;font-size: xx-large;" id="viewTeamModalLabel"><b>View Team</b></h5>
+                    <h5 class="modal-title" style="color: #e95d06;font-size: xx-large;" id="viewTeamModalLabel"><b>View
+                            Team</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -233,13 +235,45 @@
                     <ul id="userList"></ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" style="background-color: #e95d06; border: none;" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" style="background-color: #e95d06; border: none;"
+                        data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    
+
+    <div class="modal fade" id="deleteTeamModal" tabindex="-1" aria-labelledby="deleteTeamModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTeamModalLabel">Delete Team</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <p>Are you sure you want to delete this team</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-secondary float-left"
+                            style="background-color: #e95d06; border: none;" data-bs-dismiss="modal">CANCEL</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary float-right"
+                            style="background-color: #ff0303; border: none;" id="deleteTeamBtn">Delete</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
 
@@ -249,7 +283,7 @@
         var toggleButton = document.getElementById("menu-toggle");
         const spinner = document.getElementById("spinner");
         const table = document.getElementById("table");
-        
+
 
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
@@ -279,10 +313,12 @@
                                 <td>${team.numTeams}</td>
                                 <td id="check">
                                 <a href="/team/teamDetails.html?id=${team.id}">
-                                    <button style="border: none;background: none" o>
+                                    <button style="border: none;background: none">
                                     <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
                                 </button>
                                 </a>
+                                <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
+
                                 </td>
                                 `;
 
@@ -351,18 +387,18 @@
             fetch(`/getTeamDetails/${teamId}`, {
                 method: 'GET'
             })
-            .then(response => response.json())
-            .then(team => {
-                document.getElementById('viewTeamName').innerHTML = team.name;
-                document.getElementById('createdDate').innerHTML = team.createdDate;
-                const userList = document.getElementById('userList');
-                userList.innerHTML = '';
-                team.users.forEach((user, index) => {
-                    const newRow = document.createElement('li');
-                    newRow.innerHTML = `${index + 1}. ${user.name}`;
-                    userList.appendChild(newRow);
-                });
-            })
+                .then(response => response.json())
+                .then(team => {
+                    document.getElementById('viewTeamName').innerHTML = team.name;
+                    document.getElementById('createdDate').innerHTML = team.createdDate;
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = '';
+                    team.users.forEach((user, index) => {
+                        const newRow = document.createElement('li');
+                        newRow.innerHTML = `${index + 1}. ${user.name}`;
+                        userList.appendChild(newRow);
+                    });
+                })
             // Fetch player data and populate the modal fields
             // fetch(`/player/${playerId}`, {
             //     method: 'GET'
@@ -383,7 +419,28 @@
         function CSV() {
             window.location.href = '/download-csv';
         }
-   
+
+        const deleteTeamBtn = document.getElementById('deleteTeamBtn');
+deleteTeamBtn.addEventListener('click', () =>{
+    fetch('/deleteTeam', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            teamId : deleteTeamId
+        })
+    })
+    .then(response => {
+        if(response.ok){
+            window.location.href = window.location.pathname + '?tabId=2';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
 
     </script>
 </body>

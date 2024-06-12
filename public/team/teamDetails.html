@@ -97,6 +97,36 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="deleteTeamModal" tabindex="-1" aria-labelledby="deleteTeamModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTeamModalLabel">Delete Team</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <p>Are you sure you want to delete this team</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-secondary float-left"
+                            style="background-color: #e95d06; border: none;" data-bs-dismiss="modal">CANCEL</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary float-right"
+                            style="background-color: #ff0303; border: none;" id="deleteTeamBtn">Delete</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -127,6 +157,7 @@
                             <td id="check">
                                 <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id='viewTeam'>
                                         <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
+                                <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
                             </td>
                         `;
                         tableBody.appendChild(newRow);
@@ -142,11 +173,17 @@
         .catch(error => {
             console.error('Error:', error);
         });
+        var deleteTeamId = '';
+
 
         document.addEventListener('DOMContentLoaded', function(){
             const tableBody = document.querySelector('tbody'); // Adjust selector as needed
             tableBody.addEventListener('click', async function(event) {
                 try {
+                    if(event.target.classList.contains('fa-trash')) {
+                    deleteTeamId = event.target.parentElement.dataset.teamId;
+                }
+                else{
                     const selectedTeamId = event.target.parentElement.dataset.teamId;
                     if(event.target.classList.contains('fa-eye')){
                         const response = await fetch(`/getTeamDetails/${selectedTeamId}`);
@@ -166,12 +203,33 @@
                         </ul>
                         `;
                     }
+                }
                 } catch (error) {
                     console.error('Error fetching team Details', error);
                 }
             });
         });
    
+        const deleteTeamBtn = document.getElementById('deleteTeamBtn');
+deleteTeamBtn.addEventListener('click', () =>{
+    fetch('/deleteTeam', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            teamId : deleteTeamId
+        })
+    })
+    .then(response => {
+        if(response.ok){
+            window.location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
 </script>
 
 </html>
