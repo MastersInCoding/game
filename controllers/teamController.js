@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const Team = require('../models/team');
 const Player = require('../models/players');
+const XLSX = require('xlsx');
+const fs = require('fs');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 
@@ -282,50 +284,75 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
     if (!teams) {
       return res.status(404).json({ message: 'Teams not found.' });
     }
+    teamsAndPlayersData = [];
+    const userDataPromises = [];
+
+  
     for(let team of teams) {
-      const user = await User.findById(team.createdBy);
-      team.createdBy = user.name;
+      if(team == null  || team == undefined) {
+        continue;
+      }
+      userDataPromises.push(
+        User.findById(team.createdBy).then(user => {
+          team.createdBy = user.name;
+          return { name: user.name, email: user.email };
+        })
+      );
+      team.teams.forEach( t => {
+        var i = 0;
+        t.users.forEach(player => {
+          if(i == 0){
+            teamsAndPlayersData.push({
+              name: t.name,
+              player: player.name
+            });
+  
+            i++;
+          }
+          else{
+            teamsAndPlayersData.push({
+              name: '',
+              player: player.name
+            });
+          }
+        });
+      })
+      
     }
-    // Define the CSV file path
-    const csvFilePath = 'teams.csv';
-    // Create a CSV writer
-    const csvWriter = createCsvWriter({
-      path: csvFilePath,
-      header: [
-        { id: 'id', title: 'Id' },
-        { id: 'createdBy', title: 'Created By' },
-        { id: 'numTeams', title: 'Number Of Teams' },
-      ]
+
+    const userData = await Promise.all(userDataPromises);
+    const uniqueUserData = Array.from(new Set(userData.map(u => u.email)))
+    .map(email => {
+      return userData.find(u => u.email === email);
     });
+    console.log(userData);
+    // Define the CSV file path
+    const csvFilePath = 'teams_and_users.xlsx';
 
-    // Format data for CSV
-    const records = teams.map(team => ({
-      id: team._id,
-      createdBy: team.createdBy,
-      numTeams: team.numTeams
-    }));
+    const wb = XLSX.utils.book_new();
 
-    // Write data to CSV
-    await csvWriter.writeRecords(records);
-    return res.download(csvFilePath);
-    //  // Set headers to force download
-    //  res.setHeader('Content-Disposition', 'attachment; filename=teams.csv');
-    //  res.setHeader('Content-Type', 'text/csv');
-    // console.log("Yes")
-    //  // Stream the file to the client
-    //  const fileStream = fs.createReadStream(csvFilePath);
-    //  fileStream.pipe(res);
-    //  console.log("Yessss")
-    //  // Optionally delete the file after sending it
-    //  fileStream.on('end', () => {
-    //    fs.unlink(csvFilePath, (err) => {
-    //      if (err) {
-    //        console.error('Error deleting file:', err);
-    //      }
-    //    });
-    //  });
-    //  console.log("Yesaaa")
+    const ws1 = XLSX.utils.json_to_sheet(teamsAndPlayersData);
+    const ws2 = XLSX.utils.json_to_sheet(uniqueUserData);
+
+    XLSX.utils.book_append_sheet(wb, ws1, 'Teams and Players');    
+    XLSX.utils.book_append_sheet(wb, ws2, 'Users');
+
+    console.log(ws1);
+
+    XLSX.writeFile(wb, csvFilePath);
+
+    console.log(csvFilePath);
+
+    // return res.download(csvFilePath);
+    return res.download(csvFilePath, 'teams_and_users.xlsx', (err) => {
+      if (err) {
+        throw new Error('Error sending file');
+      } else {
+        console.log('File sent');
+      }
+    });
   } catch (error) {
+    console.log(error);
     res.status(500).send('An error occurred while generating the CSV file.');
   }
 }
