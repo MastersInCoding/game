@@ -325,7 +325,6 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
     .map(email => {
       return userData.find(u => u.email === email);
     });
-    console.log(userData);
     // Define the CSV file path
     const csvFilePath = 'teams_and_users.xlsx';
 
@@ -337,11 +336,8 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
     XLSX.utils.book_append_sheet(wb, ws1, 'Teams and Players');    
     XLSX.utils.book_append_sheet(wb, ws2, 'Users');
 
-    console.log(ws1);
 
     XLSX.writeFile(wb, csvFilePath);
-
-    console.log(csvFilePath);
 
     // return res.download(csvFilePath);
     return res.download(csvFilePath, 'teams_and_users.xlsx', (err) => {
