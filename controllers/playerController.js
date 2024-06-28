@@ -72,18 +72,10 @@ exports.getPlayersByUser = async (req, res) => {
                 //             console.log('Players', count);
                 //     count++;
                 // });
-
-                if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                    console.log(count, '111');
                 
             if(player.teams.length < 5) {
                 if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                    console.log(count)
-                showableUsers.push(player);
-            }
-            else{
-                if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                    console.log(count, 'sss')
+                    showableUsers.push(player);
             }
         })
         return res.status(200).json({showableUsers : showableUsers, allUsers : players});

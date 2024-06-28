@@ -225,7 +225,7 @@ exports.getAllTeams = async (req, res) => {
             teams: 1
           }
         }
-      ]);
+      ]).sort({ createdOn: -1});
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
       }

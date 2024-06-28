@@ -155,7 +155,7 @@
                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                             <td>${team.totalPoints}</td>
                             <td id="check">
-                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id='viewTeam'>
+                                <button data-bs-toggle="modal" style="border: none;background: none; margin-right:3px" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id='viewTeam'>
                                         <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
                                 <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
                             </td>
