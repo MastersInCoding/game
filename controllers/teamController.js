@@ -3,6 +3,7 @@ const Team = require('../models/team');
 const Player = require('../models/players');
 const XLSX = require('xlsx');
 const fs = require('fs');
+const Settings = require('../models/settings');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 
@@ -39,7 +40,10 @@ exports.team = async (req, res) => {
 exports.saveSelectedUsers = async (req, res) => {
   try {
     const { createdBy, selectedUserIds, teamName } = req.body;
-
+    const settings = await Settings.findOne({name: 'Team Creation Settings'});
+    if(!settings ||!settings.isActive) {
+      return res.status(403).json({ message: 'Team creation settings are not active' });
+    }
     const existingTeam = await Team.findOne({ name: { $regex: `^${teamName}$`, $options: 'i' } });
     if (existingTeam) {
       return res.status(400).json({ message: 'Team name already exists' });

@@ -19,6 +19,7 @@ let transporter = nodemailer.createTransport({
 const userController = require('../controllers/userController');
 const teamController = require('../controllers/teamController');
 const playerController = require('../controllers/playerController');
+const settingsController = require('../controllers/settingsController');
 
 
 // Home page route
@@ -72,6 +73,10 @@ router.get('/player/:id', playerController.getPlayerById);
 router.post('/savePlayer', playerController.savePlayer);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
+
+
+router.post('/settings/changeTeamCreations', settingsController.changeTeamCreations);
+router.get('/settings', settingsController.getSettings);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
 

@@ -74,8 +74,7 @@ exports.getPlayersByUser = async (req, res) => {
                 // });
                 
             if(player.teams.length < 5) {
-                if(player._id.toString() == '6643c561a722d1fa40a17dc0')
-                    showableUsers.push(player);
+                showableUsers.push(player);
             }
         })
         return res.status(200).json({showableUsers : showableUsers, allUsers : players});
