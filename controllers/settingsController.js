@@ -21,7 +21,7 @@ exports.changeTeamCreations = async (req, res) => {
         } else {
             // If no ID provided, create a new Settings document
             settings = new Settings({
-                isActive: teamCreations,
+                isActive: showTeamCreation,
                 lastUpdatedAt: Date.now(),
                 name: 'Team Creation Settings'
             });
