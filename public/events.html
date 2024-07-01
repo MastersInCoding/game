@@ -18,6 +18,13 @@
             .font-size-table {
                 font-size: xx-small !important;
             }
+            .select-option {
+                width: 100% !important;
+            }
+        }
+
+        .select-option {
+            width: 40%;
         }
 
         .font-size-table {
@@ -194,7 +201,7 @@
                                 <h5>Kindly select the ongoing event</h5>
                             </div>
                             <div class="col-6">
-                                <select class="form-select" style="width:40%" onchange="handleEventSelection(event)">
+                                <select class="form-select select-option" onchange="handleEventSelection(event)">
                                     <option disabled selected>Ongoing Event</option>
                                     <option value="1">US</option>
                                     <option value="2">UK</option>
