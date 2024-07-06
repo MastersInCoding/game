@@ -146,15 +146,18 @@ exports.updateTeam = async (req, res) => {
 
         const { selectedUserIds, teamName, teamId } = req.body;
 
-        const existingTeam = await Team.findOne({ name: { $regex: `^${teamName}$`, $options: 'i' } });
-        if (existingTeam) {
-          return res.status(400).json({ message: 'Team name already exists' });
-        }
-
         const team = await Team.findById(teamId);
         if (!team) {
             return res.status(404).json({ error: "Team not found" });
         }
+
+        const existingTeam = await Team.findOne(
+          { name: { $regex: `^${teamName}$`, $options: 'i' } , _id : { $ne: teamId} });
+        if (existingTeam) {
+          return res.status(400).json({ message: 'Team name already exists' });
+        }
+
+        
         const usersToAdd = await Player.find({ _id: { $in: selectedUserIds } });
         const selectedUserObjectIds = usersToAdd.map(user => user._id.toString());
         const usersToRemove = team.users.filter(user => !selectedUserObjectIds.includes(user.id.toString()));
@@ -174,6 +177,7 @@ exports.updateTeam = async (req, res) => {
         for (const userId of usersToRemove) {
 
           const user = await Player.findById(userId);
+          console.log(user.teams);
           user.teams = user.teams.filter(id => id.toString() !== teamId);
           await user.save();
         }

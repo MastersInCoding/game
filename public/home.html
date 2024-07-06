@@ -612,7 +612,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" style="color: #e95d06;font-size: xx-large;" id="viewTeamModalLabel">
-                            <b>View Team</b></h5>
+                            <b>View Team</b>
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -641,6 +642,7 @@
 
     <script>
 
+        let showActionButton = false;
         howToPlay = document.getElementById('tabButton1');
         predictions = document.getElementById('tabButton2');
         leaderBoard = document.getElementById('tabButton3');
@@ -1163,6 +1165,22 @@
                 });
         });
 
+        const addNewTeamBtn = document.getElementById('addNewTeam');
+        fetch('/settings', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                addNewTeamBtn.style.display = data.isActive ? 'block' : 'none';
+                showActionButton = data.isActive;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
         fetch(`/getteams/${sessionStorage.getItem('email')}`, {
             method: 'GET',
             headers: {
@@ -1181,31 +1199,35 @@
                                 tableContainer.style.display = '';
                                 noDataMessage.style.display = 'none !important';
                                 tableBody.innerHTML = '';
+                                console.log(showActionButton);
+
                                 data.forEach((team, index) => {
                                     const newRow = document.createElement('tr');
-                                    newRow.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${team.name}</td>
-                            <td>${new Date(team.createdOn).toLocaleDateString()}</td>
-                            <td>${team.totalPoints}</td>
-                            <td id="check">
-                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
-                                        <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
-                                </td>
-                        `;
-                                    // newRow.innerHTML = `
-                                    //     <td>${index + 1}</td>
-                                    //     <td>${team.name}</td>
-                                    //     <td>${new Date(team.createdOn).toLocaleDateString()}</td>
-                                    //     <td>${team.totalPoints}</td>
-                                    //     <td id="check">
-                                    //         <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
-                                    //                 <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
-                                    //         <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id="updateTeam">
-                                    //                 <i class="fas fa-solid fa-pen view-icon" style="color: green"></i></button>
-                                    //         <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
-                                    //     </td>
-                                    // `;
+                                    if(showActionButton)
+                                        newRow.innerHTML = `
+                                            <td>${index + 1}</td>
+                                            <td>${team.name}</td>
+                                            <td>${new Date(team.createdOn).toLocaleDateString()}</td>
+                                            <td>${team.totalPoints}</td>
+                                            <td id="check">
+                                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
+                                                        <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
+                                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editTeamModal" style="box-shadow: none;" data-team-id="${team._id}" id="updateTeam">
+                                                        <i class="fas fa-solid fa-pen view-icon" style="color: green"></i></button>
+                                                <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deleteTeamModal" data-team-id="${team._id}"><i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${team._id}" id="deleteTeam"></i> </button>
+                                            </td>
+                                        `;
+                                    else
+                                        newRow.innerHTML = `
+                                            <td>${index + 1}</td>
+                                            <td>${team.name}</td>
+                                            <td>${new Date(team.createdOn).toLocaleDateString()}</td>
+                                            <td>${team.totalPoints}</td>
+                                            <td id="check">
+                                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team._id}">
+                                                        <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i></button>
+                                                </td>
+                                            `;
                                     tableBody.appendChild(newRow);
                                 });
                             }
@@ -1476,21 +1498,6 @@
                     console.error('Error:', error);
                 });
         });
-
-        const addNewTeamBtn = document.getElementById('addNewTeam');
-        fetch('/settings', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                addNewTeamBtn.style.display = data.isActive ? 'block' : 'none';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     </script>
 </body>
 
