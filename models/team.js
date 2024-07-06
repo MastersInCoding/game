@@ -20,6 +20,11 @@ const teamSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  event : {
+    type: String,
+    enum: ['US', 'UK'],
+    // default: 'US'
+  },
   createdOn: {
     type: Date,
     default: Date.now

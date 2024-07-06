@@ -5,6 +5,8 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const Settings = require('../models/settings');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const Events = require('../models/events');
+
 
 
 
@@ -214,22 +216,50 @@ exports.myTeam = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
   try {
-      const teams = await Team.aggregate([
-        {
-          $group: {
-            _id: "$createdBy",
-            numTeams: { $sum: 1 },
-            teams: { $push: "$$ROOT" }
+      const event = await Events.findOne({});
+      let teams;
+      if(event.name === 'US'){
+        teams = await Team.aggregate([
+          {
+            $group: {
+              _id: "$createdBy",
+              numTeams: { $sum: 1 },
+              teams: { $push: "$$ROOT" }
+            }
+          },
+          {
+            $project: {
+              createdBy: "$_id",
+              numTeams: 1,
+              teams: 1
+            }
           }
-        },
-        {
-          $project: {
-            createdBy: "$_id",
-            numTeams: 1,
-            teams: 1
+        ]).sort({ createdOn: -1});
+      }
+      else{
+        teams = await Team.aggregate([
+          {
+            $match: {
+              event: 'UK'
+            }
+          },
+          {
+            $group: {
+              _id: "$createdBy",
+              numTeams: { $sum: 1 },
+              teams: { $push: "$$ROOT" }
+            }
+          },
+          {
+            $project: {
+              createdBy: "$_id",
+              numTeams: 1,
+              teams: 1
+            }
           }
-        }
-      ]).sort({ createdOn: -1});
+        ]).sort({ createdOn: -1});
+      }
+      
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
       }

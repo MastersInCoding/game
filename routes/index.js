@@ -20,6 +20,7 @@ const userController = require('../controllers/userController');
 const teamController = require('../controllers/teamController');
 const playerController = require('../controllers/playerController');
 const settingsController = require('../controllers/settingsController');
+const eventsController = require('../controllers/eventsController');
 
 
 // Home page route
@@ -64,6 +65,7 @@ router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
+router.get('/playersEvent', playerController.getPlayersEvent);
 router.get('/players/:userEmail', playerController.getPlayersByUser);
 // router.get('/deleteAllPlayer', playerController.deleteAllPlayer);
 router.get('/admin', playerController.getAdmin);
@@ -77,6 +79,10 @@ router.post('/savePlayer', playerController.savePlayer);
 
 router.post('/settings/changeTeamCreations', settingsController.changeTeamCreations);
 router.get('/settings', settingsController.getSettings);
+
+router.post('/changeEvent', eventsController.changeEvent);
+router.get('/getEvents', eventsController.getEvents);
+router.get('/createEvent', eventsController.createEvent);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
 

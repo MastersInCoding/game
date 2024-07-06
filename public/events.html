@@ -134,6 +134,12 @@
         .list-group-numbered .list-group-item::marker {
             font-weight: bold;
         }
+        .toast-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+        }
     </style>
 </head>
 
@@ -195,27 +201,35 @@
                             </div>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="" style="display: none;" id="eventContainer">
                         <div class="row">
                             <div class="col-6">
                                 <h5>Kindly select the ongoing event</h5>
                             </div>
                             <div class="col-6">
-                                <select class="form-select select-option" onchange="handleEventSelection(event)">
-                                    <option disabled selected>Ongoing Event</option>
-                                    <option value="1">US</option>
-                                    <option value="2">UK</option>
+                                <select class="form-select select-option" onchange="handleEventSelection(event)" id="eventSelection">
+                                    <option value="US">US</option>
+                                    <option value="UK">UK</option>
                                   </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 id="selectedOption"></h5>
-                            </div>
-                        </div>
-                        
+                        </div>                        
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="toast-container" id="successToastContainer">
+        <div class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                Operation completed successfully.
             </div>
         </div>
     </div>
@@ -225,7 +239,24 @@
         var el = document.getElementById("wrapper");
         var toggleButton = document.getElementById("menu-toggle");
         const playerList = document.getElementById("playerList");
-        const selectedOption = document.getElementById("selectedOption");
+        const eventSelection = document.getElementById("eventSelection");
+        const eventContainer = document.getElementById("eventContainer");
+        const successToast = document.querySelector('#successToastContainer .toast');
+
+
+
+        fetch('/getEvents', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then( data => {
+            eventSelection.value = data.name;
+            eventContainer.style.display = "block";
+        });
+
 
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
@@ -233,6 +264,25 @@
 
         function handleEventSelection(event) {
             const selectedValue = event.target.value;
+            fetch('/changeEvent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selectedValue: selectedValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.code === 200){
+                    successToast.classList.add('show');
+                    setTimeout(() => {
+                        successToast.classList.remove('show');
+                    }, 1000);
+                    eventSelection.value = data.event.name;
+                }
+            });
+
+
             if (selectedValue === "1") {
                 selectedOption.innerHTML = ' You have selected US'
             } else if (selectedValue === "2") {
@@ -240,27 +290,6 @@
             }
         }
 
-        // fetch('/players', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data.users.length > 0) {
-        //             playerList.innerHTML = '';
-        //             data.users.forEach((player) => {
-        //                 const newLi = document.createElement('li');
-        //                 newLi.className = 'player-list-item';
-        //                 newLi.innerHTML = `${player.name} (${player.points})`;
-        //                 playerList.appendChild(newLi);
-        //             });
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error parsing JSON:', error);
-        //     });
 
         const logoutButton = document.getElementById('logOutBtn');
         const logOutBtnDropDown = document.getElementById('logOutBtnDropDown');

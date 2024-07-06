@@ -19,6 +19,12 @@ const playerSchema = new mongoose.Schema({
   teams: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Team' }
   ]
+  ,
+  event : {
+    type: String,
+    enum: ['US', 'UK'],
+    // default: 'US'
+  },
 });
 
 playerSchema.pre('save', async function (next) {
