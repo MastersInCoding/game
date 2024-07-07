@@ -82,7 +82,8 @@ router.get('/settings', settingsController.getSettings);
 
 router.post('/changeEvent', eventsController.changeEvent);
 router.get('/getEvents', eventsController.getEvents);
-router.get('/createEvent', eventsController.createEvent);
+router.get('/getCurrentEvent', eventsController.getCurrentEvent);
+router.post('/createEvent', eventsController.createEvent);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
 

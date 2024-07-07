@@ -24,6 +24,9 @@
                 height: 3rem;
                 /* Set your desired minimum height */
             }
+            .tabButtonFont{
+                font-size: 12px !important;
+            }
         }
 
         @media only screen and (max-width: 419px) {
@@ -256,9 +259,12 @@
             </div>
         </div>
     </div>
+    <div class="mt-3" style="text-align: center; ">
+        <b id="ongoingEvent"></b>
+    </div>
 
     <div class="tab-buttons">
-        <button id="tabButton1" class="btn btn-primary ripple-surface active" style="
+        <button id="tabButton1" class="btn btn-primary ripple-surface active tabButtonFont" style="
         border: none;
         background: #ffffff;
         box-shadow: none; 
@@ -270,7 +276,7 @@
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
         " onclick="showTab('tab1')">HOW TO PLAY</button>
-        <button id="tabButton2" class="btn btn-primary ripple-surface" style="
+        <button id="tabButton2" class="btn btn-primary ripple-surface tabButtonFont" style="
         border: none;
         background: #ffffff;
         box-shadow: none;
@@ -282,7 +288,7 @@
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
         " onclick="showTab('tab2')">ENTER TEAMS</button>
-        <a id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
+        <a id="tabButton3" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
          border: none;
          background: #ffffff;
          box-shadow: none;
@@ -293,7 +299,7 @@
          font-size: 23px;
          border-bottom: 3px solid orange;
          border-bottom-color: #ffffff;
-         " href="https://jasonkellygolf.online/leaderboard/" target="_blank">LEADER BOARD</a>
+         " href="https://jasonkellygolf.online/leaderboard/" target="_blank">LEADERBOARD</a>
 
         <!-- <button id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
          border: none;
@@ -365,6 +371,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Tournament Team</th>
                                         <th>Team Name</th>
                                         <th>Created On</th>
                                         <th>Points</th>
@@ -481,6 +488,19 @@
                 </div>
                 <div class="toast-body">
                     Operation completed successfully.
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="successToastContainerCreateTeam">
+            <div class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="mr-auto">Success</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body" id="successToastTeam">
                 </div>
             </div>
         </div>
@@ -1139,6 +1159,9 @@
         dropdownMenu.addEventListener('change', handleCB);
 
         // dropdownMenu.addEventListener('change', handleCB);    
+        
+        const successToastContainerCreateTeam = document.querySelector('#successToastContainerCreateTeam .toast');
+
 
         saveTeamBtn.addEventListener('click', function () {
             fetch('/saveSelectedUsers', {
@@ -1153,16 +1176,40 @@
                 })
             })
                 .then(response => {
+                    console.log(response);
                     if (response.ok) {
+                        successToastContainerCreateTeam.classList.add('show');
+                        document.getElementById('successToastTeam').innerHTML = `You have successfully created ${addTeamName.value} team`;
+                        setTimeout(() => {
+                            successToastContainerCreateTeam.classList.remove('show');
+                        }, 4000);
                         window.location.href = window.location.pathname + '?tabId=2';
                     }
-                    if (response.status === 400) {
+                    else if (response.status === 400) {
                         alert('Team name already exists');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        });
+
+        const ongoingEvent = document.getElementById('ongoingEvent');
+
+        fetch('/getCurrentEvent', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            res.json()
+            .then(d => {
+                ongoingEvent.innerHTML = `The current ongoing event is ${d.name}`;
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
 
         const addNewTeamBtn = document.getElementById('addNewTeam');
@@ -1206,6 +1253,7 @@
                                     if(showActionButton)
                                         newRow.innerHTML = `
                                             <td>${index + 1}</td>
+                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}"></input></td>
                                             <td>${team.name}</td>
                                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                                             <td>${team.totalPoints}</td>
@@ -1220,6 +1268,7 @@
                                     else
                                         newRow.innerHTML = `
                                             <td>${index + 1}</td>
+                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}"></input></td>
                                             <td>${team.name}</td>
                                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                                             <td>${team.totalPoints}</td>
@@ -1248,17 +1297,23 @@
             });
 
         let selectedTeamId = "";
+        let tournamentTeam = [];
         document.addEventListener('DOMContentLoaded', function () {
             const tableBody = document.querySelector('tbody'); // Adjust selector as needed
 
             tableBody.addEventListener('click', async function (event) {
-                const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
+                // const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
                 selectedTeamId = event.target.parentElement.dataset.teamId;
-
-
                 try {
                     if (event.target.classList.contains('fa-trash')) {
                         deleteTeamId = event.target.parentElement.dataset.teamId;
+                    }
+                    else if(event.target.classList.contains('selectionTeam') ) {
+                        if(!event.target.checked)
+                            tournamentTeam.splice(tournamentTeam.indexOf(event.target.dataset.teamId), 1);
+                        else
+                            tournamentTeam.push(event.target.dataset.teamId);
+                        console.log(tournamentTeam);
                     }
                     else {
                         const response = await fetch(`/getTeamDetails/${selectedTeamId}`);

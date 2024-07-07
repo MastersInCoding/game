@@ -5,7 +5,7 @@ const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const { team } = require('./teamController');
-const Event = require('../models/events');
+const Events = require('../models/events');
 
 
 
@@ -56,12 +56,12 @@ exports.getPlayers = async (req, res) => {
 
 exports.getPlayersEvent = async (req, res) => {
     try {
-        const event = await Event.findOne({});
+        const event = await Events.findOne({active: true});
         let players;
         if(event.name === 'US')
             players = await Player.find({}, 'name points teams').populate('teams').sort({ points: -1});
         else
-            players = await Player.find({event : "UK"}, 'name points teams').populate('teams').sort({ points: -1});
+            players = await Player.find({event : event.name}, 'name points teams').populate('teams').sort({ points: -1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });

@@ -220,7 +220,7 @@ exports.myTeam = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
   try {
-      const event = await Events.findOne({});
+      const event = await Events.findOne({active: true});
       let teams;
       if(event.name === 'US'){
         teams = await Team.aggregate([
@@ -244,7 +244,7 @@ exports.getAllTeams = async (req, res) => {
         teams = await Team.aggregate([
           {
             $match: {
-              event: 'UK'
+              event: event.name
             }
           },
           {

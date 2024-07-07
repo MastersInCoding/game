@@ -179,10 +179,12 @@
         console.log('Response:', response);
         if(response.ok){
             email.value = '';
-            successToast.classList.add('show');
-            setTimeout(() => {
-                successToast.classList.remove('show');
-            }, 1000);
+            alert("An email with the reset password link is sent to your email id");
+            window.location.href ='/login.html'
+            // successToast.classList.add('show');
+            // setTimeout(() => {
+            //     successToast.classList.remove('show');
+            // }, 1000);
         }
         else{
           alert("Email not found");

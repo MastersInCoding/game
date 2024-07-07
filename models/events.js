@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const eventSchema = new mongoose.Schema({
   name: {
     type: String,
-    enum: ['US', 'UK'],
-    required: true,
-    default: 'US',
+    unique: true
+  },
+  active: {
+    type: Boolean,
+    default: false
   },
   lastUpdatedAt: {
     type: Date,

@@ -196,10 +196,10 @@
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
-                                <div class="col-6">
-                                    <h2 style="color: #e95d06;"><b>Players</b></h2>
+                                <div class="col-10">
+                                    <h5 style="color:#e95d06; text-align: center;"><b id="ongoingEvent"></b></h5>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-2">
                                     <button class="d-flex align-items-center mt-2" data-bs-toggle="modal"
                                         data-bs-target="#addPlayerModal"
                                         style="box-shadow: none; float: right;border: none;background: none;"
@@ -341,6 +341,8 @@
         const editPlayerName = document.getElementById('editPlayerName');
         const updatePlayerBtn = document.getElementById('editPlayerBtn');
         const deletePlayerBtn = document.getElementById('deletePlayerBtn');
+        const ongoingEvent = document.getElementById("ongoingEvent");
+
 
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
@@ -355,29 +357,45 @@
             .then(response => {
                 response.json()
                     .then(data => {
-                        document.getElementById("spinner").style.display = "none";
-                        document.getElementById('table').style.display = "block";
 
-                        const tableBody = document.querySelector('tbody');
-                        if (data.users.length > 0) {
-                            tableBody.innerHTML = '';
-                            data.users.forEach((player, index) => {
-                                const newRow = document.createElement('tr');
-                                newRow.innerHTML = `
-                                <td>${index + 1}</td>
-                                <td>${player.name}</td>
-                                <td>${player.points}</td>
-                                <td id="check">
-                                <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editPlayerModal" style="box-shadow: none;" data-player-id="${player._id}" id="updatePlayer">
-                                    <i class="fas fa-solid fa-user-pen view-icon" style="color: green"></i></button>
-                                <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deletePlayerModal" data-player-id="${player._id}">
-                                    <i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${player._id}" id="deletePlayer"></i> </button>
-                                </td>
-                                `;
-                                tableBody.appendChild(newRow);
+                        fetch('/getCurrentEvent', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(res => {
+                            res.json()
+                            .then(d => {
+                                ongoingEvent.innerHTML = `The current ongoing event is ${d.name}`;
+                                document.getElementById("spinner").style.display = "none";
+                                document.getElementById('table').style.display = "block";
 
+                                const tableBody = document.querySelector('tbody');
+                                if (data.users.length > 0) {
+                                    tableBody.innerHTML = '';
+                                    data.users.forEach((player, index) => {
+                                        const newRow = document.createElement('tr');
+                                        newRow.innerHTML = `
+                                        <td>${index + 1}</td>
+                                        <td>${player.name}</td>
+                                        <td>${player.points}</td>
+                                        <td id="check">
+                                        <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#editPlayerModal" style="box-shadow: none;" data-player-id="${player._id}" id="updatePlayer">
+                                            <i class="fas fa-solid fa-user-pen view-icon" style="color: green"></i></button>
+                                        <button class="delete" style="border: none;background: none" data-bs-toggle="modal" data-bs-target="#deletePlayerModal" data-player-id="${player._id}">
+                                            <i class="fas fa-regular fa-trash" style="color: red;" data-team-id="${player._id}" id="deletePlayer"></i> </button>
+                                        </td>
+                                        `;
+                                        tableBody.appendChild(newRow);
+
+                                    });
+                                }
                             });
-                        }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                         });
                     })
                     .catch(error => {
                         document.getElementById('table').style.display = "block";

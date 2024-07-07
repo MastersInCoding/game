@@ -195,10 +195,10 @@
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
-                                <div class="col-6">
-                                    <h2 style="color: #e95d06;"><b>Teams</b></h2>
+                                <div class="col-10">
+                                    <h5 style="color:#e95d06; text-align: center;"><b id="ongoingEvent"></b></h5>
                                 </div>
-                                <div class="col-6 mt-2">
+                                <div class="col-2 mt-2">
                                     <button class="d-flex align-items-center mt-2"
                                         style="box-shadow: none; float: right;border: none;background: none;"
                                         onclick="CSV()">
@@ -257,11 +257,13 @@
         var toggleButton = document.getElementById("menu-toggle");
         const spinner = document.getElementById("spinner");
         const table = document.getElementById("table");
+        const ongoingEvent = document.getElementById("ongoingEvent");
 
 
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
         };
+
 
 
         fetch('/getTeams', {
@@ -273,41 +275,57 @@
             .then(response => {
                 response.json()
                     .then(data => {
-                        document.getElementById("spinner").style.display = "none";
-                        document.getElementById('table').style.display = "block";
-                        const tableBody = document.querySelector('tbody');
-                        if (data.length > 0) {
-                            tableBody.innerHTML = '';
-                            data.forEach((team, index) => {
-                                const newRow = document.createElement('tr');
-                                newRow.innerHTML = `
-                                <td>${index + 1}</td>
-                                <td>AA${index+1}</td>
-                                <td>${team.createdBy}</td>
-                                <td>${team.numTeams}</td>
-                                <td id="check">
-                                <a href="/team/teamDetails.html?id=${team.id}">
-                                    <button style="border: none;background: none">
-                                    <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
-                                </button>
-                                </a>
-                                </td>
-                                `;
+                        fetch('/getCurrentEvent', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(res => {
+                            res.json()
+                            .then(d => {
+                                ongoingEvent.innerHTML = `The current ongoing event is ${d.name}`;
 
-                                // newRow.innerHTML = `
-                                // <td>${index + 1}</td>
-                                // <td>${team.createdBy}</td>
-                                // <td>${team.numTeams}</td>
-                                // <td id="check">
-                                // <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team.id}">
-                                //     <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
-                                // </button>
-                                // </td>
-                                // `;
-                                tableBody.appendChild(newRow);
+                                document.getElementById("spinner").style.display = "none";
+                                document.getElementById('table').style.display = "block";
+                                const tableBody = document.querySelector('tbody');
+                                if (data.length > 0) {
+                                    tableBody.innerHTML = '';
+                                    data.forEach((team, index) => {
+                                        const newRow = document.createElement('tr');
+                                        newRow.innerHTML = `
+                                        <td>${index + 1}</td>
+                                        <td>AA${index+1}</td>
+                                        <td>${team.createdBy}</td>
+                                        <td>${team.numTeams}</td>
+                                        <td id="check">
+                                        <a href="/team/teamDetails.html?id=${team.id}">
+                                            <button style="border: none;background: none">
+                                            <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
+                                        </button>
+                                        </a>
+                                        </td>
+                                        `;
 
+                                        // newRow.innerHTML = `
+                                        // <td>${index + 1}</td>
+                                        // <td>${team.createdBy}</td>
+                                        // <td>${team.numTeams}</td>
+                                        // <td id="check">
+                                        // <button data-bs-toggle="modal" style="border: none;background: none" data-bs-target="#viewTeamModal" style="box-shadow: none;" data-team-id="${team.id}">
+                                        //     <i class="fas fa-solid fa-eye view-icon" style="color: blue"></i>
+                                        // </button>
+                                        // </td>
+                                        // `;
+                                        tableBody.appendChild(newRow);
+
+                                    });
+                                }
                             });
-                        }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                         });
                     })
                     .catch(error => {
                         document.getElementById("spinner").style.display = "none";
