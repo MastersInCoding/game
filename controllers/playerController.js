@@ -8,6 +8,57 @@ const { team } = require('./teamController');
 const Events = require('../models/events');
 
 
+exports.addPlayerCSV = async (req, res) => {
+    try {
+        console.log('reached')
+        const tempPath = req.file.path;
+        // upload file
+        // const targetPath = path.join(__dirname, 'uploads', req.file.originalname);
+        // console.log(tempPath, ' ', targetPath);
+        // fs.rename(tempPath, targetPath, err => {
+        //     if (err) return res.status(500).send('Error occurred while processing the file here');
+    
+        //     res.status(200).json({ message: 'File uploaded successfully' });
+        // });
+
+
+        const workbook = xlsx.readFile(tempPath);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const data = xlsx.utils.sheet_to_json(worksheet);
+        const players = [];
+        await Player.deleteMany({});
+        // Convert data and save to MongoDB
+        data.forEach(async (row) => {
+            console.log(row);
+            const newData = new Player({
+                name: row['Name'],
+                points: row['Points'],
+                event: row['Events']
+            });
+            try {
+                await newData.save();
+                players.push(newData);
+            } catch (err) {
+                console.error('Error saving data to MongoDB:', err);
+            }
+        });
+        return res.status(200).json({players });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+exports.deleteAllPlayers = async (req, res) => {
+    try {
+        await Player.deleteMany({});
+        console.log("All documents deleted successfully!");
+        res.status(200).json({message: "All documents deleted successfully!"});
+    } catch (error) {
+        console.error("Error deleting documents:", error);
+    }
+}
 
 exports.addPlayer = async (req, res) => {
     try {

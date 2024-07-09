@@ -22,8 +22,7 @@ const playerSchema = new mongoose.Schema({
   ,
   event : {
     type: String,
-    enum: ['US', 'UK'],
-    // default: 'US'
+    default: 'US'
   },
 });
 

@@ -65,3 +65,20 @@ exports.getCurrentEvent = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+exports.deleteEvent = async (req, res) => {
+    try {
+        const event = await Events.findById(req.params.id);
+        if(!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        console.log(event);
+        if(event.active) {
+            return res.status(204).json({status: 204, message: "Cannot delete active event" });
+        }
+        await Events.findByIdAndDelete(req.params.id)
+        return res.status(200).json({status: 200, message: "Event deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

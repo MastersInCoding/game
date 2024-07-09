@@ -4,6 +4,10 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const crypto = require('crypto');
+const multer = require('multer');
+
+
+const upload = multer({dest: 'uploads/'})
 
 
 
@@ -21,6 +25,7 @@ const teamController = require('../controllers/teamController');
 const playerController = require('../controllers/playerController');
 const settingsController = require('../controllers/settingsController');
 const eventsController = require('../controllers/eventsController');
+const textSchemaController = require('../controllers/textSchemaController');
 
 
 // Home page route
@@ -73,6 +78,8 @@ router.delete('/deletePlayer/:id', playerController.deletePlayer);
 router.put('/updatePlayer', playerController.updatePlayer);
 router.get('/player/:id', playerController.getPlayerById);
 router.post('/savePlayer', playerController.savePlayer);
+router.post('/addPlayerCSV', upload.single('csvfile'), playerController.addPlayerCSV);
+router.delete('/deleteAllPlayers', playerController.deleteAllPlayers);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
 
@@ -84,6 +91,12 @@ router.post('/changeEvent', eventsController.changeEvent);
 router.get('/getEvents', eventsController.getEvents);
 router.get('/getCurrentEvent', eventsController.getCurrentEvent);
 router.post('/createEvent', eventsController.createEvent);
+router.delete('/deleteEvent/:id', eventsController.deleteEvent);
+
+
+router.put('/changeTextSchema', textSchemaController.changeTextSchema);
+router.get('/getSchema/:name', textSchemaController.getSchema);
+router.get('/createTextSchema', textSchemaController.createTextSchema);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
 

@@ -275,8 +275,20 @@
         font-size: 23px;
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
-        " onclick="showTab('tab1')">HOW TO PLAY</button>
-        <button id="tabButton2" class="btn btn-primary ripple-surface tabButtonFont" style="
+        " onclick="showTab('tab1')">NEWS</button>        
+        <button id="tabButton2" class="btn btn-primary ripple-surface active tabButtonFont" style="
+        border: none;
+        background: #ffffff;
+        box-shadow: none; 
+        color: rgb(233, 93, 6);
+        font-style: italic;
+        font-family: Montserrat;
+        font-weight: 900;
+        font-size: 23px;
+        border-bottom: 3px solid orange;
+        border-bottom-color: #ffffff;
+        " onclick="showTab('tab2')">HOW TO PLAY</button>
+        <button id="tabButton3" class="btn btn-primary ripple-surface tabButtonFont" style="
         border: none;
         background: #ffffff;
         box-shadow: none;
@@ -287,8 +299,8 @@
         font-size: 23px;
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
-        " onclick="showTab('tab2')">ENTER TEAMS</button>
-        <a id="tabButton3" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
+        " onclick="showTab('tab3')">ENTER TEAMS</button>
+        <a id="tabButton4" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
          border: none;
          background: #ffffff;
          box-shadow: none;
@@ -316,6 +328,18 @@
     </div>
 
     <div id="tab1" class="tab-content" style="display:block;">
+        <div class="container">
+            <div class="card" style="border-radius: 25px;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">News</h5>
+                    <p class="card-text" id="newsSetting">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab2" class="tab-content" style="display:none;">
         <div class="d-flex justify-content-center">
             <div class="card w-75" style="border-radius: 25px;">
                 <div class="card-body" id="logoutContentHP">
@@ -340,7 +364,7 @@
             </div>
         </div>
     </div>
-    <div id="tab2" class="tab-content" style="display:none;">
+    <div id="tab3" class="tab-content" style="display:none;">
         <div class="container">
 
             <div class="card" style="border-radius: 25px;">
@@ -393,7 +417,7 @@
         </div>
     </div>
 
-    <div id="tab3" class="tab-content" style="display:none;">
+    <div id="tab4" class="tab-content" style="display:none;">
         <div class="container">
 
             <div class="card" style="border-radius: 25px;">
@@ -486,8 +510,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="toast-body">
-                    Operation completed successfully.
+                <div class="toast-body" id="sucesstoastMessage">
+                    Operation completed successfully
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="errorToastContainer">
+            <div class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="mr-auto">Removed</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body" id="errorToastMessage">
                 </div>
             </div>
         </div>
@@ -663,24 +700,44 @@
     <script>
 
         let showActionButton = false;
-        howToPlay = document.getElementById('tabButton1');
-        predictions = document.getElementById('tabButton2');
-        leaderBoard = document.getElementById('tabButton3');
+        newsBtn = document.getElementById('tabButton1');
+        howToPlay = document.getElementById('tabButton2');
+        predictions = document.getElementById('tabButton3');
+        leaderBoard = document.getElementById('tabButton4');
         var urlParams = new URLSearchParams(window.location.search);
         var passedValue = urlParams.get('tabId');
-        showTab(passedValue == 2 ? 'tab2' : 'tab1');
+        showTab(passedValue == 3 ? 'tab3' : 'tab1');
+
+        fetch('/getSchema/news', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('newsSetting').innerHTML = JSON.parse(data.content);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
         function showTab(tabId) {
             if (tabId === 'tab1') {
                 predictions.classList.remove('active');
                 leaderBoard.classList.remove('active');
-                howToPlay.classList.add('active');
-            }
-            else if (tabId === 'tab3') {
-                leaderBoard.classList.add('active');
-                predictions.classList.remove('active');
                 howToPlay.classList.remove('active');
+                newsBtn.classList.add('active');
             }
-            else {
+            else if (tabId === 'tab2') {
+                howToPlay.classList.add('active');
+                leaderBoard.classList.remove('active');
+                predictions.classList.remove('active');
+                newsBtn.classList.remove('active');
+            }
+            else if (tabId === 'tab3'){
+                newsBtn.classList.remove('active');
                 howToPlay.classList.remove('active');
                 leaderBoard.classList.remove('active');
                 predictions.classList.add('active');
@@ -721,6 +778,7 @@
         }
 
         function renderDashboard() {
+            console.log(isLoggedIn());
             if (!isLoggedIn()) {
                 document.getElementById('login').classList.add('display');
                 document.getElementById('login').classList.remove('hide');
@@ -737,8 +795,9 @@
                 document.getElementById('login').classList.add('hide');
                 document.getElementById('login').classList.remove('display');
                 document.getElementById('content').classList.add('display');
-                document.getElementById('content').classList.remove('display');
+                document.getElementById('content').classList.remove('hide');
                 document.getElementById('logoutContent').classList.add('hide');
+                console.log(document.getElementById('logoutContent'));
                 document.getElementById('logoutContentHP').classList.add('hide');
                 // document.getElementById('logoutContent').classList.remove('display');
                 // document.getElementById('loginContent').classList.add('display');
@@ -753,6 +812,7 @@
         const saveEmailBtn = document.getElementById('saveEmailBtn');
         const newEmail = document.getElementById('newEmail');
         const successToast = document.querySelector('#successToastContainer .toast');
+        const errorToast = document.querySelector('#errorToastContainer .toast');
 
 
 
@@ -1253,7 +1313,7 @@
                                     if(showActionButton)
                                         newRow.innerHTML = `
                                             <td>${index + 1}</td>
-                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}"></input></td>
+                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name}></input></td>
                                             <td>${team.name}</td>
                                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                                             <td>${team.totalPoints}</td>
@@ -1268,7 +1328,7 @@
                                     else
                                         newRow.innerHTML = `
                                             <td>${index + 1}</td>
-                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}"></input></td>
+                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name}></input></td>
                                             <td>${team.name}</td>
                                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                                             <td>${team.totalPoints}</td>
@@ -1304,15 +1364,20 @@
             tableBody.addEventListener('click', async function (event) {
                 // const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
                 selectedTeamId = event.target.parentElement.dataset.teamId;
+                console.log(event.target);
                 try {
                     if (event.target.classList.contains('fa-trash')) {
                         deleteTeamId = event.target.parentElement.dataset.teamId;
                     }
                     else if(event.target.classList.contains('selectionTeam') ) {
-                        if(!event.target.checked)
+                        if(!event.target.checked){
                             tournamentTeam.splice(tournamentTeam.indexOf(event.target.dataset.teamId), 1);
-                        else
+                            errorToastMessage(`Removed selected text : You have removed the ${event.target.dataset.playerName} team from the tournament`, 3000)
+                        }
+                        else{
                             tournamentTeam.push(event.target.dataset.teamId);
+                            successToastMessage(`Selected text: You have entered ${event.target.dataset.playerName} team to tournament`, 3000)
+                        }
                         console.log(tournamentTeam);
                     }
                     else {
@@ -1410,6 +1475,21 @@
 
         });
 
+        function successToastMessage(message, timeOut){
+            document.getElementById('successToastTeam').innerHTML = message;
+            successToastContainerCreateTeam.classList.add('show');
+            setTimeout(() => {
+                successToastContainerCreateTeam.classList.remove('show');
+            }, timeOut)
+        }
+
+        function errorToastMessage(message, timeOut){
+            document.getElementById('errorToastMessage').innerHTML = message;
+            errorToast.classList.add('show');
+            setTimeout(() => {
+                errorToast.classList.remove('show');
+            }, timeOut)
+        }
 
 
         function handleUpdateCB(event) {
