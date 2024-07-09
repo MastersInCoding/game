@@ -264,7 +264,7 @@
     </div>
 
     <div class="tab-buttons">
-        <button id="tabButton1" class="btn btn-primary ripple-surface active tabButtonFont" style="
+        <button id="tabButton1" class="btn btn-primary ripple-surface tabButtonFont" style="
         border: none;
         background: #ffffff;
         box-shadow: none; 
@@ -276,7 +276,7 @@
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
         " onclick="showTab('tab1')">NEWS</button>        
-        <button id="tabButton2" class="btn btn-primary ripple-surface active tabButtonFont" style="
+        <button id="tabButton2" class="btn btn-primary ripple-surface tabButtonFont" style="
         border: none;
         background: #ffffff;
         box-shadow: none; 
@@ -300,7 +300,7 @@
         border-bottom: 3px solid orange;
         border-bottom-color: #ffffff;
         " onclick="showTab('tab3')">ENTER TEAMS</button>
-        <a id="tabButton4" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
+        <!-- <a id="tabButton4" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
          border: none;
          background: #ffffff;
          box-shadow: none;
@@ -311,9 +311,9 @@
          font-size: 23px;
          border-bottom: 3px solid orange;
          border-bottom-color: #ffffff;
-         " href="https://jasonkellygolf.online/leaderboard/" target="_blank">LEADERBOARD</a>
+         " href="https://jasonkellygolf.online/leaderboard/" target="_blank">LEADERBOARD</a> -->
 
-        <!-- <button id="tabButton3" class="btn btn-primary ripple-surface align-middle" style="
+        <button id="tabButton4" class="btn btn-primary ripple-surface align-middle tabButtonFont" style="
          border: none;
          background: #ffffff;
          box-shadow: none;
@@ -324,7 +324,7 @@
          font-size: 23px;
          border-bottom: 3px solid orange;
          border-bottom-color: #ffffff;
-         " onclick="showTab('tab3')">LEADERBOARD</button> -->
+         " onclick="showTab('tab4')">LEADERBOARD</button>
     </div>
 
     <div id="tab1" class="tab-content" style="display:block;">
@@ -421,12 +421,11 @@
         <div class="container">
 
             <div class="card" style="border-radius: 25px;">
-                <div class="card-body" id="logoutContent">
-                    <h5 class="card-title text-center">Coming Soon</h5>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Leaderboard</h5>
+                    <p class="card-text" id="leaderBoardSetting">
+                    </p>
                 </div>
-                <!-- <div class="card-body" id="loginContent">
-                    <h5 class="card-title text-center">Coming soon</h5>
-                   </div> -->
             </div>
         </div>
     </div>
@@ -722,6 +721,20 @@
             console.error('Error:', error);
         });
 
+        fetch('/getSchema/leaderboard', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('leaderBoardSetting').innerHTML = JSON.parse(data.content);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
 
         function showTab(tabId) {
             if (tabId === 'tab1') {
@@ -741,6 +754,12 @@
                 howToPlay.classList.remove('active');
                 leaderBoard.classList.remove('active');
                 predictions.classList.add('active');
+            }
+            else {
+                newsBtn.classList.remove('active');
+                howToPlay.classList.remove('active');
+                leaderBoard.classList.add('active');
+                predictions.classList.remove('active');
             }
             var tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(function (tab) {

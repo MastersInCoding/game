@@ -22,10 +22,25 @@ exports.createTextSchema = async (req, res) => {
     try {
 
         const textSchema = new TextSchema({
-            name: 'news'
+            name: 'prize',
+            content: '"Prize"'
         });
 
         await textSchema.save();
+
+        const lSchema = new TextSchema({
+            name: 'leaderboard',
+            content: '"Leaderboard"'
+        });
+
+
+        const r = new TextSchema({
+            name: 'rule',
+            content: '"Rule"'
+        });
+
+        await lSchema.save();
+        await r.save();
 
         return res.status(201).json(textSchema);
     } catch (error) {

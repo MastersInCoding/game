@@ -46,7 +46,8 @@
       <div class="card" style="border-radius: 25px; width: 90%;">
         <div class="card-body" id="logoutContent">
           <h5 class="card-title text-center" style="color: rgb(233, 93, 6); font-style: italic;">Game Rules</h5>
-          <br />
+          <p class="card-text" id="rulesSetting"></p>
+          <!-- <br />
           <p class="card-text">
           <p><br />1.<strong> Select Your Golfers:</strong> Choose 6 golfers from the provided list located under the ‘Enter Teams’ tab. Ensure that the total points of your selected players do not exceed 300.</p>
           <p><br />2. <strong>Register Your Selections:</strong> Once you have finalised the 6 players for your team, click ‘Add’ to enter your team. If you wish to enter another team, click on the ‘Add Team’ button. You can edit and amend your team(s) until the entry deadline.</p>
@@ -65,12 +66,27 @@
             legislation. Returning players are already members.</p>
           <p><br />14. <strong>Prize Distribution:</strong> The number of paid places will be disclosed in the email on Thursday, June 13th, 2024, and on the website.</p>
           </p>
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
 
   </div>
 </body>
+<script>
 
+  fetch('/getSchema/rule', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      document.getElementById('rulesSetting').innerHTML = JSON.parse(data.content);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+</script>
 </html>
