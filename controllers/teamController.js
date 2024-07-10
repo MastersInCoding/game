@@ -220,62 +220,79 @@ exports.myTeam = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
   try {
-      const event = await Events.findOne({active: true});
-      let teams;
-      if(event.name === 'US'){
-        teams = await Team.aggregate([
-          {
-            $group: {
-              _id: "$createdBy",
-              numTeams: { $sum: 1 },
-              teams: { $push: "$$ROOT" }
-            }
-          },
-          {
-            $project: {
-              createdBy: "$_id",
-              numTeams: 1,
-              teams: 1
-            }
+    const event = await Events.findOne({ active: true });
+    let teams;
+    if (event.name === 'US') {
+      teams = await Team.aggregate([
+        {
+          $group: {
+            _id: "$createdBy",
+            numTeams: { $sum: 1 },
+            teams: { $push: "$$ROOT" }
           }
-        ]).sort({ createdOn: -1});
-      }
-      else{
-        teams = await Team.aggregate([
-          {
-            $match: {
-              event: event.name
-            }
-          },
-          {
-            $group: {
-              _id: "$createdBy",
-              numTeams: { $sum: 1 },
-              teams: { $push: "$$ROOT" }
-            }
-          },
-          {
-            $project: {
-              createdBy: "$_id",
-              numTeams: 1,
-              teams: 1
-            }
+        },
+        {
+          $sort: {
+            "teams.createdOn": -1 // Sorting within the teams array
           }
-        ]).sort({ createdOn: -1});
-      }
-      
-      if (!teams) {
-        return res.status(404).json({ message: 'Teams not found.' });
-      }
-      for(let team of teams) {
-        const user = await User.findById(team.createdBy);
-        team.createdBy = user.name;
-      }
-      res.status(200).json(teams.map(team => ({createdBy: team.createdBy, numTeams: team.numTeams, id: team._id})));
+        },
+        {
+          $project: {
+            createdBy: "$_id",
+            numTeams: 1,
+            teams: 1
+          }
+        }
+      ]);
+    } else {
+      teams = await Team.aggregate([
+        {
+          $match: {
+            event: event.name
+          }
+        },
+        {
+          $group: {
+            _id: "$createdBy",
+            numTeams: { $sum: 1 },
+            teams: { $push: "$$ROOT" }
+          }
+        },
+        {
+          $sort: {
+            "teams.createdOn": -1 // Sorting within the teams array
+          }
+        },
+        {
+          $project: {
+            createdBy: "$_id",
+            numTeams: 1,
+            teams: 1
+          }
+        }
+      ]);
+    }
+
+    if (!teams) {
+      return res.status(404).json({ message: 'Teams not found.' });
+    }
+
+    for (let team of teams) {
+      const user = await User.findById(team.createdBy);
+      team.createdBy = user.name;
+    }
+    
+    res.status(200).json(teams.map(team => ({
+      createdBy: team.createdBy,
+      numTeams: team.numTeams,
+      id: team._id,
+      teams: team.teams
+    })));
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
-}
+};
+
 
 
 exports.getTeamByUserId = async (req, res) => {
