@@ -98,7 +98,7 @@ exports.addPlayer = async (req, res) => {
 
 exports.getPlayers = async (req, res) => {
     try {
-        const players = await Player.find({}, 'name points teams').populate('teams').sort({ points: -1});
+        const players = await Player.find({}, 'name points teams').populate('teams').sort({ name: 1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
