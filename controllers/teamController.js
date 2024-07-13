@@ -13,26 +13,49 @@ const Events = require('../models/events');
 exports.team = async (req, res) => {
     try {
         const { name, users, createdBy } = req.body;
-    
-        // Check if the team exceeds the points limit
-        const totalPoints = await User.aggregate([
-          { $match: { _id: { $in: users } } },
-          { $group: { _id: null, totalPoints: { $sum: '$points' } } }
-        ]);
-    
-        if (totalPoints.length > 0 && totalPoints[0].totalPoints > 300) {
-          return res.status(400).json({ message: 'Team exceeds 300 points limit.' });
+
+        const createdByUser = await User.find({name: createdBy});
+        if(createdByUser.length > 1) {
+          return res.status(409).json({ message: 'User name already exists' });
         }
-    
-        const team = new Team({ name, users, createdBy });
-        const selectedUsers = await User.find({ _id: { $in: users } });
-        const alreadyIn5Team = selectedUsers.map(u => u.teams.length === 5 ? u.name : u);
-        if(alreadyIn5Team.length > 0) {
-          return res.status(500).json({ message: 'error saving team', alreadyIn5Team: alreadyIn5Team});
+        if(createdByUser.length  == 0 ) {
+          return res.status(404).json({ message: 'User does not exist' });
         }
-        await team.save();
-    
-        return res.status(201).json(team);
+
+        const selectedUsers = await Player.find({ _id: { $in: users } });
+
+        const totalPoints = selectedUsers.reduce((total, user) => total + user.points, 0);
+
+        const populatedUsers = selectedUsers.map(user => ({
+          id: user._id,
+          points: user.points,
+          name: user.name
+      }));
+
+        const newTeam = new Team({
+          name: name,
+          createdBy: createdByUser[0].id,
+          users: populatedUsers, // Assign the populatedUsers array
+          totalPoints: totalPoints, // Calculate totalPoints
+          createdOn: Date.now()
+      });
+
+      newTeam.save()
+      .then((updatedTeam) => {
+        if(updatedTeam) {
+          selectedUsers.forEach(async user => {
+            user.teams.push(updatedTeam._id);
+            await user.save();
+          });
+          return res.status(200).json({ message: 'Selected users added to the team successfully' });
+        }
+      })
+      .catch(err => {
+          console.error('Error saving team:', err);
+          return res.status(500).json({ message: 'Error saving team' });
+        });
+
+
       } catch (error) {
         res.status(500).json({ message: error.message });
       }

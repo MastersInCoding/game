@@ -26,6 +26,7 @@ const playerController = require('../controllers/playerController');
 const settingsController = require('../controllers/settingsController');
 const eventsController = require('../controllers/eventsController');
 const textSchemaController = require('../controllers/textSchemaController');
+const timerController = require('../controllers/timerController');
 
 
 // Home page route
@@ -97,6 +98,10 @@ router.delete('/deleteEvent/:id', eventsController.deleteEvent);
 router.put('/changeTextSchema', textSchemaController.changeTextSchema);
 router.get('/getSchema/:name', textSchemaController.getSchema);
 router.get('/createTextSchema', textSchemaController.createTextSchema);
+
+router.get('/timer', timerController.getTimer);
+router.put('/updateTimer', timerController.updateTimer);
+router.get('/createTimer', timerController.createTimer);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
 

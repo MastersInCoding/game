@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <title>Settings</title>
+    <title>Timer</title>
     <style>
         .bg {
             background-image: url('construction-bg.jpg');
@@ -190,7 +190,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                    <h2 class="fs-2 m-0">Settings</h2>
+                    <h2 class="fs-2 m-0">Timer</h2>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -217,20 +217,19 @@
                     <div class="table-title">
                         <div class="row">
                             <div class="col">
-                                <h2 style="color: #e95d06;"><b>Settings</b></h2>
+                                <h2 style="color: #e95d06;"><b>Timer</b></h2>
                             </div>
                         </div>
                     </div>
-                    <div class="">
-                        <div class="row">
-                            <div class="col ml-3">
-                                <h4 for="teamName">Show create team button</h4>
-                            </div>
-                            <div class="col ml-3" style="margin-top: 10px;">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="showTeamCreation">
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <h5>Set Timer (Date and Time):</h5>
+                        </div>
+                        <div class="col">
+                            <input type="datetime-local" class="form-control" id="datetimeInput">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" id="setTimerBtn">Set Timer</button>
                         </div>
                     </div>
 
@@ -259,31 +258,97 @@
         var el = document.getElementById("wrapper");
         var toggleButton = document.getElementById("menu-toggle");
         const successToast = document.querySelector('#successToastContainer .toast');
-        const table = document.getElementById("table");
-        var teamCreationSettingId = "";
-        const showTeamCreation = document.getElementById("showTeamCreation");
 
-        showTeamCreation.addEventListener('change', function (e) {
-            console.log(e.target.checked);
-            fetch('/settings/changeTeamCreations', {
-                method: 'POST',
+        var datetimeInput = document.getElementById('datetimeInput');
+        var setTimerBtn = document.getElementById('setTimerBtn');
+
+        fetch('/timer', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if(response.status == 200){
+                response.json()
+                .then(data => {
+                    datetimeInput.value = data.timer.endTime;
+                })
+                .catch(error => {
+                    console.log('Error: ' + JSON.stringify(error));
+                });
+            }
+        })
+        .catch(error => {
+            console.log('Error: ' + JSON.stringify(error));
+        });
+
+        setTimerBtn.addEventListener('click', function() {
+            // var datetime = new Date(datetimeInput.value);
+            // console.log(datetime);
+            fetch('/updateTimer', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    showTeamCreation: e.target.checked,
-                    id: teamCreationSettingId
-                })
+                body: JSON.stringify({ endTime: datetimeInput.value })
             })
-                .then(response => {
-                    if(response.status === 200) {
-                        successToast.classList.add('show');
-                        setTimeout(() => {
-                            successToast.classList.remove('show');
-                        }, 1000);
-                    }
-                })
+            .then(response => {
+                if(response.status === 200){
+                    alert('Successfully updated');
+                    window.location.reload();
+                }
+                else{
+                    alert('Failed to update');
+                }
+            })
+            .catch(error => {
+                alert('Failed to update');
+                console.log(error);
+            });
+            // if (datetime > new Date()) {
+            //     fetch('/timer', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify({ endTime: datetime })
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         startTimer(new Date(data.endTime));
+            //     });
+            // }
         });
+
+
+
+
+        // const table = document.getElementById("table");
+        // var teamCreationSettingId = "";
+        // const showTeamCreation = document.getElementById("showEvent");
+
+        // showTeamCreation.addEventListener('change', function (e) {
+        //     console.log(e.target.checked);
+        //     fetch('/settings/changeTeamCreations', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             showTeamCreation: e.target.checked,
+        //             id: teamCreationSettingId
+        //         })
+        //     })
+        //         .then(response => {
+        //             if(response.status === 200) {
+        //                 successToast.classList.add('show');
+        //                 setTimeout(() => {
+        //                     successToast.classList.remove('show');
+        //                 }, 1000);
+        //             }
+        //         })
+        // });
 
 
         toggleButton.onclick = function () {
@@ -327,20 +392,20 @@
                 });
         });
 
-        fetch('/settings', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(
-                response => response.json()
-            )
-            .then(data => {
-                console.log(data);
-                teamCreationSettingId = data._id;
-                showTeamCreation.checked = data.isActive;
-            });
+        // fetch('/settings', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // })
+        //     .then(
+        //         response => response.json()
+        //     )
+        //     .then(data => {
+        //         console.log(data);
+        //         teamCreationSettingId = data._id;
+        //         showTeamCreation.checked = data.isActive;
+        //     });
         // .catch(error => {
         //     console.error('Error:', error);
         // });
