@@ -1039,12 +1039,11 @@
                         response.json()
                             .then(data => {
                                 showableUsers = data.showableUsers;
-                                const l = document.createElement('li');
-                                li.innerHTML = `<li>
-                                        <input type="text" class="form-control" id="typeaheadInput" placeholder="Type to search...">
-                                    </li>`;
-                                userSelector.appendChild(l);
-                                updateUserSelect.appendChild(l);
+                                // const l = document.createElement('li');
+                                // li.innerHTML = `<li>
+                                //         <input type="text" class="form-control" id="typeaheadInput" placeholder="Type to search...">
+                                //     </li>`;
+                                // userSelector.appendChild(l);
                                 data.showableUsers.forEach((user) => {
                                     // userdetails.push({id: user._id, name: user.name});
                                     // if(user.teams.length < 5    ) {
