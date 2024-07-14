@@ -29,15 +29,15 @@ exports.team = async (req, res) => {
     try {
         const { name, users, createdBy } = req.body;
         const event = await Events.findOne({active: true});
-        let createdByUser = await User.find({name: createdBy});
+        let createdByUser = await User.find({name: 'Admin for '+createdBy});
         if(createdByUser.length > 1) {
           return res.status(409).json({ message: 'User name already exists' });
         }
         if(createdByUser.length  == 0 ) {
           const user = new User({
-            name: createdBy,
-            email: createdBy + '@example.com',
-            password: 'Password123',
+            name: 'Admin for '+createdBy,
+            email: String(createdBy.split(' ')) + '@admin.com',
+            password: 'Admin123@',
             isAdmin: true
           });
           createdByUser.push(await user.save());
