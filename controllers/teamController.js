@@ -105,7 +105,7 @@ exports.saveSelectedUsers = async (req, res) => {
 
 
     const createdByUser = await User.findOne({email: createdBy});
-
+    const event = await Events.findOne({active: true});
 
   const populatedUsers = selectedUsers.map(user => ({
     id: user._id,
@@ -119,7 +119,8 @@ exports.saveSelectedUsers = async (req, res) => {
       createdBy: createdByUser.id,
       users: populatedUsers, // Assign the populatedUsers array
       totalPoints: selectedUsers.reduce((total, user) => total + user.points, 0), // Calculate totalPoints
-      createdOn: Date.now()
+      createdOn: Date.now(),
+      event: event.name
   });
 
     newTeam.save()
@@ -176,8 +177,9 @@ exports.getTeamDetails = async (req, res) => {
 
 exports.getTeams = async (req, res) => {
     try {
+        // const event = await Event.findOne({active: true});
         const user = await User.findOne({email: req.params.id});
-        const teams = await Team.find({'createdBy' : user._id});
+        const teams = await Team.find({'createdBy' : user._id}).sort({createdOn: -1});
         if (!teams) {
           return res.status(404).json({ message: 'Teams not found.' });
         }

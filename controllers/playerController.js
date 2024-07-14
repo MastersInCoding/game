@@ -196,7 +196,8 @@ exports.getPlayersEvent = async (req, res) => {
 
 exports.getPlayersByUser = async (req, res) => {
     try {
-        const players = await Player.find({}, 'name points teams').populate('teams').sort({name: 1});
+        const event = await Events.findOne({active: true});
+        const players = await Player.find({event: event.name}, 'name points teams').populate('teams').sort({name: 1});
         const user = await User.findOne({email: req.params.userEmail});
         // console.log(user.)
         var showableUsers = [];

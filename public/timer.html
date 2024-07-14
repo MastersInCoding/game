@@ -293,7 +293,11 @@
         });
 
         setTimerBtn.addEventListener('click', function() {
-            // var datetime = new Date(datetimeInput.value);
+            var datetime = new Date(datetimeInput.value);
+            if(datetime < new Date()){
+                alert('Please enter future date and time');
+                return;
+            }
             // console.log(datetime);
             fetch('/updateTimer', {
                 method: 'PUT',

@@ -1315,11 +1315,13 @@
                         timerDisplay.textContent = "Time's up!";
                         return;
                     }
-
+                    var totalMonths = Math.floor(distance / (1000 * 60 * 60 * 24 * 30));
+                    var remainingDays = Math.floor((distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
                     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    timer.textContent = hours + "h " + minutes + "m " + seconds + "s ";
+
+                    timer.textContent = totalMonths + " months " + remainingDays + " days " + hours + "h " + minutes + "m " + seconds + "s ";
             }, 1000);
         }
 
