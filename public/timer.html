@@ -231,6 +231,12 @@
                         <div class="col">
                             <button class="btn btn-primary" id="setTimerBtn">Set Timer</button>
                         </div>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="showTeamCreation">
+                                <label>&nbsp;Enable/ Disable Timer</label>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -262,6 +268,8 @@
         var datetimeInput = document.getElementById('datetimeInput');
         var setTimerBtn = document.getElementById('setTimerBtn');
 
+        const showTeamCreation = document.getElementById("showTeamCreation");
+
         fetch('/timer', {
             method: 'GET',
             headers: {
@@ -273,6 +281,7 @@
                 response.json()
                 .then(data => {
                     datetimeInput.value = data.timer.endTime;
+                    showTeamCreation.checked = data.timer.active;
                 })
                 .catch(error => {
                     console.log('Error: ' + JSON.stringify(error));
@@ -326,29 +335,25 @@
 
         // const table = document.getElementById("table");
         // var teamCreationSettingId = "";
-        // const showTeamCreation = document.getElementById("showEvent");
+        
 
-        // showTeamCreation.addEventListener('change', function (e) {
-        //     console.log(e.target.checked);
-        //     fetch('/settings/changeTeamCreations', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             showTeamCreation: e.target.checked,
-        //             id: teamCreationSettingId
-        //         })
-        //     })
-        //         .then(response => {
-        //             if(response.status === 200) {
-        //                 successToast.classList.add('show');
-        //                 setTimeout(() => {
-        //                     successToast.classList.remove('show');
-        //                 }, 1000);
-        //             }
-        //         })
-        // });
+        showTeamCreation.addEventListener('change', function (e) {
+            fetch('/changeTimerStatus', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if(response.status === 200) {
+                        alert('Successfully updated');
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
 
 
         toggleButton.onclick = function () {

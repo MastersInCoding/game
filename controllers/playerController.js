@@ -8,51 +8,114 @@ const { team } = require('./teamController');
 const Events = require('../models/events');
 
 
+// exports.addPlayerCSV = async (req, res) => {
+//     try {
+//         console.log('reached')
+//         const tempPath = req.file.path;
+//         // upload file
+//         // const targetPath = path.join(__dirname, 'uploads', req.file.originalname);
+//         // console.log(tempPath, ' ', targetPath);
+//         // fs.rename(tempPath, targetPath, err => {
+//         //     if (err) return res.status(500).send('Error occurred while processing the file here');
+    
+//         //     res.status(200).json({ message: 'File uploaded successfully' });
+//         // });
+
+
+//         const workbook = xlsx.readFile(tempPath);
+//         const sheetName = workbook.SheetNames[0];
+//         const worksheet = workbook.Sheets[sheetName];
+//         const data = xlsx.utils.sheet_to_json(worksheet);
+//         const players = [];
+//         const event = await Events.findOne({active: true});
+//         await Player.deleteMany({event: event.name});
+//         // Convert data and save to MongoDB
+//         data.forEach(async (row) => {
+//             const player = await Player.findOne({name: row['Name']});
+//             if(player !== undefined){
+//                 return res.send({status:409, message:row['Name']+" name already exists"});
+//             }
+
+//             const newData = new Player({
+//                 name: row['Name'],
+//                 points: row['Points'],
+//                 event: event.name
+//             });
+//             try {
+//                 await newData.save();
+//                 players.push(newData);
+//             } catch (err) {
+//                 console.error('Error saving data to MongoDB:', err);
+//                 return res.send({err});
+                
+//             }
+//         });
+//         return res.status(200).json({status: 200, players});
+//     } catch (error) {
+//         console.log(error)
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+
+
 exports.addPlayerCSV = async (req, res) => {
     try {
-        console.log('reached')
+        console.log('reached');
         const tempPath = req.file.path;
-        // upload file
-        // const targetPath = path.join(__dirname, 'uploads', req.file.originalname);
-        // console.log(tempPath, ' ', targetPath);
-        // fs.rename(tempPath, targetPath, err => {
-        //     if (err) return res.status(500).send('Error occurred while processing the file here');
-    
-        //     res.status(200).json({ message: 'File uploaded successfully' });
-        // });
-
-
         const workbook = xlsx.readFile(tempPath);
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const data = xlsx.utils.sheet_to_json(worksheet);
         const players = [];
-        await Player.deleteMany({});
+        const errors = [];
+        const event = await Events.findOne({ active: true });
+
+        // Clear existing players for the active event
+        await Player.deleteMany({ event: event.name });
+
         // Convert data and save to MongoDB
-        data.forEach(async (row) => {
-            console.log(row);
+        const savePromises = data.map(async (row) => {
+            const player = await Player.findOne({ name: row['Name'] });
+            if (player) {
+                errors.push({ status: 409, message: row['Name'] + " name already exists" });
+                return null;
+            }
+
             const newData = new Player({
                 name: row['Name'],
                 points: row['Points'],
-                event: row['Events']
+                event: event.name
             });
+
             try {
                 await newData.save();
                 players.push(newData);
             } catch (err) {
                 console.error('Error saving data to MongoDB:', err);
+                errors.push({ status: 500, message: 'Error saving data to MongoDB for ' + row['Name'] });
             }
         });
-        return res.status(200).json({players });
+
+        await Promise.all(savePromises);
+
+        if (errors.length > 0) {
+            return res.status(400).json({ status: 400, errors });
+        }
+
+        return res.status(200).json({ status: 200, players });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 }
 
+
 exports.deleteAllPlayers = async (req, res) => {
     try {
-        await Player.deleteMany({});
+        const event = await Events.findOne({active: true});
+        console.log(event);
+        await Player.deleteMany({event: event.name});
         console.log("All documents deleted successfully!");
         res.status(200).json({message: "All documents deleted successfully!"});
     } catch (error) {
@@ -86,6 +149,20 @@ exports.addPlayer = async (req, res) => {
     }
 };
 
+exports.migratePlayerToUS = async (req, res) => {
+    try {
+        const players = await Player.find({});
+        await Promise.all(players.map(async (player) => {
+            player.event = 'US';
+            await player.save();
+        }));
+        console.log("Players moved successfully!");
+        res.status(200).json({message: "Players moved successfully!"});
+    } catch (error) {
+        console.error("Error moving players:", error);
+    }
+}
+
 // exports.deleteAllPlayer = async (req, res) => {
 //     try {
 //         await Player.deleteMany({});
@@ -98,7 +175,8 @@ exports.addPlayer = async (req, res) => {
 
 exports.getPlayers = async (req, res) => {
     try {
-        const players = await Player.find({}, 'name points teams').populate('teams').sort({ name: 1});
+        const event = await Events.findOne({active: true});
+        const players = await Player.find({event: event.name}, 'name points teams').populate('teams').sort({ name: 1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -109,10 +187,7 @@ exports.getPlayersEvent = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
         let players;
-        if(event.name === 'US')
-            players = await Player.find({}, 'name points teams').populate('teams').sort({ points: -1});
-        else
-            players = await Player.find({event : event.name}, 'name points teams').populate('teams').sort({ points: -1});
+        players = await Player.find({event : event.name}, 'name points teams').populate('teams').sort({ points: -1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -268,6 +343,7 @@ exports.getPlayerById = async (req, res) => {
 exports.savePlayer = async (req, res) => {
     try {
 
+        const event = await Events.findOne({active: true});
         const {playerName, points} = req.body;
         const playerByName = await Player.find({name: playerName});
         
@@ -275,7 +351,7 @@ exports.savePlayer = async (req, res) => {
             return res.status(409).json({ message: 'Player Name already exists.' });
         }
         
-        const player = new Player({name: playerName, points});
+        const player = new Player({name: playerName, points, event: event.name});
         
         await player.save();
 

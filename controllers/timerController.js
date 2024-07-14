@@ -8,6 +8,19 @@ exports.getTimer = async (req, res) => {
     return res.status(200).json({ timer});
 };
 
+exports.toggleTimer = async (req, res) => {
+    console.log('toggleTimer');
+    try {
+        const timer = await Timer.findOne();
+        timer.active =!timer.active;
+        timer.lastUpdatedAt = Date.now();
+        await timer.save();
+        return res.status(200).json(timer);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 exports.updateTimer = async (req, res) => {
     try {
         const { endTime } = req.body;
@@ -26,7 +39,7 @@ exports.createTimer = async (req, res) => {
         const timer = await Timer.findOne();
         if(!timer){
             const newTimer = new Timer({
-                endTime: Date.now() + 1000
+                endTime: Date.now() + 1000,
             });
             await newTimer.save();
             return res.status(200).json(timer);

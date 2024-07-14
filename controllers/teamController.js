@@ -10,16 +10,38 @@ const Events = require('../models/events');
 
 
 
+exports.migrateTeamsToUS = async (req, res) => {
+  try {
+        const teams = await Team.find({});
+        await Promise.all(teams.map(async (team) => {
+          team.event = 'US';
+          await team.save();
+      }));
+
+        return res.status(200).json({ message: 'Team migrated to US successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
 exports.team = async (req, res) => {
     try {
         const { name, users, createdBy } = req.body;
-
-        const createdByUser = await User.find({name: createdBy});
+        const event = await Events.findOne({active: true});
+        let createdByUser = await User.find({name: createdBy});
         if(createdByUser.length > 1) {
           return res.status(409).json({ message: 'User name already exists' });
         }
         if(createdByUser.length  == 0 ) {
-          return res.status(404).json({ message: 'User does not exist' });
+          const user = new User({
+            name: createdBy,
+            email: createdBy + '@example.com',
+            password: 'Password123',
+            isAdmin: true
+          });
+          createdByUser.push(await user.save());
+          // return res.status(404).json({ message: 'User does not exist' });
         }
 
         const selectedUsers = await Player.find({ _id: { $in: users } });
@@ -37,7 +59,8 @@ exports.team = async (req, res) => {
           createdBy: createdByUser[0].id,
           users: populatedUsers, // Assign the populatedUsers array
           totalPoints: totalPoints, // Calculate totalPoints
-          createdOn: Date.now()
+          createdOn: Date.now(),
+          event: event.name
       });
 
       newTeam.save()
@@ -245,29 +268,6 @@ exports.getAllTeams = async (req, res) => {
   try {
     const event = await Events.findOne({ active: true });
     let teams;
-    if (event.name === 'US') {
-      teams = await Team.aggregate([
-        {
-          $group: {
-            _id: "$createdBy",
-            numTeams: { $sum: 1 },
-            teams: { $push: "$$ROOT" }
-          }
-        },
-        {
-          $sort: {
-            "teams.createdOn": -1 // Sorting within the teams array
-          }
-        },
-        {
-          $project: {
-            createdBy: "$_id",
-            numTeams: 1,
-            teams: 1
-          }
-        }
-      ]);
-    } else {
       teams = await Team.aggregate([
         {
           $match: {
@@ -290,26 +290,27 @@ exports.getAllTeams = async (req, res) => {
           $project: {
             createdBy: "$_id",
             numTeams: 1,
-            teams: 1
+            teams: 1,
           }
         }
       ]);
-    }
 
     if (!teams) {
       return res.status(404).json({ message: 'Teams not found.' });
     }
-
+    let usersUniqueId = []
     for (let team of teams) {
       const user = await User.findById(team.createdBy);
       team.createdBy = user.name;
+      usersUniqueId.push(user.uniqueId);
     }
     
-    res.status(200).json(teams.map(team => ({
+    res.status(200).json(teams.map((team, index) => ({
       createdBy: team.createdBy,
       numTeams: team.numTeams,
       id: team._id,
-      teams: team.teams
+      teams: team.teams,
+      uniqueId: usersUniqueId[index]
     })));
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -320,11 +321,12 @@ exports.getAllTeams = async (req, res) => {
 
 exports.getTeamByUserId = async (req, res) => {
   try {
+      const event = await Events.findOne({active: true});
       const user = await User.findById(req.params.id)
       if(!user){
         return res.status(404).json({ message: 'User not found.' });
       }
-      const teams = await Team.find({'createdBy' : user._id});
+      const teams = await Team.find({'createdBy' : user._id, event: event.name});
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
       }
@@ -343,7 +345,13 @@ exports.getTeamByUserId = async (req, res) => {
 
 exports.downloadTeamDataInCSVFile = async (req, res) => {
   try {
+    const event = await Events.findOne({ active: true });
     const teams = await Team.aggregate([
+      {
+        $match: {
+          event: event.name
+        }
+      },
       {
         $group: {
           _id: "$createdBy",

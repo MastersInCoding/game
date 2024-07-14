@@ -1,5 +1,47 @@
 const User = require('../models/user');
+const Counter = require('../models/counter');
 
+
+
+
+exports.updateUsersUniqueId = async (req, res) => {
+    try {
+      // Ensure the counter document exists and start from the initial value
+      const counter = await Counter.findByIdAndUpdate(
+        { _id: 'userId' },
+        { $setOnInsert: { seq: 1 } },
+        { upsert: true, new: true }
+      );
+  
+      let currentSeq = counter ? counter.seq : 1;
+  
+      // Fetch all teams
+      const users = await User.find();
+  
+      // Update each team with a new uniqueId
+      for (const user of users) {
+        const uniqueId = `AA${currentSeq}`;
+        user.uniqueId = uniqueId;
+        await user.save();
+        currentSeq += 1;
+      }
+  
+      // Update the counter document with the final sequence value
+      await Counter.findByIdAndUpdate(
+        { _id: 'userId' },
+        { seq: currentSeq },
+        { new: true }
+      );
+  
+      return res.status(200).json({users});
+    } catch (error) {
+      console.error('Error updating teams uniqueId:', error);
+      return res.status(500).json({message:"Error"});
+    } finally {
+      // Close the database connection
+      // mongoose.connection.close();
+    }
+  };
 
 exports.getUsers = async (req, res) => {
     try {

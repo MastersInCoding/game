@@ -5,6 +5,11 @@ const timerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  active:{
+    type: Boolean,
+    required: true,
+    default: false
+  },
   lastUpdatedAt: {
     type: Date,
     default: Date.now

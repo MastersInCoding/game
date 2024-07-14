@@ -9,6 +9,8 @@ const multer = require('multer');
 
 const upload = multer({dest: 'uploads/'})
 
+const Counter = require('../models/counter');
+
 
 
 // Create a transporter object using SMTP transport
@@ -53,6 +55,9 @@ router.post('/createAccount', userController.signup);
 router.post('/findByEmailId', userController.findByEmailId);
 router.get('/resetPasswordPage', userController.resetPassword);
 router.get('/confirmNewPass', userController.confirmResetPass);
+router.get('/updateUsersUniqueId', userController.updateUsersUniqueId);
+
+
 router.get('/privacyPolicy', userController.privacyPolicy);
 router.get('/termsAndConditions', userController.termsAndConditions);
 
@@ -67,7 +72,7 @@ router.delete('/deleteTeam', teamController.deleteTeam);
 router.get('/getTeams', teamController.getAllTeams);
 router.get('/getTeamsByUser/:id', teamController.getTeamByUserId);
 router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
-
+router.get('/migrateTeamsToUS', teamController.migrateTeamsToUS);
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
@@ -81,6 +86,7 @@ router.get('/player/:id', playerController.getPlayerById);
 router.post('/savePlayer', playerController.savePlayer);
 router.post('/addPlayerCSV', upload.single('csvfile'), playerController.addPlayerCSV);
 router.delete('/deleteAllPlayers', playerController.deleteAllPlayers);
+router.get('/migratePlayerToUS', playerController.migratePlayerToUS);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
 
@@ -101,9 +107,24 @@ router.get('/createTextSchema', textSchemaController.createTextSchema);
 
 router.get('/timer', timerController.getTimer);
 router.put('/updateTimer', timerController.updateTimer);
+router.put('/changeTimerStatus', timerController.toggleTimer);
 router.get('/createTimer', timerController.createTimer);
 
 router.get('/makeAdmin/:id', userController.makeAdmin);
+
+
+router.get('/createCounter', async(req, res) => {
+    try {
+        await Counter.findByIdAndUpdate(
+          { _id: 'userId' },
+          { seq: 1 },
+          { upsert: true, new: true }
+        ).exec();
+        console.log('Counter document ensured');
+      } catch (error) {
+        console.error('Error ensuring counter document:', error);
+      }
+})
 
 router.post('/resetPasswordLink', async (req, res) => {
 
@@ -145,7 +166,7 @@ router.post('/resetPasswordLink', async (req, res) => {
 
 });
 
-router.post('/reset-password', async(req, res) => {
+    router.post('/reset-password', async(req, res) => {
     const {token, password} = req.body;
     const user = await User.findOne({ resetToken: token });
     if (!user) {

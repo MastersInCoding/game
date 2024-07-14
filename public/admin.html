@@ -492,8 +492,14 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                alert('File uploaded successfully');
-                window.location.href = '/admin.html'
+                if(data.status === 200) {
+                    alert('File uploaded successfully');
+                    window.location.href = '/admin.html'
+                }
+                else if(data.status === 400){
+                    if(data.errors[0].status === 409)
+                        alert(data.errors[0].message);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);

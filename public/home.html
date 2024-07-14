@@ -1294,8 +1294,10 @@
         .then(response => response.json())
         .then(data => {
             var endTime = new Date(data.timer.endTime);
-            if(endTime > Date.now()) {
+            if(data.timer.active){
+                if(endTime > Date.now()) {
                 startTimer(endTime);
+            }
             }
         })
         .catch(error => {
