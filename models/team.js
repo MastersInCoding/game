@@ -23,6 +23,10 @@ const teamSchema = new mongoose.Schema({
   event : {
     type: String
   },
+  eventId : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  },
   createdOn: {
     type: Date,
     default: Date.now

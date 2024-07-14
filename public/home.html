@@ -1039,11 +1039,12 @@
                         response.json()
                             .then(data => {
                                 showableUsers = data.showableUsers;
-                                // const l = document.createElement('li');
-                                // li.innerHTML = `<li>
-                                //         <input type="text" class="form-control" id="typeaheadInput" placeholder="Type to search...">
-                                //     </li>`;
-                                // userSelector.appendChild(l);
+                                const l = document.createElement('li');
+                                l.classList.add('dropdown-item');
+                                l.innerHTML = `<label>
+                                        <input type="text" class="form-control" id="typeaheadInput" placeholder="Type to search..." onkeyup="call(this)">
+                                    </label>`;
+                                userSelector.appendChild(l);
                                 data.showableUsers.forEach((user) => {
                                     // userdetails.push({id: user._id, name: user.name});
                                     // if(user.teams.length < 5    ) {
@@ -1097,6 +1098,18 @@
         //     selectedUsers.splice(index, 1);
         //     updateSelectedUsers();
         // }
+
+
+        function call(e){
+            console.log(e.value);
+            // var typeaheadInput = document.getElementById('typeaheadInput');
+            var input = e.value.toLowerCase();
+            var suggestions = showableUsers.filter(function(item) {
+                return item.name.toLowerCase().includes(input);
+            });
+            console.log(suggestions);
+            renderSuggestions(suggestions);
+        }
 
         function unselectedUser(name, id, points) {
             const selectedUsersContainer = document.getElementById('selectedUsers');
@@ -1197,6 +1210,10 @@
 
 
         function handleCB(event) {
+            console.log(event.target.type);
+            if(event.target.type === 'text'){
+                return;
+            }
             const checkbox = event.target;
             const points = parseInt(checkbox.getAttribute('data-points')); // Get the points associated with the user
 
@@ -1425,6 +1442,33 @@
                 console.error('Error:', error);
             });
 
+
+
+        function renderSuggestions(suggestions) {
+            // Clear previous suggestions
+            var oldSuggestions = userSelector.querySelectorAll('li');
+            console.log(oldSuggestions);
+            oldSuggestions.forEach(function(item) {
+                if(!item.classList.contains('dropdown-item'))
+                    item.remove();
+            });
+            console.log(oldSuggestions.length);
+            // Add new suggestions
+            suggestions.forEach(function(suggestion) {
+                let li;
+                if(selectedUsers.includes(suggestion._id)){
+                    li = document.createElement('li');
+                    li.innerHTML = `<label id="3"><input id="${suggestion._id}" type="checkbox" value="${suggestion.name}" data-points="${suggestion.points}" checked>${suggestion.name}( ${suggestion.points} pt)</label>`;
+                }
+                else{
+                    li = document.createElement('li');
+                    li.innerHTML = `<label id="3"><input id="${suggestion._id}" type="checkbox" value="${suggestion.name}" data-points="${suggestion.points}">${suggestion.name}( ${suggestion.points} pt)</label>`;
+                }
+                userSelector.appendChild(li);
+            });
+            console.log(userSelector.querySelectorAll('li'));
+        }
+
         let selectedTeamId = "";
         let tournamentTeam = [];
         document.addEventListener('DOMContentLoaded', function () {
@@ -1466,7 +1510,7 @@
                     console.error('Error fetching team details:', error);
                 }
 
-            });
+            });        
         });
 
 

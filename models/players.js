@@ -19,8 +19,11 @@ const playerSchema = new mongoose.Schema({
   },
   teams: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Team' }
-  ]
-  ,
+  ],
+  eventId : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  },
   event : {
     type: String,
     default: 'US'
