@@ -204,6 +204,12 @@ exports.getPlayersByUser = async (req, res) => {
         players.forEach(async player => {
             var count = 0;
             
+            player.teams.forEach( team => {
+                console.log(team.createdBy, user._id);
+                if(team.createdBy == user._id){
+                    count++;
+                }
+            });
             // console.log(t.teams.length)
                 // await player.teams.forEach(async a => {
                 //     t = await Team.findById(a);
@@ -213,8 +219,10 @@ exports.getPlayersByUser = async (req, res) => {
                 //             console.log('Players', count);
                 //     count++;
                 // });
-                
-            if(player.teams.length < 5) {
+                // player.teams.forEach( t => {
+                //     if(t.createdBy ==== user._id)
+                // });
+            if(count < 5) {
                 showableUsers.push(player);
             }
         })
