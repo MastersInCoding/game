@@ -32,7 +32,12 @@
         }
     }
 
-
+    .toast-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+    }
 
     .card-custom {
         width: 90%;
@@ -58,6 +63,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Enter This Team</th>
                                         <th>Team Name</th>
                                         <th>Created On</th>
                                         <th>Points</th>
@@ -129,12 +135,39 @@
             </div>
         </div>
     </div>
+    <div class="toast-container" id="successToastContainerCreateTeam">
+        <div class="toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body" id="successToastTeam">
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="errorToastContainer">
+        <div class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">Removed</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body" id="errorToastMessage">
+            </div>
+        </div>
+    </div>
 </body>
 
 <script>
 
     var urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id');
+    const successToastContainerCreateTeam = document.querySelector('#successToastContainerCreateTeam .toast');
+    const errorToast = document.querySelector('#errorToastContainer .toast');
     if (userId == null || userId == undefined || userId.length == 0)
         window.location.href = '../admin.html';
     fetch(`/getTeamsByUser/${userId}`, {
@@ -153,6 +186,7 @@
                         const newRow = document.createElement('tr');
                         newRow.innerHTML = `
                             <td>${index + 1}</td>
+                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name}></input></td>
                             <td>${team.name}</td>
                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                             <td>${team.totalPoints}</td>
@@ -177,61 +211,88 @@
         });
         var deleteTeamId = '';
 
-
+        let tournamentTeam = [];
         document.addEventListener('DOMContentLoaded', function(){
             const tableBody = document.querySelector('tbody'); // Adjust selector as needed
             tableBody.addEventListener('click', async function(event) {
                 try {
                     if(event.target.classList.contains('fa-trash')) {
-                    deleteTeamId = event.target.parentElement.dataset.teamId;
-                }
-                else{
-                    const selectedTeamId = event.target.parentElement.dataset.teamId;
-                    if(event.target.classList.contains('fa-eye')){
-                        const response = await fetch(`/getTeamDetails/${selectedTeamId}`);
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        const teamData = await response.json();
-                        const modalBody = document.querySelector('#viewTeamModal .modal-body');
-                        modalBody.innerHTML = `
-                        <p><strong>Team Name:</strong> ${teamData.name}</p>
-                        <p><strong>Created By:</strong> ${teamData.createdBy}</p>
-                        <p><strong>Created On:</strong> ${new Date(teamData.createdOn).toLocaleString()}</p>
-                        <p><strong>Total Points:</strong> ${teamData.totalPoints}</p>
-                        <p><strong>Players:</strong></p>
-                        <ul>
-                            ${teamData.users.map(user => `<li>${user.name} (${user.points} points)</li>`).join('')}
-                        </ul>
-                        `;
+                        deleteTeamId = event.target.parentElement.dataset.teamId;
                     }
-                }
+                    else if(event.target.classList.contains('selectionTeam') ) {
+                        console.log(event.target.dataset.teamId);
+                        if(!event.target.checked){
+                            tournamentTeam.splice(tournamentTeam.indexOf(event.target.dataset.teamId), 1);
+                            errorToastMessage(`Removed selected text : You have removed the ${event.target.dataset.playerName} team from the tournament`, 3000)
+                        }
+                        else{
+                            tournamentTeam.push(event.target.dataset.teamId);
+                            successToastMessage(`Selected text: You have entered ${event.target.dataset.playerName} team to tournament`, 3000)
+                        }
+                        console.log(tournamentTeam);
+                    }
+                    else{
+                        const selectedTeamId = event.target.parentElement.dataset.teamId;
+                        if(event.target.classList.contains('fa-eye')){
+                            const response = await fetch(`/getTeamDetails/${selectedTeamId}`);
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            const teamData = await response.json();
+                            const modalBody = document.querySelector('#viewTeamModal .modal-body');
+                            modalBody.innerHTML = `
+                            <p><strong>Team Name:</strong> ${teamData.name}</p>
+                            <p><strong>Created By:</strong> ${teamData.createdBy}</p>
+                            <p><strong>Created On:</strong> ${new Date(teamData.createdOn).toLocaleString()}</p>
+                            <p><strong>Total Points:</strong> ${teamData.totalPoints}</p>
+                            <p><strong>Players:</strong></p>
+                            <ul>
+                                ${teamData.users.map(user => `<li>${user.name} (${user.points} points)</li>`).join('')}
+                            </ul>
+                            `;
+                        }
+                    }
                 } catch (error) {
                     console.error('Error fetching team Details', error);
                 }
             });
         });
+        function successToastMessage(message, timeOut){
+            document.getElementById('successToastTeam').innerHTML = message;
+            successToastContainerCreateTeam.classList.add('show');
+            setTimeout(() => {
+                successToastContainerCreateTeam.classList.remove('show');
+            }, timeOut)
+        }
+
+        function errorToastMessage(message, timeOut){
+            document.getElementById('errorToastMessage').innerHTML = message;
+            errorToast.classList.add('show');
+            setTimeout(() => {
+                errorToast.classList.remove('show');
+            }, timeOut)
+        }
    
         const deleteTeamBtn = document.getElementById('deleteTeamBtn');
-deleteTeamBtn.addEventListener('click', () =>{
-    fetch('/deleteTeam', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            teamId : deleteTeamId
-        })
-    })
-    .then(response => {
-        if(response.ok){
-            window.location.reload();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
+        deleteTeamBtn.addEventListener('click', () =>{
+            fetch('/deleteTeam', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    teamId : deleteTeamId
+                })
+            })
+            .then(response => {
+                if(response.ok){
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
 </script>
 
 </html>
