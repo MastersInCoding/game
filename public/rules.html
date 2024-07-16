@@ -261,8 +261,20 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 text-center">
-                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetRule()">Reset</button>
-                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="saveRule()">Save</button>
+                                <input type="file" id="fileInput" class="form-control mb-3">
+                                
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 text-center">
+                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="removeAttachFile()">Remove Attach File</button>
+                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetLeaderboard()">Reset</button>
+                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="saveLeaderboard()">Save</button>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div id="attachments" class="attachment"></div>
                             </div>
                         </div>
                     </div>
@@ -294,6 +306,48 @@
         toggleButton.onclick = function () {
             el.classList.toggle("toggled");
         };
+
+        const fileInput = document.getElementById("fileInput");
+
+        function removeAttachFile(){
+            fileInput.value = "";
+            document.getElementById('attachments').innerHTML = "";
+        }
+
+        fileInput.addEventListener("change", attachFile);
+
+
+        function attachFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const attachmentDiv = document.getElementById('attachments');
+                    const attachmentItem = document.createElement('div');
+                    attachmentItem.className = 'attachment-item';
+
+                    const fileIcon = document.createElement('i');
+                    fileIcon.className = 'fas fa-paperclip';
+                    
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file.name;
+
+                    const fileLink = document.createElement('a');
+                    fileLink.href = e.target.result;
+                    fileLink.download = file.name;
+                    fileLink.textContent = 'Download';
+                    fileLink.className = 'btn btn-link';
+
+                    attachmentItem.appendChild(fileIcon);
+                    attachmentItem.appendChild(fileName);
+                    attachmentItem.appendChild(fileLink);
+                    attachmentDiv.appendChild(attachmentItem);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
 
         function resetRule() {
             fetch('/getSchema/rule', {
