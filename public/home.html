@@ -260,9 +260,6 @@
         </div>
     </div>
     <div class="mt-3" style="text-align: center; ">
-        <b id="ongoingEvent"></b>
-    </div>
-    <div class="mt-3" style="text-align: center; ">
         <b id="timer"></b>
     </div>
 
@@ -350,7 +347,7 @@
                     <p class="card-text text-center">
                         Select your team by choosing <strong>six golfers</strong>, each is assigned a specific value.
                         <br />Make sure the combined value of your selected <strong>golfers</strong> does not surpass
-                        300 points.
+                        <strong>300 points</strong>.
                         <br /> The team with the lowest combined score wins. For full details, <a
                             href="/login.html">Login</a>
                     </p>
@@ -375,6 +372,9 @@
                     <h5 class="card-title text-center">Please Kindly <a href="/login.html">Login</a></h5>
                 </div>
                 <div class="card-body" id="loginContent">
+                    <h3 class="card-title text-center">
+                        <b id="ongoingEvent"></b>
+                    </h3>
                     <h5 class="card-title text-center">Make your team</h5>
                     <div class="table">
                         <div class="table-wrapper">
@@ -398,7 +398,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tournament Team</th>
+                                        <th>Enter This Team</th>
                                         <th>Team Name</th>
                                         <th>Created On</th>
                                         <th>Points</th>
@@ -1351,7 +1351,7 @@
         .then(res => {
             res.json()
             .then(d => {
-                ongoingEvent.innerHTML = `The current ongoing event is ${d.name}`;
+                ongoingEvent.innerHTML = `${d.name}`;
             });
         })
         .catch(error => {
