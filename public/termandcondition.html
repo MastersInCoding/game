@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <title>Prize</title>
+    <title>Terms & Conditions</title>
     <style>
         .bg {
             background-image: url('construction-bg.jpg');
@@ -179,7 +179,7 @@
                     News
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
-                    style="background: #9ce9b4 !important;border-radius: 50px;">
+                    href="prizes.html">
                     Prize
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
@@ -191,7 +191,7 @@
                     Leaderboard
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
-                    href="termandcondition.html">
+                style="background: #9ce9b4 !important;border-radius: 50px;">
                     Terms & Conditions
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
@@ -207,7 +207,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                    <h2 class="fs-2 m-0">Prize</h2>
+                    <h2 class="fs-2 m-0">Terms & Conditions</h2>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -234,7 +234,7 @@
                     <div class="table-title">
                         <div class="row">
                             <div class="col">
-                                <h2 style="color: #e95d06;"><b>Prize</b></h2>
+                                <h2 style="color: #e95d06;"><b>Terms & Conditions</b></h2>
                             </div>
                         </div>
                     </div>
@@ -261,8 +261,8 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 text-center">
-                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetPrize()">Reset</button>
-                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="savePrize()">Save</button>
+                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetTermsAndConditions()">Reset</button>
+                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="saveTermsAndConditions()">Save</button>
                             </div>
                         </div>
                     </div>
@@ -295,8 +295,8 @@
             el.classList.toggle("toggled");
         };
 
-        function resetPrize() {
-            fetch('/getSchema/prize', {
+        function resetTermsAndConditions() {
+            fetch('/getSchema/termsandconditions', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -311,7 +311,7 @@
             });
         }
 
-        function savePrize() {
+        function saveTermsAndConditions() {
             const editorContent = document.getElementById('editor').innerHTML;
             fetch('/changeTextSchema', {
                 method: 'PUT',
@@ -320,16 +320,16 @@
                 },
                 body: JSON.stringify({
                     content: JSON.stringify(editorContent),
-                    name: 'prize'
+                    name: 'termsandconditions'
                 })
             })
             .then(response => {
                 if(response.status === 200) {
-                    alert('Successfully Changed Prize');
+                    alert('Successfully Changed Terms & Conditions');
                     window.location.reload();
                 }
                 else
-                    alert('Failed to change Prize');
+                    alert('Failed to change Terms & Conditions');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -338,7 +338,7 @@
         }
         
 
-        fetch('/getSchema/prize', {
+        fetch('/getSchema/termsandconditions', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

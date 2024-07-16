@@ -182,7 +182,9 @@
                     document.getElementById('createdByName').innerHTML = response.user.name;
                     const tableBody = document.querySelector('tbody');
                     tableBody.innerHTML = '';
+                    console.log(response);
                     response.teams.forEach((team, index) => {
+                        console.log(team);
                         const newRow = document.createElement('tr');
                         newRow.innerHTML = `
                             <td>${index + 1}</td>

@@ -48,32 +48,8 @@
                 <div class="card-body" id="logoutContent">
                     <h5 class="card-title text-center" style="color: rgb(233, 93, 6); font-style: italic;">Terms and Conditions</h5>
                     <br/>
-                    <p class="card-text">
-                        <span style="text-decoration: underline;"><strong>Introduction:</strong></span><br />These terms and conditions ("Terms") hereby govern the jasonkellygolf.com – Major Sweeps ("Competition") organized by jasonkellygolf.com ("Organizer"). Participation in the Competition implies your acceptance and adherence to these Terms.<br /><br />
-                        <span style="text-decoration: underline;">
-                            <strong>Eligibility:</strong>
-                        </span><br />
-                        The Competition is open to all individuals who have attained the age of majority in heir jurisdiction of residence and have established agreed to be a member of the Major Sweeps Private Members Club<br /><br />
-
-                        <span style="text-decoration: underline;"><strong>Competition Period:</strong>
-                        </span><br />The Competition shall commence on Monday, June 10th, and conclude on Sunday, June 16th, 2024.<br /><br />
-
-                        <span style="text-decoration: underline;"><strong>Prizes:</strong>
-                        </span><br />The prizes will be announced here on Thursday, June 13<sup>th</sup>.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Winner Selection:</strong>
-                        </span><br />
-                        he winner of the Competition shall be determined based on the lowest score attained during the Competition period. In the event of a tie, the winner shall be calculated using the best last 18 holes, then 9 holes, 6 holes, 3 holes, 1 hole if needed. Participants may review their scores and overall position via the leaderboard tab within the game interface. Second, third, fourth, and fifth-place participants shall be chosen based on the second, third, fourth, and fifth-lowest scores recorded during the Competition. The prize for Low Score Sunday shall be awarded to the participant who identifies the player who shoots the lowest score in Sunday's final round. The player's predicted score and winning tournament score will operate as tiebreakers.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Announcement of
-                                Winners:</strong></span><br />Winners shall be publicly announced during the subsequent week following the Competition and shall be notified via the email associated with their sign-up.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Claiming the
-                                Prize:</strong></span><br />Winners must send their preferred payment method and details to majors@jasonkellygolf.com to claim their prize.<br /><br />
-
-                        <span style="text-decoration: underline;"><strong>Limitation of
-                                Liability:</strong></span><br />The Organizers shall not be held liable for any loss or damage, including but not limited to indirect or consequential loss or damage, arising from or in connection with the Competition or the awarded prize. This includes any loss of data or profits arising out of or in connection with jasonkellygolf.com.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Modification of
-                                Terms:</strong></span><br />The Organizers retain the right to modify these Terms at their discretion without prior notice. Any alterations shall be communicated to the email address associated with the sign-up.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Governing Law:</strong></span><br />These Terms shall be governed by and construed in accordance with the laws of the United Kingdom.<br /><br />
-                        <span style="text-decoration: underline;"><strong>Dispute Resolution:</strong></span><br />Any disputes arising from or relating to the Competition shall be resolved through binding arbitration in accordance with the laws of the United Kingdom. By participating in the Competition, you acknowledge that you have read, understood, and agree to be bound by these Terms. Contact: For any inquiries regarding these Terms, please contact jasonkellygolf.com via email at jason@jasonkellygolf.com
+                    <p class="card-text" id="tAndCSetting">
+                        
                     </p>
                 </div>
             </div>
@@ -81,5 +57,22 @@
 
     </div>
 </body>
+
+<script>
+
+  fetch('/getSchema/termsandconditions', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      document.getElementById('tAndCSetting').innerHTML = JSON.parse(data.content);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+</script>
 
 </html>
