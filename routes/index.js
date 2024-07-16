@@ -99,6 +99,9 @@ router.get('/getEvents', eventsController.getEvents);
 router.get('/getCurrentEvent', eventsController.getCurrentEvent);
 router.post('/createEvent', eventsController.createEvent);
 router.delete('/deleteEvent/:id', eventsController.deleteEvent);
+router.put('/updateEvent/:id/:name', eventsController.updateEvent);
+router.get('/migratePlayerWithEvent', eventsController.migratePlayerWithEvent);
+router.get('/migrateTeamWithEvent', eventsController.migrateTeamWithEvent);
 
 
 router.put('/changeTextSchema', textSchemaController.changeTextSchema);

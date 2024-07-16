@@ -60,7 +60,7 @@ exports.team = async (req, res) => {
           users: populatedUsers, // Assign the populatedUsers array
           totalPoints: totalPoints, // Calculate totalPoints
           createdOn: Date.now(),
-          event: event.name
+          eventId : event._id
       });
 
       newTeam.save()
@@ -120,7 +120,7 @@ exports.saveSelectedUsers = async (req, res) => {
       users: populatedUsers, // Assign the populatedUsers array
       totalPoints: selectedUsers.reduce((total, user) => total + user.points, 0), // Calculate totalPoints
       createdOn: Date.now(),
-      event: event.name
+      eventId : event._id
   });
 
     newTeam.save()
@@ -273,7 +273,7 @@ exports.getAllTeams = async (req, res) => {
       teams = await Team.aggregate([
         {
           $match: {
-            event: event.name
+            eventId : event._id
           }
         },
         {
@@ -328,7 +328,7 @@ exports.getTeamByUserId = async (req, res) => {
       if(!user){
         return res.status(404).json({ message: 'User not found.' });
       }
-      const teams = await Team.find({'createdBy' : user._id, event: event.name});
+      const teams = await Team.find({'createdBy' : user._id, eventId : event._id});
       if (!teams) {
         return res.status(404).json({ message: 'Teams not found.' });
       }
@@ -351,7 +351,7 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
     const teams = await Team.aggregate([
       {
         $match: {
-          event: event.name
+          eventId : event._id
         }
       },
       {

@@ -1,4 +1,6 @@
 const Events = require('../models/events');
+const Team = require('../models/team');
+const Player = require('../models/players');
 
 
 exports.changeEvent = async (req, res) => {
@@ -48,6 +50,24 @@ exports.createEvent = async (req, res) => {
     }
 }
 
+exports.updateEvent = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const name = req.params.name;
+        const eventExist = await Events.find({name: name});
+        if(eventExist.length > 0) {
+            return res.status(204).json({ message: 'Event already exists' });  // Event already exists, hence cannot update it. 400 Bad Request status code.  // If event already exists, we return a 400 Bad Request status code.  // If the event does not exist, we continue with the update operation.  // If the event does not exist, we return a 404 Not Found status code.  // If the event does exist, we continue with the update operation.  // If the event does exist, we return a 404 Not Found status code.  // If the event does exist, we continue with the update operation.  // If the event does exist, we return a 404 Not Found status code.  // If the event does exist, we continue with the update operation.  // If the event does exist, we return a 404 Not Found status code.
+        }
+        const event = await Events.findByIdAndUpdate(id, { name: name });
+        if(!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        return res.status(200).json(event);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 exports.getEvents = async (req, res) => {
     try {
         const events = await Events.find({});
@@ -78,6 +98,41 @@ exports.deleteEvent = async (req, res) => {
         }
         await Events.findByIdAndDelete(req.params.id)
         return res.status(200).json({status: 200, message: "Event deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+exports.migratePlayerWithEvent = async (req, res) => {
+    try {
+        console.log("Y");
+        const player = await Player.find({});
+        player.forEach(async (p) => {
+            console.log()
+            const event = await Events.findOne({name: p.event});
+            if(event){
+                p.eventId = event._id;
+                await p.save();
+                console.log(p)
+            }
+        })
+        return res.status(200).json({ message: "Event updated successfully" , players: player});
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+exports.migrateTeamWithEvent = async (req, res) => {
+    try {
+        const team = await Team.find();
+        team.forEach(async (p) => {
+            const event = await Events.findOne({name: p.event});
+            if(event){
+                p.eventId = event._id;
+                await p.save();
+            }
+        })
+        return res.status(200).json({ message: "Event updated successfully" });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

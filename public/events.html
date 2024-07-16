@@ -385,6 +385,52 @@
         const saveEventBtn = document.getElementById('saveEventBtn');
         const deleteEventBtn = document.getElementById('deleteEventBtn');
         const editEventBtn = document.getElementById('editEventBtn');
+        const editEventModal = document.getElementById('editEventModal');
+        const editEventName = document.getElementById('editEventName');
+        
+        editEventName.addEventListener('input', () => {
+            if(editEventName.value.trim().length > 0) {
+                editEventBtn.disabled = false;
+            } else {
+                editEventBtn.disabled = true;
+    
+            }
+        });
+
+        editEventModal.addEventListener('show.bs.modal', (event) => {
+            
+            const triggerButton = event.relatedTarget;
+            const eventId = triggerButton.getAttribute('data-event-id');
+            editEventBtn.setAttribute('data-event-id', eventId);
+        });
+
+        editEventBtn.addEventListener('click', () => {
+            const eventId = editEventBtn.getAttribute('data-event-id');
+            const eventName = editEventName.value;
+            console.log(eventId);
+            fetch(`/updateEvent/${eventId}/${eventName}`, {
+                method: 'PUT',
+                // eaders: {
+                //     'Content-Type': 'application/json'
+                // },
+                // body: JSON.stringify({ name: eventName, id: eventId})
+            })
+            .then(response => {
+                if(response.status === 200){
+                    alert('Event Updated Successfully')
+                    window.location.reload(); // Reload the page after successful deletion
+                }
+                else if(response.status === 204){
+                    alert("Event Name already exists")
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+        
+
+
 
         const deleteEventModal = document.getElementById('deleteEventModal');
         deleteEventModal.addEventListener('show.bs.modal', (event) => {
@@ -523,11 +569,8 @@
                 .then(data => {
                     if(data.code === 200){
                         alert('Event changed successfully');
-                        // successToast.classList.add('show');
-                        // setTimeout(() => {
-                        //     successToast.classList.remove('show');
-                        // }, 1000);
-                        window.location.reload();                }
+                        window.location.reload();                
+                    }
                 });
 
 

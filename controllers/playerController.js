@@ -72,7 +72,7 @@ exports.addPlayerCSV = async (req, res) => {
         const event = await Events.findOne({ active: true });
 
         // Clear existing players for the active event
-        await Player.deleteMany({ event: event.name });
+        await Player.deleteMany({ eventId: event._id });
 
         // Convert data and save to MongoDB
         const savePromises = data.map(async (row) => {
@@ -85,7 +85,7 @@ exports.addPlayerCSV = async (req, res) => {
             const newData = new Player({
                 name: row['Name'],
                 points: row['Points'],
-                event: event.name
+                eventId: event._id
             });
 
             try {
@@ -115,7 +115,7 @@ exports.deleteAllPlayers = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
         console.log(event);
-        await Player.deleteMany({event: event.name});
+        await Player.deleteMany({eventId: event._id});
         console.log("All documents deleted successfully!");
         res.status(200).json({message: "All documents deleted successfully!"});
     } catch (error) {
@@ -176,7 +176,7 @@ exports.migratePlayerToUS = async (req, res) => {
 exports.getPlayers = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
-        const players = await Player.find({event: event.name}, 'name points teams').populate('teams').sort({ name: 1});
+        const players = await Player.find({eventId: event._id}, 'name points teams').populate('teams').sort({ name: 1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -187,7 +187,7 @@ exports.getPlayersEvent = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
         let players;
-        players = await Player.find({event : event.name}, 'name points teams').populate('teams').sort({ points: -1});
+        players = await Player.find({eventId : event._id}, 'name points teams').populate('teams').sort({ points: -1});
         return res.status(200).json({users : players});
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -197,7 +197,7 @@ exports.getPlayersEvent = async (req, res) => {
 exports.getPlayersByUser = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
-        const players = await Player.find({event: event.name}, 'name points teams').populate('teams').sort({name: 1});
+        const players = await Player.find({eventId : event._id}, 'name points teams').populate('teams').sort({name: 1});
         const user = await User.findOne({email: req.params.userEmail});
         // console.log(user.)
         var showableUsers = [];
@@ -225,49 +225,49 @@ exports.getPlayersByUser = async (req, res) => {
 };
 
 
-exports.saveSelectedPlayers = async (req, res) => {
-    try {
-        const { createdBy, selectedUserIds, teamName } = req.body;
+// exports.saveSelectedPlayers = async (req, res) => {
+//     try {
+//         const { createdBy, selectedUserIds, teamName } = req.body;
     
-        const selectedUsers = await Player.find({ _id: { $in: selectedUserIds } });
+//         const selectedUsers = await Player.find({ _id: { $in: selectedUserIds } });
     
-        if (!selectedUsers || selectedUsers.length === 0) {
-          return res.status(404).json({ message: 'No player found with the provided IDs' });
-        }
+//         if (!selectedUsers || selectedUsers.length === 0) {
+//           return res.status(404).json({ message: 'No player found with the provided IDs' });
+//         }
     
-        const newTeam = new Team();
-        const createdByUser = await User.findOne({email: createdBy});
+//         const newTeam = new Team();
+//         const createdByUser = await User.findOne({email: createdBy});
     
-        // Add selected users to the team's users array
-        newTeam.users = [...selectedUsers];
-        newTeam.createdBy = createdByUser._id;
-        newTeam.totalPoints = selectedUsers.reduce((total, user) => total + user.points, 0);
-        newTeam.createdOn = Date.now();
-        newTeam.name = teamName;
+//         // Add selected users to the team's users array
+//         newTeam.users = [...selectedUsers];
+//         newTeam.createdBy = createdByUser._id;
+//         newTeam.totalPoints = selectedUsers.reduce((total, user) => total + user.points, 0);
+//         newTeam.createdOn = Date.now();
+//         newTeam.name = teamName;
     
-        // Save the updated team document
-        newTeam.save()
-         .then((updatedTeam) => {
-          if(updatedTeam) {
-            selectedUsers.forEach(async user => {
-              user.teams.push(updatedTeam._id);
-              await user.save();
-            });
-            // Send response after all operations are completed
-            return res.status(200).json({ message: 'Selected users added to the team successfully' });
-          }
-         })
-         .catch(err => {
-            console.error('Error saving team:', err);
-            return res.status(500).json({ message: 'Error saving team' });
-          });
+//         // Save the updated team document
+//         newTeam.save()
+//          .then((updatedTeam) => {
+//           if(updatedTeam) {
+//             selectedUsers.forEach(async user => {
+//               user.teams.push(updatedTeam._id);
+//               await user.save();
+//             });
+//             // Send response after all operations are completed
+//             return res.status(200).json({ message: 'Selected users added to the team successfully' });
+//           }
+//          })
+//          .catch(err => {
+//             console.error('Error saving team:', err);
+//             return res.status(500).json({ message: 'Error saving team' });
+//           });
     
     
-      } catch (error) {
-        console.error('Error saving selected users:', error);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-};
+//       } catch (error) {
+//         console.error('Error saving selected users:', error);
+//         return res.status(500).json({ message: 'Internal server error' });
+//       }
+// };
 
 
 exports.getAdmin = async (req, res) => {
@@ -352,7 +352,7 @@ exports.savePlayer = async (req, res) => {
             return res.status(409).json({ message: 'Player Name already exists.' });
         }
         
-        const player = new Player({name: playerName, points, event: event.name});
+        const player = new Player({name: playerName, points, eventId : event._id});
         
         await player.save();
 
