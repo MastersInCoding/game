@@ -13,10 +13,12 @@ const FileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    parent : {
-        type: String,
-        required: true,
-        unique: true
+    parent : { 
+        type: String, 
+    },
+    textSchema : {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'TextSchema'
     },
     lastUpdatedAt : {
         type: Date,

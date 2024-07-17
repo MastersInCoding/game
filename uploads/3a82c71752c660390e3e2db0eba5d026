@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <title>Rule</title>
+    <title>Leaderboard</title>
     <style>
         .bg {
             background-image: url('construction-bg.jpg');
@@ -183,11 +183,11 @@
                     Prize
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
-                    style="background: #9ce9b4 !important;border-radius: 50px;">
+                    href="rules.html">
                     Rules
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
-                    href="leaderboards.html">
+                    style="background: #9ce9b4 !important;border-radius: 50px;">
                     Leaderboard
                 </a>
                 <a class="list-group-item list-group-item-action bg-transparent fw-bold cursor-pointer"
@@ -207,7 +207,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                 <div class="d-flex align-items-center">
                     <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                    <h2 class="fs-2 m-0">Rule</h2>
+                    <h2 class="fs-2 m-0">Leaderboard</h2>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -234,7 +234,7 @@
                     <div class="table-title">
                         <div class="row">
                             <div class="col">
-                                <h2 style="color: #e95d06;"><b>Rule</b></h2>
+                                <h2 style="color: #e95d06;"><b>Leaderboard</b></h2>
                             </div>
                         </div>
                     </div>
@@ -261,15 +261,15 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 text-center">
-                                <input type="file" id="fileInput" class="form-control mb-3">
-                                
+                                <input type="file" class="form-control mb-3" id="fileInput">
+                                <label for="attachmentFile" class="form-label">Attach file</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 text-center">
                                 <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="removeAttachFile()">Remove Attach File</button>
-                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetRule()">Reset</button>
-                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="saveRule()">Save</button>
+                                <button type="button" class="btn btn-secondary" style="background: red;border: none;" onclick="resetLeaderboard()">Reset</button>
+                                <button type="button" class="btn btn-primary" style="background: #e95d06; border: none;" onclick="saveLeaderboard()">Save</button>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -310,12 +310,11 @@
         const fileInput = document.getElementById("fileInput");
 
         function removeAttachFile(){
-            fileInput.value = "";
+            fileInput.files = [];
             document.getElementById('attachments').innerHTML = "";
         }
 
         fileInput.addEventListener("change", attachFile);
-
 
         function attachFile() {
             const file = fileInput.files[0];
@@ -323,7 +322,6 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const attachmentDiv = document.getElementById('attachments');
-                    attachmentDiv.innerHTML = '';
                     const attachmentItem = document.createElement('div');
                     attachmentItem.className = 'attachment-item';
 
@@ -348,9 +346,8 @@
             }
         }
 
-
-        function resetRule() {
-            fetch('/getSchema/rule', {
+        function resetLeaderboard() {
+            fetch('/getSchema/leaderboard', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -365,29 +362,28 @@
             });
         }
 
-        function saveRule() {
+        function saveLeaderboard() {
             const editorContent = document.getElementById('editor').innerHTML;
             const attachments = fileInput.files[0];
-            const removeAttachment = document.getElementById('attachments').innerHTML.length > 0;
-            const data = {
-                content: editorContent,
-                name: 'rule',
-                removeAttachment: removeAttachment
-            }
+            console.log(attachments);
             const formData = new FormData();
             formData.append('attachments', attachments);
-            formData.append('data', JSON.stringify(data));
+            // console.log(formData.get('file').name);
+            // for (let pair of formData.entries()) {
+            //     console.log(pair[0] + ': ' + pair[1]);
+            // }
+            // alert(formData.get('file').name);
             fetch('/changeTextSchema', {
                 method: 'PUT',
                 body: formData
             })
             .then(response => {
                 if(response.status === 200) {
-                    alert('Successfully Changed Rule');
-                    window.location.reload();
+                    alert('Successfully Changed Leaderboard');
+                    // window.location.reload();
                 }
                 else
-                    alert('Failed to change Rule');
+                    alert('Failed to change Leaderboard');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -396,7 +392,7 @@
         }
         
 
-        fetch('/getSchema/rule', {
+        fetch('/getSchema/leaderboard', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -404,38 +400,13 @@
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('editor').innerHTML = data.textSchema.content;
-            if(data.fileSchema.filename.length > 2)
-                attachUploadedFile(data.fileSchema);
+            document.getElementById('editor').innerHTML = JSON.parse(data.content);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 
 
-        function attachUploadedFile(fileSchema){
-
-            const attachmentDiv = document.getElementById('attachments');
-            const attachmentItem = document.createElement('div');
-            attachmentItem.className = 'attachment-item';
-
-            const fileIcon = document.createElement('i');
-            fileIcon.className = 'fas fa-paperclip';
-
-            const fileName = document.createElement('span');
-            fileName.textContent = fileSchema.filename;
-
-            const fileLink = document.createElement('a');
-            fileLink.href = 'download-attachment/'+fileSchema._id;
-            fileLink.download = fileSchema.filename;
-            fileLink.textContent = 'Download';
-            fileLink.className = 'btn btn-link';
-
-            attachmentItem.appendChild(fileIcon);
-            attachmentItem.appendChild(fileName);
-            attachmentItem.appendChild(fileLink);
-            attachmentDiv.appendChild(attachmentItem);
-        }
 
         function execCmd(command) {
             document.execCommand(command, false, null);

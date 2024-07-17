@@ -8,6 +8,7 @@ const multer = require('multer');
 
 
 const upload = multer({dest: 'uploads/'})
+const attachment = multer({dest: 'public/attachments/'})
 
 const Counter = require('../models/counter');
 
@@ -72,7 +73,7 @@ router.delete('/deleteTeam', teamController.deleteTeam);
 router.get('/getTeams', teamController.getAllTeams);
 router.get('/getTeamsByUser/:id', teamController.getTeamByUserId);
 router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
-router.get('/migrateTeamsToUS', teamController.migrateTeamsToUS);
+// router.get('/migrateTeamsToUS', teamController.migrateTeamsToUS);
 
 // router.get('/addPlayer', playerController.addPlayer);
 router.get('/players', playerController.getPlayers);
@@ -86,7 +87,7 @@ router.get('/player/:id', playerController.getPlayerById);
 router.post('/savePlayer', playerController.savePlayer);
 router.post('/addPlayerCSV', upload.single('csvfile'), playerController.addPlayerCSV);
 router.delete('/deleteAllPlayers', playerController.deleteAllPlayers);
-router.get('/migratePlayerToUS', playerController.migratePlayerToUS);
+// router.get('/migratePlayerToUS', playerController.migratePlayerToUS);
 // router.post('/saveSelectedPlayers', playerController.saveSelectedPlayers);
 // router.put('/updateTeam', teamController.updateTeam);
 
@@ -100,13 +101,17 @@ router.get('/getCurrentEvent', eventsController.getCurrentEvent);
 router.post('/createEvent', eventsController.createEvent);
 router.delete('/deleteEvent/:id', eventsController.deleteEvent);
 router.put('/updateEvent/:id/:name', eventsController.updateEvent);
-router.get('/migratePlayerWithEvent', eventsController.migratePlayerWithEvent);
-router.get('/migrateTeamWithEvent', eventsController.migrateTeamWithEvent);
+// router.get('/migratePlayerWithEvent', eventsController.migratePlayerWithEvent);
+// router.get('/migrateTeamWithEvent', eventsController.migrateTeamWithEvent);
 
 
-router.put('/changeTextSchema', textSchemaController.changeTextSchema);
+router.put('/changeTextSchema', attachment.single('attachments'), textSchemaController.changeTextSchema);
 router.get('/getSchema/:name', textSchemaController.getSchema);
 router.get('/createTextSchema', textSchemaController.createTextSchema);
+router.get('/migrateParentWithName', textSchemaController.migrateParentWithName);
+router.get('/download-attachment/:id', textSchemaController.downloadAttachment);
+router.get('/viewFile/:id', textSchemaController.viewAttachment);
+router.get('/createFileSchema/:name', textSchemaController.createFileSchema);
 
 router.get('/timer', timerController.getTimer);
 router.put('/updateTimer', timerController.updateTimer);
@@ -116,18 +121,18 @@ router.get('/createTimer', timerController.createTimer);
 router.get('/makeAdmin/:id', userController.makeAdmin);
 
 
-router.get('/createCounter', async(req, res) => {
-    try {
-        await Counter.findByIdAndUpdate(
-          { _id: 'userId' },
-          { seq: 1 },
-          { upsert: true, new: true }
-        ).exec();
-        console.log('Counter document ensured');
-      } catch (error) {
-        console.error('Error ensuring counter document:', error);
-      }
-})
+// router.get('/createCounter', async(req, res) => {
+//     try {
+//         await Counter.findByIdAndUpdate(
+//           { _id: 'userId' },
+//           { seq: 1 },
+//           { upsert: true, new: true }
+//         ).exec();
+//         console.log('Counter document ensured');
+//       } catch (error) {
+//         console.error('Error ensuring counter document:', error);
+//       }
+// })
 
 router.post('/resetPasswordLink', async (req, res) => {
 

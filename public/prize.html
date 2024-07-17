@@ -101,11 +101,37 @@
   })
   .then(response => response.json())
   .then(data => {
-      document.getElementById('prizeSetting').innerHTML = JSON.parse(data.content);
+      attachmentShow(data, 'prizeSetting');
   })
   .catch(error => {
       console.error('Error:', error);
   });
+
+  function attachmentShow(data, documentId){
+    const textSchema = data.textSchema;
+    const fileSchema = data.fileSchema;
+    const attachmentItem = document.createElement('div');
+    attachmentItem.className = 'attachment-item';
+
+    if(fileSchema.filename.length > 2){
+        const fileIcon = document.createElement('i');
+        fileIcon.className = 'fas fa-paperclip';
+
+        const fileLink = document.createElement('a');
+        fileLink.href = 'viewFile/'+fileSchema._id;
+        fileLink.target = '_blank';
+        fileLink.textContent = fileSchema.filename;
+        fileLink.className = 'btn btn-link';
+        attachmentItem.appendChild(fileIcon);
+        attachmentItem.appendChild(fileLink);
+    }
+
+    
+    document.getElementById(documentId).innerHTML = textSchema.content + `<div>${attachmentItem.innerHTML}</div>`;
+
+  }
+
+
 </script>
 
 </html>

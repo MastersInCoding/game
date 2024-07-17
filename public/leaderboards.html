@@ -261,8 +261,7 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 text-center">
-                                <input type="file" id="fileInput" class="form-control mb-3">
-                                
+                                <input type="file" class="form-control mb-3" id="fileInput">
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -317,12 +316,12 @@
         fileInput.addEventListener("change", attachFile);
 
         function attachFile() {
-            const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const attachmentDiv = document.getElementById('attachments');
+                    attachmentDiv.innerHTML = '';
                     const attachmentItem = document.createElement('div');
                     attachmentItem.className = 'attachment-item';
 
@@ -365,15 +364,20 @@
 
         function saveLeaderboard() {
             const editorContent = document.getElementById('editor').innerHTML;
-            fetch('/changeTextSchema', {
+            const attachments = fileInput.files[0];
+            const removeAttachment = document.getElementById('attachments').innerHTML.length > 0;
+            console.log(removeAttachment);
+            const data = {
+                content: editorContent,
+                name: 'leaderboard',
+                removeAttachment: removeAttachment
+            }
+            const formData = new FormData();
+            formData.append('attachments', attachments);
+            formData.append('data', JSON.stringify(data));
+            fetch(`/changeTextSchema`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    content: JSON.stringify(editorContent),
-                    name: 'leaderboard'
-                })
+                body: formData
             })
             .then(response => {
                 if(response.status === 200) {
@@ -398,11 +402,37 @@
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('editor').innerHTML = JSON.parse(data.content);
+            document.getElementById('editor').innerHTML = data.textSchema.content;
+            if(data.fileSchema.filename.length > 2)
+                attachUploadedFile(data.fileSchema);
         })
         .catch(error => {
             console.error('Error:', error);
         });
+
+        function attachUploadedFile(fileSchema){
+
+            const attachmentDiv = document.getElementById('attachments');
+            const attachmentItem = document.createElement('div');
+            attachmentItem.className = 'attachment-item';
+
+            const fileIcon = document.createElement('i');
+            fileIcon.className = 'fas fa-paperclip';
+            
+            const fileName = document.createElement('span');
+            fileName.textContent = fileSchema.filename;
+
+            const fileLink = document.createElement('a');
+            fileLink.href = 'download-attachment/'+fileSchema._id;
+            fileLink.download = fileSchema.filename;
+            fileLink.textContent = 'Download';
+            fileLink.className = 'btn btn-link';
+
+            attachmentItem.appendChild(fileIcon);
+            attachmentItem.appendChild(fileName);
+            attachmentItem.appendChild(fileLink);
+            attachmentDiv.appendChild(attachmentItem);
+        }
 
 
 
