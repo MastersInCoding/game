@@ -7,6 +7,7 @@ const path = require('path');
 exports.changeTextSchema = async (req, res) => {
     try {
         const data = JSON.parse(req.body.data);
+        console.log(data.name, data.removeAttachment);
         const textSchema = await TextSchema.findOne({name: data.name});
         
         textSchema.content = data.content;
@@ -15,14 +16,16 @@ exports.changeTextSchema = async (req, res) => {
         const fileSchema = await FileSchema.findOne({textSchema: textSchema});
         
         if(data.removeAttachment) {
+            console.log("1");
             fileSchema.filename = ' ';
             fileSchema.path = ' ';
             fileSchema.contentType = ' ';
             fileSchema.lastUpdatedAt = Date.now();
             // delete old file schema
         }
-        else if(req.file === undefined){}
+        else if(req.file === undefined){console.log("2");}
         else{
+            console.log("3");
             fileSchema.filename = req.file.originalname;
             fileSchema.path = req.file.path;
             fileSchema.contentType = req.file.mimetype;
