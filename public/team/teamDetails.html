@@ -188,7 +188,7 @@
                         const newRow = document.createElement('tr');
                         newRow.innerHTML = `
                             <td>${index + 1}</td>
-                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name} ${team.selected ? 'checked' : ''}></input></td>
+                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name} ${team.selected ? 'checked' : ''} disabled></input></td>
                             <td>${team.name}</td>
                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                             <td>${team.totalPoints}</td>
