@@ -21,7 +21,8 @@ exports.changeTextSchema = async (req, res) => {
             fileSchema.lastUpdatedAt = Date.now();
             // delete old file schema
         }
-        else if(req.file){
+        else if(req.file === undefined){}
+        else{
             fileSchema.filename = req.file.originalname;
             fileSchema.path = req.file.path;
             fileSchema.contentType = req.file.mimetype;
