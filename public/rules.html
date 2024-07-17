@@ -358,7 +358,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('editor').innerHTML = JSON.parse(data.content);
+                document.getElementById('editor').innerHTML = data.textSchema.content;
                 if(data.fileSchema.filename.length > 2)
                     attachUploadedFile(data.fileSchema);
                 else
