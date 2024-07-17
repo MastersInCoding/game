@@ -15,7 +15,7 @@ exports.changeTextSchema = async (req, res) => {
         console.log(req.file);
         const fileSchema = await FileSchema.findOne({textSchema: textSchema});
         
-        if(data.removeAttachment) {
+        if(data.removeAttachment == false) {
             console.log("1");
             fileSchema.filename = ' ';
             fileSchema.path = ' ';
@@ -23,7 +23,6 @@ exports.changeTextSchema = async (req, res) => {
             fileSchema.lastUpdatedAt = Date.now();
             // delete old file schema
         }
-        else if(req.file === undefined){console.log("2");}
         else{
             console.log("3");
             fileSchema.filename = req.file.originalname;
