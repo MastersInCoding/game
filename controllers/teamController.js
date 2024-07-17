@@ -319,6 +319,33 @@ exports.getAllTeams = async (req, res) => {
   }
 };
 
+exports.updateTeamSelection = async (req, res) => {
+  try {
+    const {teamId, checked } = req.body;
+    const team = await Team.findById(teamId);
+    if (!team) {
+      return res.status(404).json({ message: 'Team not found.' });
+    }
+    team.selected = checked;
+    await team.save();
+    return res.status(200).json({ status: 200, checked: team.selected });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+exports.migrateTeamSlectionToFalse = async (req, res) => {
+  try {
+    const teams = await Team.find({  });
+    for (const team of teams) {
+      team.selected = false;
+      await team.save();
+    }
+    return res.status(200).json({ message: 'Team selection migrated successfully.' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
 
 
 exports.getTeamByUserId = async (req, res) => {

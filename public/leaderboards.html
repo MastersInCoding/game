@@ -355,7 +355,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('editor').innerHTML = JSON.parse(data.content);
+                document.getElementById('editor').innerHTML = data.textSchema.content;
+                if(data.fileSchema.filename.length > 2)
+                    attachUploadedFile(data.fileSchema);
+                else
+                    document.getElementById('attachments').innerHTML = ' ';
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -411,8 +415,9 @@
         });
 
         function attachUploadedFile(fileSchema){
-
+            console.log("y")
             const attachmentDiv = document.getElementById('attachments');
+            attachmentDiv.innerHTML = '';
             const attachmentItem = document.createElement('div');
             attachmentItem.className = 'attachment-item';
 

@@ -1447,7 +1447,7 @@
                                     if(showActionButton)
                                         newRow.innerHTML = `
                                             <td>${index + 1}</td>
-                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name}></input></td>
+                                            <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name} ${team.selected ? 'checked' : ''}></input></td>
                                             <td>${team.name}</td>
                                             <td>${new Date(team.createdOn).toLocaleDateString()}</td>
                                             <td>${team.totalPoints}</td>
@@ -1525,20 +1525,36 @@
             tableBody.addEventListener('click', async function (event) {
                 // const checkboxes = updateDropdownMenu.querySelectorAll('input[type="checkbox"]');
                 selectedTeamId = event.target.parentElement.dataset.teamId;
-                console.log(event.target);
                 try {
                     if (event.target.classList.contains('fa-trash')) {
                         deleteTeamId = event.target.parentElement.dataset.teamId;
                     }
                     else if(event.target.classList.contains('selectionTeam') ) {
-                        if(!event.target.checked){
-                            tournamentTeam.splice(tournamentTeam.indexOf(event.target.dataset.teamId), 1);
-                            errorToastMessage(`Removed selected text : You have removed the ${event.target.dataset.playerName} team from the tournament`, 3000)
-                        }
-                        else{
-                            tournamentTeam.push(event.target.dataset.teamId);
-                            successToastMessage(`Selected text: You have entered ${event.target.dataset.playerName} team to tournament`, 3000)
-                        }
+                        fetch(`/updateTeamSelection`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                teamId: event.target.dataset.teamId,
+                                checked: event.target.checked
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if(data.status === 200 && data.checked){
+                                    tournamentTeam.push(event.target.dataset.teamId);
+                                    successToastMessage(`Selected text: You have entered ${event.target.dataset.playerName} team to tournament`, 3000)                                    
+                                }
+                                else if(data.status === 200 && !data.checked){
+                                    tournamentTeam.splice(tournamentTeam.indexOf(event.target.dataset.teamId), 1);
+                                    errorToastMessage(`Removed selected text : You have removed the ${event.target.dataset.playerName} team from the tournament`, 3000)
+                                }
+
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
                         console.log(tournamentTeam);
                     }
                     else {

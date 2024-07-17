@@ -27,6 +27,10 @@ const teamSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Event'
   },
+  selected : {
+    type: Boolean,
+    default: false
+  },
   createdOn: {
     type: Date,
     default: Date.now

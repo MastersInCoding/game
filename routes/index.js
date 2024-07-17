@@ -73,6 +73,8 @@ router.delete('/deleteTeam', teamController.deleteTeam);
 router.get('/getTeams', teamController.getAllTeams);
 router.get('/getTeamsByUser/:id', teamController.getTeamByUserId);
 router.get('/download-csv', teamController.downloadTeamDataInCSVFile);
+router.put('/updateTeamSelection', teamController.updateTeamSelection);
+router.get('/migrateTeamSlectionToFalse', teamController.migrateTeamSlectionToFalse);
 // router.get('/migrateTeamsToUS', teamController.migrateTeamsToUS);
 
 // router.get('/addPlayer', playerController.addPlayer);

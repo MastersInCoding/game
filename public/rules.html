@@ -359,6 +359,10 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('editor').innerHTML = JSON.parse(data.content);
+                if(data.fileSchema.filename.length > 2)
+                    attachUploadedFile(data.fileSchema);
+                else
+                    document.getElementById('attachments').innerHTML = ' ';
             })
             .catch(error => {
                 console.error('Error:', error);
