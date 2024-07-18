@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>File</title>
+    </head>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #file {
+            flex: 1;
+            display: flex;
+        }
+        embed {
+            flex: 1;
+            border: none;
+        }
+    </style>
+
+<body>
+    <div id="file">
+
+    </div>
+</body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const fileId = params.get('id');
+    const file = document.getElementById("file");
+    const embed = document.createElement('embed');
+    embed.class = "pdf" 
+    embed.src = `/viewFile/${fileId}`;
+    embed.width = "100%";
+    embed.height = "100%";
+    file.appendChild(embed);
+    // const source = "/viewFile/fileId";
+    // console.log(fileId);
+</script>
+
+</html>

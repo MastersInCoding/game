@@ -94,13 +94,20 @@
             const fileSchema = data.fileSchema;
             const attachmentItem = document.createElement('div');
             attachmentItem.className = 'attachment-item';
+//             <embed 
+//                src=
+// "http://localhost:3000/viewFile/6695505e511f8b34ee38a1a0"
+//             width="100%" height="100%">
 
             if(fileSchema.filename.length > 2){
                 const fileIcon = document.createElement('i');
                 fileIcon.className = 'fas fa-paperclip';
 
                 const fileLink = document.createElement('a');
-                fileLink.href = 'viewFile/'+fileSchema._id;
+                if(fileSchema.contentType.includes('pdf'))
+                  fileLink.href = 'file.html?id='+fileSchema._id;
+                else
+                  fileLink.href = 'viewFile/'+fileSchema._id;
                 fileLink.target = '_blank';
                 fileLink.textContent = fileSchema.filename;
                 fileLink.className = 'btn btn-link';

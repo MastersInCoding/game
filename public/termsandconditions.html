@@ -85,7 +85,10 @@
         fileIcon.className = 'fas fa-paperclip';
 
         const fileLink = document.createElement('a');
-        fileLink.href = 'viewFile/'+fileSchema._id;
+        if(fileSchema.contentType.includes('pdf'))
+          fileLink.href = 'file.html?id='+fileSchema._id;
+        else
+          fileLink.href = 'viewFile/'+fileSchema._id;
         fileLink.target = '_blank';
         fileLink.textContent = fileSchema.filename;
         fileLink.className = 'btn btn-link';
