@@ -31,7 +31,7 @@
     const params = new URLSearchParams(window.location.search);
     const fileId = params.get('id');
     const file = document.getElementById("file");
-    const embed = document.createElement('embed');
+    const embed = document.createElement('iframe');
     embed.class = "application/x-google-chrome-pdf" 
     embed.src = `/viewFile/${fileId}`;
     embed.width = "100%";
