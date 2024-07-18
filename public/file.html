@@ -31,8 +31,8 @@
     const params = new URLSearchParams(window.location.search);
     const fileId = params.get('id');
     const file = document.getElementById("file");
-    const embed = document.createElement('embed');
-    embed.class = "pdf" 
+    const embed = document.createElement('object');
+    embed.class = "application/pdf" 
     embed.src = `/viewFile/${fileId}`;
     embed.width = "100%";
     embed.height = "100%";
