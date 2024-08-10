@@ -9,7 +9,6 @@ exports.getTimer = async (req, res) => {
 };
 
 exports.toggleTimer = async (req, res) => {
-    console.log('toggleTimer');
     try {
         const timer = await Timer.findOne();
         timer.active =!timer.active;

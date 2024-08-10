@@ -114,9 +114,7 @@ exports.addPlayerCSV = async (req, res) => {
 exports.deleteAllPlayers = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
-        console.log(event);
         await Player.deleteMany({eventId: event._id});
-        console.log("All documents deleted successfully!");
         res.status(200).json({message: "All documents deleted successfully!"});
     } catch (error) {
         console.error("Error deleting documents:", error);
@@ -156,7 +154,6 @@ exports.migratePlayerToUS = async (req, res) => {
             player.event = 'US';
             await player.save();
         }));
-        console.log("Players moved successfully!");
         res.status(200).json({message: "Players moved successfully!"});
     } catch (error) {
         console.error("Error moving players:", error);
@@ -197,7 +194,7 @@ exports.getPlayersEvent = async (req, res) => {
 exports.getPlayersByUser = async (req, res) => {
     try {
         const event = await Events.findOne({active: true});
-        const players = await Player.find({eventId : event._id}, 'name points teams').populate('teams').sort({name: 1});
+        const players = await Player.find({eventId : event._id}, 'name points teams').populate('teams').sort({points: -1});
         const user = await User.findOne({email: req.params.userEmail});
         // console.log(user.)
         var showableUsers = [];
@@ -205,7 +202,6 @@ exports.getPlayersByUser = async (req, res) => {
             var count = 0;
             
             player.teams.forEach( team => {
-                console.log(team.createdBy, user._id);
                 if(team.createdBy == user._id){
                     count++;
                 }
