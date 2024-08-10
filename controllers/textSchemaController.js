@@ -55,24 +55,36 @@ exports.createTextSchema = async (req, res) => {
 
         const textSchema = new TextSchema({
             name: 'termsandconditions',
-            content: '"Prize"'
+            content: '"termsandconditions"'
         });
 
         await textSchema.save();
 
-        // const lSchema = new TextSchema({
-        //     name: 'leaderboard',
-        //     content: '"Leaderboard"'
-        // });
+        const lSchema = new TextSchema({
+            name: 'leaderboard',
+            content: '"Leaderboard"'
+        });
 
 
-        // const r = new TextSchema({
-        //     name: 'rule',
-        //     content: '"Rule"'
-        // });
+        const r = new TextSchema({
+            name: 'rule',
+            content: '"Rule"'
+        });
 
-        // await lSchema.save();
-        // await r.save();
+        const news = new TextSchema({
+            name: 'news',
+            content: '"Rule"'
+        });
+
+        const prize = new TextSchema({
+            name: 'prize',
+            content: '"Prize"'
+        });
+
+        await lSchema.save();
+        await r.save();
+        await news.save();
+        await prize.save();
 
         return res.status(201).json(textSchema);
     } catch (error) {

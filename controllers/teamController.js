@@ -6,6 +6,8 @@ const fs = require('fs');
 const Settings = require('../models/settings');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const Events = require('../models/events');
+const nodemailer = require('nodemailer');
+
 
 
 
@@ -225,7 +227,6 @@ exports.updateTeam = async (req, res) => {
         for (const userId of usersToRemove) {
 
           const user = await Player.findById(userId);
-          console.log(user.teams);
           user.teams = user.teams.filter(id => id.toString() !== teamId);
           await user.save();
         }
@@ -321,13 +322,38 @@ exports.getAllTeams = async (req, res) => {
 
 exports.updateTeamSelection = async (req, res) => {
   try {
-    const {teamId, checked } = req.body;
+    const {teamId, checked, email } = req.body;
     const team = await Team.findById(teamId);
     if (!team) {
       return res.status(404).json({ message: 'Team not found.' });
     }
+    const user = await User.findOne({email : email});
+    if(!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
     team.selected = checked;
     await team.save();
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'saifalaman@gmail.com', // Your email address
+            pass: 'zhrvscqpufmneckv' // Your email password or app-specific password
+        }
+    });
+    // Define email options
+    let mailOptions = {
+        from: 'saifalaman@gmail.com', // Sender email address
+        to: user.email, // Recipient email address
+        subject: `${team.selected ? "Selected Team" : "Removed Team"}`, // Email subject
+        text: `${team.selected ? `Selected text: You have entered ${team.name} team to tournament` : `Removed selected text : You have removed the ${team.name} team from the tournament`}`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error:', error);
+            return res.status(500).send('Error sending email');
+        }
+        res.send('Password reset email sent');
+    });   
     return res.status(200).json({ status: 200, checked: team.selected });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -392,7 +418,8 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
         $project: {
           createdBy: "$_id",
           numTeams: 1,
-          teams: 1
+          teams: 1,
+          createdOn: 1
         }
       }
     ]);
@@ -419,7 +446,8 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
           if(i == 0){
             teamsAndPlayersData.push({
               name: t.name,
-              player: player.name
+              player: player.name,
+              timestamp: formatTimestamp(t.createdOn)
             });
   
             i++;
@@ -459,7 +487,6 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
       if (err) {
         throw new Error('Error sending file');
       } else {
-        console.log('File sent');
       }
     });
   } catch (error) {
@@ -480,3 +507,16 @@ exports.downloadTeamDataInCSVFile = async (req, res) => {
 //       res.status(500).json({ message: error.message });
 //   }
 // }
+
+
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true
+  }).format(date);
+}

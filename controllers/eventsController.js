@@ -7,7 +7,6 @@ exports.changeEvent = async (req, res) => {
     try {
        
         const selectedValue = req.body.selectedValue;
-        console.log(req.body)
         const event = await Events.findOne({active: true});
         if(event){
             event.active = false;
@@ -15,7 +14,6 @@ exports.changeEvent = async (req, res) => {
             await event.save();
         }
         const newEvent = await Events.findOneAndUpdate({name: selectedValue}, { lastUpdatedAt: Date.now(), active : true});
-        console.log(newEvent);
 
         return res.status(200).json({ message: "Successfully updated team", event: newEvent, code: 200 });
     } catch (error) {
@@ -30,10 +28,7 @@ exports.createEvent = async (req, res) => {
         // await Events.findOneAndDelete({});
 
         // const s = await Events.find({});
-        // console.log(s);
-        // console.log(name);
         const existingEvent = await Events.findOne({name: name});
-        // console.log(existingEvent);
         if (existingEvent) {
             return res.status(400).json({ message: 'Event already exists' });
         }
@@ -92,10 +87,13 @@ exports.deleteEvent = async (req, res) => {
         if(!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
-        console.log(event);
         if(event.active) {
             return res.status(204).json({status: 204, message: "Cannot delete active event" });
         }
+        const teams = await Team.find({eventId: event._id});
+        teams.forEach(async (t) => {
+            await Team.findByIdAndDelete(t._id);
+        });
         await Events.findByIdAndDelete(req.params.id)
         return res.status(200).json({status: 200, message: "Event deleted successfully" });
     } catch (error) {
@@ -105,15 +103,12 @@ exports.deleteEvent = async (req, res) => {
 
 exports.migratePlayerWithEvent = async (req, res) => {
     try {
-        console.log("Y");
         const player = await Player.find({});
         player.forEach(async (p) => {
-            console.log()
             const event = await Events.findOne({name: p.event});
             if(event){
                 p.eventId = event._id;
                 await p.save();
-                console.log(p)
             }
         })
         return res.status(200).json({ message: "Event updated successfully" , players: player});

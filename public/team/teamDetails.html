@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Details</title>
+    <link rel="icon" type="image/x-icon" href="../icon.jpeg">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
@@ -59,7 +60,7 @@
                             <div class="table-title" style="border-bottom: 3px solid #8793d4; margin-bottom: 16px;">
                             </div>
                             <table style="background-color: white;"
-                                class="table table-striped table-hover font-size-table" id="tableContainer">
+                                class="table table-hover font-size-table" id="tableContainer">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -186,6 +187,7 @@
                     response.teams.forEach((team, index) => {
                         console.log(team);
                         const newRow = document.createElement('tr');
+                        newRow.style.backgroundColor = team.selected ? "green" : "white";
                         newRow.innerHTML = `
                             <td>${index + 1}</td>
                             <td><input type="checkbox" class="selectionTeam" data-team-id="${team._id}" data-player-name=${team.name} ${team.selected ? 'checked' : ''} disabled></input></td>

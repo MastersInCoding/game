@@ -4,7 +4,6 @@ const Settings = require('../models/settings');
 exports.changeTeamCreations = async (req, res) => {
     try {
         const { showTeamCreation, id } = req.body;
-        console.log(req.body);
 
         let settings;
 
@@ -13,7 +12,6 @@ exports.changeTeamCreations = async (req, res) => {
                 isActive: showTeamCreation,
                 lastUpdatedAt: Date.now()
             });
-            console.log(settings);
 
             if (!settings) {
                 return res.status(404).json({ message: "Settings not found" });
@@ -39,7 +37,6 @@ exports.changeTeamCreations = async (req, res) => {
 exports.getSettings = async (req, res) => {
     try {
         const settings = await Settings.findOne({});
-        console.log(settings)
         return res.status(200).json(settings);
     } catch (error) {
         return res.status(500).json({ message: error.message });
